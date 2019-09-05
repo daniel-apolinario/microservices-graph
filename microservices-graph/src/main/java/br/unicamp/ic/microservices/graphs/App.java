@@ -20,7 +20,6 @@ import org.jgrapht.io.ComponentNameProvider;
 import org.jgrapht.io.DOTExporter;
 import org.jgrapht.io.GraphExporter;
 import org.jgrapht.util.SupplierUtil;
-import org.jgrapht.util.VertexToIntegerMapping;
 
 /**
  * @author Daniel R. F. Apolinario
@@ -34,7 +33,7 @@ public class App {
 	public static void main(String[] args) {
 
 		// Número de grafos a serem gerados.
-		int n = 5;
+		int n = 10;
 
 		List<GraphGeneratorParameters> grGeParams = new ArrayList<GraphGeneratorParameters>();
 		for (int i = 0; i < n; i++) {
@@ -122,16 +121,179 @@ public class App {
 	 */
 	private static Graph<String, DefaultEdge> applyMicroserviceDesignPatterns(Graph<String, DefaultEdge> graph,
 			GraphGeneratorParameters graphGenParameters, int graphCount) {
-		Graph<String, DefaultEdge> updatedGraph = null;
+		Graph<String, DefaultEdge> updatedGraph = graph;
 
-		updatedGraph = applyAPIGateway(graph, graphGenParameters);
+		exportGraphToFile(updatedGraph, graphCount + "-ini");
+
+		updatedGraph = applyAPIComposition(updatedGraph, graphGenParameters);
+		exportGraphToFile(updatedGraph, graphCount + "-com");
+
+		updatedGraph = applyAPIGateway(updatedGraph, graphGenParameters);
 		exportGraphToFile(updatedGraph, graphCount + "-gtw");
 
 		updatedGraph = applyServiceRegistry(updatedGraph, graphGenParameters);
 		exportGraphToFile(updatedGraph, graphCount + "-reg");
 
 		updatedGraph = applyEventDriven(updatedGraph, graphGenParameters);
+		exportGraphToFile(updatedGraph, graphCount + "-evD");
 
+		updatedGraph = applyExternalizedConfiguration(updatedGraph, graphGenParameters);
+		exportGraphToFile(updatedGraph, graphCount + "-cfg");
+
+		updatedGraph = applyDistributedTracing(updatedGraph, graphGenParameters);
+		exportGraphToFile(updatedGraph, graphCount + "-trc");
+
+		return updatedGraph;
+	}
+
+	/**
+	 * @param updatedGraph
+	 * @param graphGenParameters
+	 * @return
+	 */
+	private static Graph<String, DefaultEdge> applyDistributedTracing(Graph<String, DefaultEdge> graph,
+			GraphGeneratorParameters graphGenParameters) {
+		Graph<String, DefaultEdge> updatedGraph = graph;
+		Random rd = new Random();
+		int prob = 0;
+		if (graphGenParameters.getDistributedTracingProbability() != Integer.MIN_VALUE) {
+			prob = graphGenParameters.getDistributedTracingProbability() / 10;
+		}
+
+		if (rd.nextInt(10) <= prob) {
+			List<String> allVertices = Graphs.getVertexToIntegerMapping(updatedGraph).getIndexList();
+			VertexTypeRestrictions vertexTypeRestrictions = new VertexTypeRestrictions(false, false, false, true, false,
+					true);
+			updatedGraph.addVertex(VertexType.DISTRIBUTED_TRACING);
+			for (String vertex : allVertices) {
+				if (vertexTypeRestrictions.testVertexTypeRestrictions(vertex)) {
+					updatedGraph.addEdge(vertex, VertexType.DISTRIBUTED_TRACING);
+				}
+			}
+			if (updatedGraph.containsVertex(VertexType.SERVICE_REGISTRY)) {
+				updatedGraph.addEdge(VertexType.DISTRIBUTED_TRACING, VertexType.SERVICE_REGISTRY);
+			}
+		}
+		return updatedGraph;
+
+	}
+
+	private static List<String> getPercentualRandomVertices(Graph<String, DefaultEdge> graph, int percentual,
+			VertexTypeRestrictions vertexTypeRestrictions) {
+		List<String> vertices = new ArrayList<String>();
+		Random rd = new Random();
+		int graphSize = 0;
+		if (graph != null && graph.vertexSet().size() > 0 && percentual > 0 && percentual <= 100) {
+			graphSize = graph.vertexSet().size();
+			List<String> allVertices = Graphs.getVertexToIntegerMapping(graph).getIndexList();
+			int verticesQty = Math.floorDiv(graphSize * percentual, 100);
+			int i = 0;
+			while (i < verticesQty) {
+				int vertexIndex = rd.nextInt(graphSize - i);
+				if (vertexTypeRestrictions.testVertexTypeRestrictions(allVertices.get(vertexIndex))) {
+					vertices.add(allVertices.get(vertexIndex));
+					allVertices.remove(vertexIndex);
+					i++;
+				}
+			}
+		}
+		return vertices;
+	}
+
+	/**
+	 * @param updatedGraph
+	 * @param graphGenParameters
+	 * @return
+	 */
+	private static Graph<String, DefaultEdge> applyExternalizedConfiguration(Graph<String, DefaultEdge> graph,
+			GraphGeneratorParameters graphGenParameters) {
+		Graph<String, DefaultEdge> updatedGraph = graph;
+		Random rd = new Random();
+		int prob = 0;
+		if (graphGenParameters.getExternalizedConfigurationProbability() != Integer.MIN_VALUE) {
+			prob = graphGenParameters.getExternalizedConfigurationProbability() / 10;
+		}
+
+		if (rd.nextInt(10) <= prob) {
+			List<String> sourceVerticesToExternalizedConfig = getPercentualRandomVertices(updatedGraph,
+					graphGenParameters.getExternalizedConfigProportion(),
+					new VertexTypeRestrictions(true, true, false, true, true, true));
+			updatedGraph.addVertex(VertexType.EXTERNALIZED_CONFIGURATION);
+			for (String vertex : sourceVerticesToExternalizedConfig) {
+				updatedGraph.addEdge(vertex, VertexType.EXTERNALIZED_CONFIGURATION);
+			}
+			if (updatedGraph.containsVertex(VertexType.SERVICE_REGISTRY)) {
+				updatedGraph.addEdge(VertexType.SERVICE_REGISTRY, VertexType.EXTERNALIZED_CONFIGURATION);
+			}
+
+		}
+
+		return updatedGraph;
+	}
+
+	/**
+	 * @param updatedGraph
+	 * @param graphGenParameters
+	 * @return
+	 */
+	private static Graph<String, DefaultEdge> applyAPIComposition(Graph<String, DefaultEdge> graph,
+			GraphGeneratorParameters graphGenParameters) {
+		Graph<String, DefaultEdge> updatedGraph = graph;
+		Random rd = new Random();
+		int prob = 0;
+		if (graphGenParameters.getApiCompositionProbability() != Integer.MIN_VALUE) {
+			prob = graphGenParameters.getApiCompositionProbability() / 10;
+		}
+
+		if (rd.nextInt(10) <= prob) {
+			List<String> candidateVertices = new ArrayList<String>();
+			Iterator<String> it = updatedGraph.vertexSet().iterator();
+			while (it.hasNext()) {
+				String vertex = (String) it.next();
+				// we will catch only the leaf nodes
+				if (updatedGraph.outDegreeOf(vertex) == 0) {
+					candidateVertices.add(vertex);
+				}
+			}
+			int verticesQty = updatedGraph.vertexSet().size();
+			Random rdProp = new Random();
+			int verticesToAggregateQty = Math
+					.floorDiv(graphGenParameters.getApiCompositionAggregatedProportion() * verticesQty, 100);
+			// if leaf nodes is not enough, we will add aleatory nodes
+			System.out.println("verticesQty=" + verticesQty);
+			System.out.println("verticesToAggregateQty=" + verticesToAggregateQty);
+			System.out.println("candidateVertices.size()=" + candidateVertices.size());
+			if (verticesToAggregateQty > candidateVertices.size()) {
+				List<String> verticesList = Graphs.getVertexToIntegerMapping(updatedGraph).getIndexList();
+				int aleatoryIndex = -1;
+				while (candidateVertices.size() < verticesToAggregateQty) {
+					aleatoryIndex = rdProp.nextInt(verticesList.size());
+					String selectedVertex = verticesList.get(aleatoryIndex);
+					if (!candidateVertices.contains(selectedVertex)) {
+						candidateVertices.add(selectedVertex);
+					}
+				}
+			}
+			System.out.println("candidateVertices.size() depois=" + candidateVertices.size());
+			int countWhile = 1;
+			while (candidateVertices.size() > 0) {
+				int aggregateQty = GraphGeneratorParameters.API_COMPOSITION_AGGREGATED_MIN + rdProp.nextInt(
+						Math.min(candidateVertices.size(), GraphGeneratorParameters.API_COMPOSITION_AGGREGATED_MAX
+								- GraphGeneratorParameters.API_COMPOSITION_AGGREGATED_MIN));
+				// we can't leave only 1 element, because isn't possible to aggregate 1 element
+				// just.
+				if (candidateVertices.size() - aggregateQty < 2) {
+					aggregateQty = candidateVertices.size();
+				}
+				updatedGraph.addVertex(VertexType.API_COMPOSITION + countWhile);
+				for (int i = 0; i < aggregateQty; i++) {
+					updatedGraph.addEdge(VertexType.API_COMPOSITION + countWhile, candidateVertices.get(0));
+					candidateVertices.remove(0);
+				}
+				countWhile++;
+			}
+
+		}
 		return updatedGraph;
 	}
 
@@ -155,12 +317,13 @@ public class App {
 		}
 
 		if (rdProb.nextInt(10) <= eDProb) {
-			String messageBrokerVertex = "MB";
-			updatedGraph.addVertex(messageBrokerVertex);
+			updatedGraph.addVertex(VertexType.EVENT_DRIVEN);
 			Iterator<String> it = updatedGraph.vertexSet().iterator();
+			VertexTypeRestrictions vertexTypeRestrictions = new VertexTypeRestrictions(true, true, false, true, false,
+					false);
 			while (it.hasNext()) {
 				String vertex = (String) it.next();
-				if (!vertex.equals(messageBrokerVertex) && !vertex.equals("REG") && !vertex.equals("GTW")) {
+				if (vertexTypeRestrictions.testVertexTypeRestrictions(vertex)) {
 					if (rdDistProb.nextInt(10) <= eDDProb) {
 						Set<DefaultEdge> outgoingEdges = updatedGraph.outgoingEdgesOf(vertex);
 						List<String> targetVertices = new ArrayList<String>();
@@ -169,15 +332,15 @@ public class App {
 							for (DefaultEdge outEdge : outgoingEdges) {
 								String targetVertex = updatedGraph.getEdgeTarget(outEdge);
 								// we should not consider REG vertex as vertex
-								if (!targetVertex.equals("REG")) {
+								if (!targetVertex.equals(VertexType.EVENT_DRIVEN)) {
 									targetVertices.add(targetVertex);
 									edgesToRemove.add(outEdge);
 								}
 							}
 
-							updatedGraph.addEdge(vertex, messageBrokerVertex);
+							updatedGraph.addEdge(vertex, VertexType.EVENT_DRIVEN);
 							for (String targetVertex : targetVertices) {
-								updatedGraph.addEdge(messageBrokerVertex, targetVertex);
+								updatedGraph.addEdge(VertexType.EVENT_DRIVEN, targetVertex);
 							}
 							updatedGraph.removeAllEdges(edgesToRemove);
 						}
@@ -203,17 +366,16 @@ public class App {
 		}
 
 		if (rd.nextInt(10) <= prob) {
-			String apiGatewayVertex = "GTW";
-			updatedGraph.addVertex(apiGatewayVertex);
+			updatedGraph.addVertex(VertexType.API_GATEWAY);
 			Iterator<String> it = updatedGraph.vertexSet().iterator();
 			while (it.hasNext()) {
 				String vertex = (String) it.next();
-				if (!vertex.equals(apiGatewayVertex)) {
+				if (!vertex.equals(VertexType.API_GATEWAY)) {
 					// The API Gateway will connect with all vertices available to external
 					// Our premise is all the vertices that they don`t have incoming edges are
 					// available to external only
 					if (updatedGraph.incomingEdgesOf(vertex).isEmpty()) {
-						updatedGraph.addEdge(apiGatewayVertex, vertex);
+						updatedGraph.addEdge(VertexType.API_GATEWAY, vertex);
 					}
 				}
 			}
@@ -221,8 +383,8 @@ public class App {
 			// edges.
 			// In this case, we will selected a percentage of the vertices to be called by
 			// gateway
-			System.out.println("gateway degree = "+ updatedGraph.degreeOf(apiGatewayVertex));
-			if (updatedGraph.degreeOf(apiGatewayVertex) == 0) {
+			System.out.println("gateway degree = " + updatedGraph.degreeOf(VertexType.API_GATEWAY));
+			if (updatedGraph.degreeOf(VertexType.API_GATEWAY) == 0) {
 				Random rdVertices = new Random();
 				int numberOfVertices = updatedGraph.vertexSet().size();
 				int externalVertices = Math.floorDiv(numberOfVertices * 30, 100);
@@ -234,10 +396,10 @@ public class App {
 
 					String vertexSelected = verticesList.get(vertexIndex);
 					if (!verticesAlreadyUsed.contains(vertexSelected) && !vertexSelected.equals("GTW")) {
-						updatedGraph.addEdge(apiGatewayVertex, vertexSelected);
+						updatedGraph.addEdge(VertexType.API_GATEWAY, vertexSelected);
 						verticesAlreadyUsed.add(vertexSelected);
 						count++;
-					}					
+					}
 				}
 			}
 		}
@@ -263,15 +425,15 @@ public class App {
 		}
 
 		if (rd.nextInt(10) <= prob) {
-			String serviceRegistryVertex = "REG";
-			updatedGraph.addVertex(serviceRegistryVertex);
-
+			updatedGraph.addVertex(VertexType.SERVICE_REGISTRY);
+			VertexTypeRestrictions vertexTypeRestrictions = new VertexTypeRestrictions(true, true, false, false, false,
+					false);
 			Iterator<String> it = updatedGraph.vertexSet().iterator();
 			while (it.hasNext()) {
 				String vertex = (String) it.next();
-				if (!vertex.equals(serviceRegistryVertex) && !vertex.equals("GTW")) {
-					updatedGraph.addEdge(vertex, serviceRegistryVertex);
-					updatedGraph.addEdge(serviceRegistryVertex, vertex);
+				if (vertexTypeRestrictions.testVertexTypeRestrictions(vertex)) {
+					updatedGraph.addEdge(vertex, VertexType.SERVICE_REGISTRY);
+					updatedGraph.addEdge(VertexType.SERVICE_REGISTRY, vertex);
 				}
 			}
 		}
@@ -331,10 +493,10 @@ public class App {
 		randomGraph = new SimpleDirectedGraph<>(vSupplier, SupplierUtil.createDefaultEdgeSupplier(), false);
 
 		// Create the GnpRandomGraphGenerator object
-		// The random graph will have 10 nodes and the probability 0.2 to have edge
+		// The random graph will have 10 nodes and the probability 0.1 to have edge
 		// between 2 nodes
 		GnpRandomGraphGenerator<String, DefaultEdge> randomGenerator = new GnpRandomGraphGenerator<>(
-				graphGenParameters.getVerticesNumber(), 0.2);
+				graphGenParameters.getVerticesNumber(), 0.1);
 
 		// Use the GnpRandomGraphGenerator object to make a random graph
 		randomGenerator.generateGraph(randomGraph);
@@ -350,13 +512,14 @@ public class App {
 		// há 3 opções de tamanho de grafo
 		gParams.setGraphSize(rdGrParams.nextInt(3));
 		gParams.calculateVerticesNumber();
-		gParams.setApiCompositionProbability(0);
-		gParams.setApiGatewayProbability(100);
-		gParams.setCqrsProbability(0);
-		gParams.setDistributedTracingProbability(0);
+		gParams.setApiCompositionProbability(50);
+		gParams.setApiCompositionAggregatedProportion(20);
+		gParams.setApiGatewayProbability(80);
+		gParams.setDistributedTracingProbability(50);
 		gParams.setEventDrivingProbability(50);
 		gParams.setEventDrivingProportionProbability(50);
-		gParams.setExternalizedConfigurationProbability(0);
+		gParams.setExternalizedConfigurationProbability(50);
+		gParams.setExternalizedConfigProportion(40);
 		gParams.setServiceRegistryProbability(100);
 
 		return gParams;

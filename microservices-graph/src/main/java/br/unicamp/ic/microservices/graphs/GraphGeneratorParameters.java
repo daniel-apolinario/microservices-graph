@@ -27,6 +27,9 @@ public class GraphGeneratorParameters {
 
 	public static final int BIG_GRAPH_MIN = 26;
 	public static final int BIG_GRAPH_MAX = 60;
+	
+	public static final int API_COMPOSITION_AGGREGATED_MIN = 2;
+	public static final int API_COMPOSITION_AGGREGATED_MAX = 10;
 
 	private int graphStructure;
 
@@ -44,13 +47,15 @@ public class GraphGeneratorParameters {
 	
 	private int apiCompositionProbability = Integer.MIN_VALUE;
 	
-	private int cqrsProbability = Integer.MIN_VALUE;
+	private int apiCompositionAggregatedProportion = Integer.MIN_VALUE;
 	
 	private int eventDrivingProbability = Integer.MIN_VALUE;
 	
 	private int eventDrivingProportionProbability = Integer.MIN_VALUE;
 	
 	private int externalizedConfigurationProbability = Integer.MIN_VALUE;
+	
+	private int externalizedConfigProportion = Integer.MIN_VALUE;
 
 	public int getGraphStructure() {
 		return graphStructure;
@@ -122,14 +127,6 @@ public class GraphGeneratorParameters {
 		this.apiCompositionProbability = apiCompositionProbability;
 	}
 
-	public int getCqrsProbability() {
-		return cqrsProbability;
-	}
-
-	public void setCqrsProbability(int cqrsProbability) {
-		this.cqrsProbability = cqrsProbability;
-	}
-
 	public int getEventDrivingProbability() {
 		return eventDrivingProbability;
 	}
@@ -158,6 +155,34 @@ public class GraphGeneratorParameters {
 	 */
 	public void setEventDrivingProportionProbability(int eventDrivingProportionProbability) {
 		this.eventDrivingProportionProbability = eventDrivingProportionProbability;
+	}
+
+	/**
+	 * @return the apiCompositionAggregatedProportion
+	 */
+	public int getApiCompositionAggregatedProportion() {
+		return apiCompositionAggregatedProportion;
+	}
+
+	/**
+	 * @param apiCompositionAggregatedProportion the apiCompositionAggregatedProportion to set
+	 */
+	public void setApiCompositionAggregatedProportion(int apiCompositionAggregatedProportion) {
+		this.apiCompositionAggregatedProportion = apiCompositionAggregatedProportion;
+	}
+
+	/**
+	 * @return the externalizedConfigProportion
+	 */
+	public int getExternalizedConfigProportion() {
+		return externalizedConfigProportion;
+	}
+
+	/**
+	 * @param externalizedConfigProportion the externalizedConfigProportion to set
+	 */
+	public void setExternalizedConfigProportion(int externalizedConfigProportion) {
+		this.externalizedConfigProportion = externalizedConfigProportion;
 	}
 
 	public void calculateVerticesNumber() {
