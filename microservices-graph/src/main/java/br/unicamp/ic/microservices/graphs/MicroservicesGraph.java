@@ -3,7 +3,11 @@
  */
 package br.unicamp.ic.microservices.graphs;
 
+import java.util.function.Supplier;
+
+import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleDirectedGraph;
+import org.jgrapht.util.SupplierUtil;
 
 /**
  * @author Daniel R. F. Apolinario
@@ -30,6 +34,8 @@ public class MicroservicesGraph<V, E> extends SimpleDirectedGraph<V, E> {
 		MEGA_SERVICE, CYCLIC_DEPENDENCY;
 	}
 
+	private String fileName;
+	
 	private InitialArchitectureState initialArchitectureState;
 
 	private ArchitectureEvolutionTarget architectureEvolutionTarget;
@@ -37,12 +43,43 @@ public class MicroservicesGraph<V, E> extends SimpleDirectedGraph<V, E> {
 	private ArchitectureEvolutionIssue architectureEvolutionIssue;
 
 	private double architectureEvolutionGrowthRate;
-
+	
+	private int[] verticesToAddInReleases;
+	
+	private int[] verticesToRemoveInReleases;
+	
+	private int[] edgesToAddInReleases;
+	
+	private int[] edgesToRemoveInReleases;
+		
 	/**
 	 * @param edgeClass
 	 */
 	public MicroservicesGraph(Class<? extends E> edgeClass) {
 		super(edgeClass);
+	}
+
+	/**
+	 * @param vertexSupplier
+	 * @param edgeSupplier
+	 * @param weighted
+	 */
+	public MicroservicesGraph(Supplier<V> vertexSupplier, Supplier<E> edgeSupplier) {
+		super(vertexSupplier, edgeSupplier, false);
+	}
+
+	/**
+	 * @return the fileName
+	 */
+	public String getFileName() {
+		return fileName;
+	}
+
+	/**
+	 * @param fileName the fileName to set
+	 */
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
 	}
 
 	public InitialArchitectureState getInitialArchitectureState() {
@@ -75,5 +112,37 @@ public class MicroservicesGraph<V, E> extends SimpleDirectedGraph<V, E> {
 
 	public void setArchitectureEvolutionGrowthRate(double architectureEvolutionGrowthRate) {
 		this.architectureEvolutionGrowthRate = architectureEvolutionGrowthRate;
+	}
+
+	public int[] getVerticesToAddInReleases() {
+		return verticesToAddInReleases;
+	}
+
+	public void setVerticesToAddInReleases(int[] verticesToAddInReleases) {
+		this.verticesToAddInReleases = verticesToAddInReleases;
+	}
+
+	public int[] getVerticesToRemoveInReleases() {
+		return verticesToRemoveInReleases;
+	}
+
+	public void setVerticesToRemoveInReleases(int[] verticesToRemoveInReleases) {
+		this.verticesToRemoveInReleases = verticesToRemoveInReleases;
+	}
+
+	public int[] getEdgesToAddInReleases() {
+		return edgesToAddInReleases;
+	}
+
+	public void setEdgesToAddInReleases(int[] edgesToAddInReleases) {
+		this.edgesToAddInReleases = edgesToAddInReleases;
+	}
+
+	public int[] getEdgesToRemoveInReleases() {
+		return edgesToRemoveInReleases;
+	}
+
+	public void setEdgesToRemoveInReleases(int[] edgesToRemoveInReleases) {
+		this.edgesToRemoveInReleases = edgesToRemoveInReleases;
 	}
 }

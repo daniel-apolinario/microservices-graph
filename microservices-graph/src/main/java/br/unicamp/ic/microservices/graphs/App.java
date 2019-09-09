@@ -30,6 +30,8 @@ import org.jgrapht.util.SupplierUtil;
  */
 public class App {
 
+	private static final String DIR_NAME = "/home/daniel/Downloads/";
+
 	public static void main(String[] args) {
 
 		// Número de grafos a serem gerados.
@@ -44,47 +46,9 @@ public class App {
 		int graphCount = 1;
 		for (GraphGeneratorParameters graphGenParameters : grGeParams) {
 			Graph<String, DefaultEdge> graph = generateGraph(graphGenParameters, graphCount);
-			exportGraphToFile(graph, Integer.toString(graphCount));
+			MicroservicesGraphUtil.exportGraphToFile(graph, DIR_NAME, "grafo-" + Integer.toString(graphCount));
 			graphCount++;
 		}
-	}
-
-	/**
-	 * Method to export a Graph object to a DOT file format
-	 * 
-	 * @param graph
-	 */
-	private static void exportGraphToFile(Graph<String, DefaultEdge> graph, String graphName) {
-		if (graph != null) {
-			// use helper classes to define how vertices should be rendered,
-			// adhering to the DOT language restrictions
-			ComponentNameProvider<String> vertexIdProvider = new ComponentNameProvider<String>() {
-				public String getName(String name) {
-					return name;
-				}
-			};
-			ComponentNameProvider<String> vertexLabelProvider = new ComponentNameProvider<String>() {
-				public String getName(String name) {
-					return name;
-				}
-			};
-			GraphExporter<String, DefaultEdge> exporter = new DOTExporter<>(vertexIdProvider, vertexLabelProvider,
-					null);
-			Writer writer = null;
-			try {
-				writer = new FileWriter("/home/daniel/Downloads/grafo-" + graphName + ".dot");
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-			try {
-				exporter.exportGraph(graph, writer);
-			} catch (org.jgrapht.io.ExportException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-
 	}
 
 	/**
@@ -123,25 +87,25 @@ public class App {
 			GraphGeneratorParameters graphGenParameters, int graphCount) {
 		Graph<String, DefaultEdge> updatedGraph = graph;
 
-		exportGraphToFile(updatedGraph, graphCount + "-ini");
+		MicroservicesGraphUtil.exportGraphToFile(updatedGraph, DIR_NAME, "grafo-" + graphCount + "-ini");
 
 		updatedGraph = applyAPIComposition(updatedGraph, graphGenParameters);
-		exportGraphToFile(updatedGraph, graphCount + "-com");
+		MicroservicesGraphUtil.exportGraphToFile(updatedGraph, DIR_NAME, "grafo-" + graphCount + "-com");
 
 		updatedGraph = applyAPIGateway(updatedGraph, graphGenParameters);
-		exportGraphToFile(updatedGraph, graphCount + "-gtw");
+		MicroservicesGraphUtil.exportGraphToFile(updatedGraph, DIR_NAME, "grafo-" + graphCount + "-gtw");
 
 		updatedGraph = applyServiceRegistry(updatedGraph, graphGenParameters);
-		exportGraphToFile(updatedGraph, graphCount + "-reg");
+		MicroservicesGraphUtil.exportGraphToFile(updatedGraph, DIR_NAME, "grafo-" + graphCount + "-reg");
 
 		updatedGraph = applyEventDriven(updatedGraph, graphGenParameters);
-		exportGraphToFile(updatedGraph, graphCount + "-evD");
+		MicroservicesGraphUtil.exportGraphToFile(updatedGraph, DIR_NAME, "grafo-" + graphCount + "-evD");
 
 		updatedGraph = applyExternalizedConfiguration(updatedGraph, graphGenParameters);
-		exportGraphToFile(updatedGraph, graphCount + "-cfg");
+		MicroservicesGraphUtil.exportGraphToFile(updatedGraph, DIR_NAME, "grafo-" + graphCount + "-cfg");
 
 		updatedGraph = applyDistributedTracing(updatedGraph, graphGenParameters);
-		exportGraphToFile(updatedGraph, graphCount + "-trc");
+		MicroservicesGraphUtil.exportGraphToFile(updatedGraph, DIR_NAME, "grafo-" + graphCount + "-trc");
 
 		return updatedGraph;
 	}
@@ -178,27 +142,6 @@ public class App {
 
 	}
 
-	private static List<String> getPercentualRandomVertices(Graph<String, DefaultEdge> graph, int percentual,
-			VertexTypeRestrictions vertexTypeRestrictions) {
-		List<String> vertices = new ArrayList<String>();
-		Random rd = new Random();
-		int graphSize = 0;
-		if (graph != null && graph.vertexSet().size() > 0 && percentual > 0 && percentual <= 100) {
-			graphSize = graph.vertexSet().size();
-			List<String> allVertices = Graphs.getVertexToIntegerMapping(graph).getIndexList();
-			int verticesQty = Math.floorDiv(graphSize * percentual, 100);
-			int i = 0;
-			while (i < verticesQty) {
-				int vertexIndex = rd.nextInt(graphSize - i);
-				if (vertexTypeRestrictions.testVertexTypeRestrictions(allVertices.get(vertexIndex))) {
-					vertices.add(allVertices.get(vertexIndex));
-					allVertices.remove(vertexIndex);
-					i++;
-				}
-			}
-		}
-		return vertices;
-	}
 
 	/**
 	 * @param updatedGraph
@@ -215,7 +158,7 @@ public class App {
 		}
 
 		if (rd.nextInt(10) <= prob) {
-			List<String> sourceVerticesToExternalizedConfig = getPercentualRandomVertices(updatedGraph,
+			List<String> sourceVerticesToExternalizedConfig = MicroservicesGraphUtil.getPercentualRandomVertices(updatedGraph,
 					graphGenParameters.getExternalizedConfigProportion(),
 					new VertexTypeRestrictions(true, true, false, true, true, true));
 			updatedGraph.addVertex(VertexType.EXTERNALIZED_CONFIGURATION);

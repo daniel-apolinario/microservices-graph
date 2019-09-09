@@ -26,15 +26,20 @@ public class Teste {
 
 	public static void main(String args[]) {
 
-		int nodes = 20;
-		int releases = 10;
+		int num = 5;
+		int div = 2;
+		System.out.println(num / div);
+		System.out.println(Math.ceil((double) num / div));
 
-		int[] nodesToAdd = calculateVectorDistribution((int) (nodes * 1.3), 10);
-		int[] nodesToRemove = calculateVectorDistribution((int) (nodes * 0.3), 10);
-
-		for (int i = 0; i < releases; i++) {
-			System.out.println("nodesToAdd[" + i + "]=" + nodesToAdd[i] + " e nodesToRemove[" + i + "]=" + nodesToRemove[i]);
-		}
+//		int nodes = 20;
+//		int releases = 10;
+//
+//		int[] nodesToAdd = calculateVectorDistribution((int) (nodes * 1.3), 10);
+//		int[] nodesToRemove = calculateVectorDistribution((int) (nodes * 0.3), 10);
+//
+//		for (int i = 0; i < releases; i++) {
+//			System.out.println("nodesToAdd[" + i + "]=" + nodesToAdd[i] + " e nodesToRemove[" + i + "]=" + nodesToRemove[i]);
+//		}
 	}
 
 	public static int[] calculateVectorDistribution(int nodes, int releases) {

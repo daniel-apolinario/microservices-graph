@@ -19,9 +19,9 @@ public class GraphEvolutionParameters {
 
 	private double architectureEvolutionTargetWorsePercentage;
 
-	private double architectureEvolutionGrowthRateMininum;
+	private int architectureEvolutionGrowthRateMininum;
 
-	private double architectureEvolutionGrowthRateMaximum;	
+	private int architectureEvolutionGrowthRateMaximum;	
 
 	public int getNumberOfReleases() {
 		return numberOfReleases;
@@ -63,19 +63,19 @@ public class GraphEvolutionParameters {
 		this.architectureEvolutionTargetWorsePercentage = architectureEvolutionTargetWorsePercentage;
 	}
 
-	public double getArchitectureEvolutionGrowthRateMininum() {
+	public int getArchitectureEvolutionGrowthRateMininum() {
 		return architectureEvolutionGrowthRateMininum;
 	}
 
-	public void setArchitectureEvolutionGrowthRateMininum(double architectureEvolutionGrowthRateMininum) {
+	public void setArchitectureEvolutionGrowthRateMininum(int architectureEvolutionGrowthRateMininum) {
 		this.architectureEvolutionGrowthRateMininum = architectureEvolutionGrowthRateMininum;
 	}
 
-	public double getArchitectureEvolutionGrowthRateMaximum() {
+	public int getArchitectureEvolutionGrowthRateMaximum() {
 		return architectureEvolutionGrowthRateMaximum;
 	}
 
-	public void setArchitectureEvolutionGrowthRateMaximum(double architectureEvolutionGrowthRateMaximum) {
+	public void setArchitectureEvolutionGrowthRateMaximum(int architectureEvolutionGrowthRateMaximum) {
 		this.architectureEvolutionGrowthRateMaximum = architectureEvolutionGrowthRateMaximum;
 	}
 
