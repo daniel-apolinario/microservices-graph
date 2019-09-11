@@ -1,8 +1,5 @@
 package br.unicamp.ic.microservices.graphs;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -16,9 +13,6 @@ import org.jgrapht.generate.BarabasiAlbertGraphGenerator;
 import org.jgrapht.generate.GnpRandomGraphGenerator;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleDirectedGraph;
-import org.jgrapht.io.ComponentNameProvider;
-import org.jgrapht.io.DOTExporter;
-import org.jgrapht.io.GraphExporter;
 import org.jgrapht.util.SupplierUtil;
 
 /**
@@ -35,7 +29,7 @@ public class App {
 	public static void main(String[] args) {
 
 		// Número de grafos a serem gerados.
-		int n = 10;
+		int n = 6;
 
 		List<GraphGeneratorParameters> grGeParams = new ArrayList<GraphGeneratorParameters>();
 		for (int i = 0; i < n; i++) {

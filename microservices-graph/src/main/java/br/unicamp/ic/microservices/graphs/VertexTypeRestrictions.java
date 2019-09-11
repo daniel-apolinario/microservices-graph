@@ -3,6 +3,9 @@
  */
 package br.unicamp.ic.microservices.graphs;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author Daniel R. F. Apolinario
  *
@@ -21,6 +24,8 @@ public class VertexTypeRestrictions {
 
 	private boolean distributedTracingRestrict = false;
 
+	private List<String> extraRestrictions;
+
 	/**
 	 * @param apiGatewayRestrict
 	 * @param serviceRegistryRestrict
@@ -33,6 +38,22 @@ public class VertexTypeRestrictions {
 			boolean apiCompositionRestrict, boolean eventDrivenRestrict, boolean externalizedConfigurationRestrict,
 			boolean distributedTracingRestrict) {
 		super();
+		setAttributes(apiGatewayRestrict, serviceRegistryRestrict, apiCompositionRestrict, eventDrivenRestrict,
+				externalizedConfigurationRestrict, distributedTracingRestrict);
+	}
+
+	public VertexTypeRestrictions(boolean apiGatewayRestrict, boolean serviceRegistryRestrict,
+			boolean apiCompositionRestrict, boolean eventDrivenRestrict, boolean externalizedConfigurationRestrict,
+			boolean distributedTracingRestrict, List<String> extraRestrictions) {
+		super();
+		setAttributes(apiGatewayRestrict, serviceRegistryRestrict, apiCompositionRestrict, eventDrivenRestrict,
+				externalizedConfigurationRestrict, distributedTracingRestrict);
+		this.extraRestrictions = extraRestrictions;
+	}
+
+	private void setAttributes(boolean apiGatewayRestrict, boolean serviceRegistryRestrict,
+			boolean apiCompositionRestrict, boolean eventDrivenRestrict, boolean externalizedConfigurationRestrict,
+			boolean distributedTracingRestrict) {
 		this.apiGatewayRestrict = apiGatewayRestrict;
 		this.serviceRegistryRestrict = serviceRegistryRestrict;
 		this.apiCompositionRestrict = apiCompositionRestrict;
@@ -49,7 +70,7 @@ public class VertexTypeRestrictions {
 		this.externalizedConfigurationRestrict = false;
 		this.distributedTracingRestrict = false;
 	}
-	
+
 	public boolean isApiGatewayRestrict() {
 		return apiGatewayRestrict;
 	}
@@ -98,6 +119,20 @@ public class VertexTypeRestrictions {
 		this.distributedTracingRestrict = distributedTracingRestrict;
 	}
 
+	public void addExtraRestrictions(String restriction) {
+		if (this.extraRestrictions == null) {
+			this.extraRestrictions = new ArrayList<String>();
+		}
+		this.extraRestrictions.add(restriction);
+	}
+
+	public void addExtraRestrictions(List<String> restrictions) {
+		if (this.extraRestrictions == null) {
+			this.extraRestrictions = new ArrayList<String>();
+		}
+		this.extraRestrictions.addAll(restrictions);
+	}
+
 	public boolean testVertexTypeRestrictions(String vertexName) {
 
 		if (vertexName != null) {
@@ -107,7 +142,7 @@ public class VertexTypeRestrictions {
 			if (this.serviceRegistryRestrict && vertexName.equals(VertexType.SERVICE_REGISTRY)) {
 				return false;
 			}
-			if (this.apiCompositionRestrict && vertexName.equals(VertexType.API_COMPOSITION)) {
+			if (this.apiCompositionRestrict && vertexName.startsWith(VertexType.API_COMPOSITION)) {
 				return false;
 			}
 			if (this.eventDrivenRestrict && vertexName.equals(VertexType.EVENT_DRIVEN)) {
@@ -119,7 +154,10 @@ public class VertexTypeRestrictions {
 			if (this.distributedTracingRestrict && vertexName.equals(VertexType.DISTRIBUTED_TRACING)) {
 				return false;
 			}
-
+			if (this.extraRestrictions != null && this.extraRestrictions.size() > 0
+					&& this.extraRestrictions.contains(vertexName)) {
+				return false;
+			}
 		}
 		return true;
 	}

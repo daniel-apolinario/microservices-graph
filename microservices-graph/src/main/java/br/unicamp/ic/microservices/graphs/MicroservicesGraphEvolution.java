@@ -14,13 +14,15 @@ import java.nio.file.PathMatcher;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-import java.util.function.Supplier;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.jgrapht.Graph;
+import org.jgrapht.Graphs;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.io.DOTImporter;
 import org.jgrapht.io.EdgeProvider;
@@ -85,11 +87,110 @@ public class MicroservicesGraphEvolution {
 					}
 				} else {
 					if (microservicesGraph.getInitialArchitectureState() == InitialArchitectureState.BAD) {
-
+						if (microservicesGraph.getArchitectureEvolutionTarget() == ArchitectureEvolutionTarget.BETTER) {
+							simulateArchitectureEvolutionToBetter(microservicesGraph, evolutionParameters);
+						} else {
+							simulateArchitectureEvoluionToKeep(microservicesGraph);
+						}
 					}
 				}
 			}
 		}
+	}
+
+	/**
+	 * @param microservicesGraph
+	 */
+	private static void simulateArchitectureEvolutionToBetter(
+			MicroservicesGraph<String, DefaultEdge> microservicesGraph, GraphEvolutionParameters evolutionParameters) {
+		if (microservicesGraph != null) {
+			if (microservicesGraph.getArchitectureEvolutionIssue() == ArchitectureEvolutionIssue.MEGA_SERVICE) {
+				// to select one vertice to be the Mega Service
+				VertexTypeRestrictions vertexTypeRestrictions = new VertexTypeRestrictions(true, true, true, true, true,
+						true);
+				int graphSize = microservicesGraph.vertexSet().size();
+				int maxDependencies = (int) Math.floor(
+						graphSize * (((double) evolutionParameters.getArchitectureEvolutionGrowthRateMininum() / 100)));
+
+				List<String> megaServices = findVerticesMegaServices(microservicesGraph, maxDependencies,
+						vertexTypeRestrictions);
+
+				int[] verticesToAdd = microservicesGraph.getVerticesToAddInReleases();
+				File newDirectory = new File(
+						microservicesGraph.getFileName().substring(0, microservicesGraph.getFileName().length() - 4));
+				newDirectory.mkdir();
+				if (verticesToAdd != null && verticesToAdd.length > 0) {
+					for (int i = 0; i < verticesToAdd.length; i++) {
+						breakDownMegaServices(microservicesGraph, megaServices, verticesToAdd[i], maxDependencies);
+						MicroservicesGraphUtil.exportGraphToFile(microservicesGraph, newDirectory.getAbsolutePath(),
+								"release-" + i);	
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * @param microservicesGraph
+	 * @param megaServices
+	 * @param i
+	 * @return
+	 */
+	private static void breakDownMegaServices(MicroservicesGraph<String, DefaultEdge> microservicesGraph,
+			List<String> megaServices, int verticesToAdd, int maxDependencies) {
+		for (int i = 0; i < verticesToAdd; i++) {
+			if (megaServices != null && megaServices.size() > 0) {
+				String megaServiceName = megaServices.get(0);
+				Set<DefaultEdge> incomingEdges = microservicesGraph.incomingEdgesOf(megaServiceName);
+				Iterator<DefaultEdge> incomingEdgesIterator = incomingEdges.iterator();
+				List<DefaultEdge> edgesToRemove = new ArrayList<DefaultEdge>();
+				List<String> verticesSource = new ArrayList<String>();
+				for (int j = 0; j < incomingEdges.size() / 2; j++) {
+					DefaultEdge edgeToRemove = incomingEdgesIterator.next();
+					edgesToRemove.add(edgeToRemove);
+					verticesSource.add(microservicesGraph.getEdgeSource(edgeToRemove));
+				}
+				microservicesGraph.removeAllEdges(edgesToRemove);
+				String newVertex = microservicesGraph.addVertex();
+				Graphs.addIncomingEdges(microservicesGraph, newVertex, verticesSource);
+				if (incomingEdges.size() < maxDependencies) {
+					megaServices.remove(0);
+				} else {
+					megaServices.add(newVertex);
+				}
+			} else {
+				VertexTypeRestrictions vertexTypeRestrictions = new VertexTypeRestrictions(true, true, true, true, true,
+						true);
+				List<String> vertices = MicroservicesGraphUtil.getRandomVertices(microservicesGraph, 1,
+						vertexTypeRestrictions);
+
+				String addedVertex = microservicesGraph.addVertex();
+				microservicesGraph = MicroservicesGraphUtil.connectDirectedVerticesRandomly(microservicesGraph,
+						addedVertex, vertices.get(0));
+				microservicesGraph = keepArchitectureConsistency(microservicesGraph, addedVertex);
+			}
+		}
+
+	}
+
+	/**
+	 * @param microservicesGraph
+	 * @param vertexTypeRestrictions
+	 * @return
+	 */
+	private static List<String> findVerticesMegaServices(MicroservicesGraph<String, DefaultEdge> microservicesGraph,
+			int maxDependencies, VertexTypeRestrictions vertexTypeRestrictions) {
+		List<String> megaServices = new ArrayList<String>();
+		if (microservicesGraph != null && microservicesGraph.vertexSet().size() > 0) {
+			List<String> allVertices = Graphs.getVertexToIntegerMapping(microservicesGraph).getIndexList();
+			for (String vertice : allVertices) {
+				if (microservicesGraph.inDegreeOf(vertice) > maxDependencies
+						&& vertexTypeRestrictions.testVertexTypeRestrictions(vertice)) {
+					megaServices.add(vertice);
+				}
+			}
+		}
+		return megaServices;
 	}
 
 	/**
@@ -131,15 +232,67 @@ public class MicroservicesGraphEvolution {
 	 */
 	private static MicroservicesGraph<String, DefaultEdge> keepArchitectureConsistency(
 			MicroservicesGraph<String, DefaultEdge> microservicesGraph, String addedVertex) {
+		Random rd = new Random();
 		// if new vertex added is calling any other existent service
 		if (microservicesGraph.outDegreeOf(addedVertex) > 0) {
-			// we will include an API Gateway call 
-			existsVertexType(VertexType)
+			// we will include an API Gateway call
+			if (existsVertexType(microservicesGraph, VertexType.API_GATEWAY)) {
+				microservicesGraph.addEdge(VertexType.API_GATEWAY, addedVertex);
+			}
 		}
-		return null;
+		if (existsVertexType(microservicesGraph, VertexType.SERVICE_REGISTRY)) {
+			microservicesGraph.addEdge(VertexType.SERVICE_REGISTRY, addedVertex);
+			microservicesGraph.addEdge(addedVertex, VertexType.SERVICE_REGISTRY);
+		}
+		if (existsVertexType(microservicesGraph, VertexType.EVENT_DRIVEN)) {
+			// I'm not sure about what to do here
+		}
+		if (existsVertexType(microservicesGraph, VertexType.DISTRIBUTED_TRACING)) {
+			if (rd.nextInt(2) == 0) {
+				microservicesGraph.addEdge(addedVertex, VertexType.DISTRIBUTED_TRACING);
+			}
+		}
+		if (existsVertexType(microservicesGraph, VertexType.EXTERNALIZED_CONFIGURATION)) {
+			if (rd.nextInt(2) == 0) {
+				microservicesGraph.addEdge(addedVertex, VertexType.EXTERNALIZED_CONFIGURATION);
+			}
+		}
+
+		return microservicesGraph;
 	}
 
-	
+	/**
+	 * @param microservicesGraph
+	 * @param apiGateway
+	 * @return
+	 */
+	private static boolean existsVertexType(MicroservicesGraph<String, DefaultEdge> microservicesGraph,
+			String vertexType) {
+		boolean found = false;
+		switch (vertexType) {
+		case VertexType.API_GATEWAY:
+		case VertexType.SERVICE_REGISTRY:
+		case VertexType.EVENT_DRIVEN:
+		case VertexType.DISTRIBUTED_TRACING:
+		case VertexType.EXTERNALIZED_CONFIGURATION:
+
+			found = microservicesGraph.containsVertex(vertexType);
+			break;
+		case VertexType.API_COMPOSITION:
+			int cont = 0;
+			List<String> allVertices = Graphs.getVertexToIntegerMapping(microservicesGraph).getIndexList();
+			while (!found && cont < allVertices.size()) {
+				if (allVertices.get(cont).startsWith(VertexType.API_COMPOSITION)) {
+					found = true;
+				}
+			}
+		default:
+			break;
+		}
+
+		return found;
+	}
+
 	/**
 	 * @param microservicesGraph
 	 */
@@ -316,6 +469,7 @@ public class MicroservicesGraphEvolution {
 					}
 				} else {
 					microservicesGraph.setInitialArchitectureState(InitialArchitectureState.BAD);
+					microservicesGraph = applyMegaServiceIssue(microservicesGraph, evolutionParameters);
 					graphsNumberOfArchitectureBad--;
 					if (graphsNumberOfTargetBetter > 0) {
 						microservicesGraph.setArchitectureEvolutionTarget(ArchitectureEvolutionTarget.BETTER);
@@ -328,6 +482,103 @@ public class MicroservicesGraphEvolution {
 		}
 
 		return configuredGraphList;
+	}
+
+	/**
+	 * @param microservicesGraph
+	 * @return
+	 */
+	private static MicroservicesGraph<String, DefaultEdge> applyMegaServiceIssue(
+			MicroservicesGraph<String, DefaultEdge> microservicesGraph, GraphEvolutionParameters evolutionParameters) {
+		MicroservicesGraph<String, DefaultEdge> returnedGraph = microservicesGraph;
+		Random rd = new Random();
+		int growthRate = rd
+				.nextInt(evolutionParameters.getArchitectureEvolutionGrowthRateMaximum()
+						- evolutionParameters.getArchitectureEvolutionGrowthRateMininum())
+				+ evolutionParameters.getArchitectureEvolutionGrowthRateMininum();
+		int graphSize = microservicesGraph.vertexSet().size();
+		int megaServiceDependents = (int) Math.ceil(graphSize * ((double) growthRate / 100));
+		VertexTypeRestrictions vertexTypeRestrictions = new VertexTypeRestrictions(true, true, true, true, true, true);
+		String verticeMaxIncomingDegree = findMaxIncomingDegreeVertex(microservicesGraph, vertexTypeRestrictions);
+		int currentDegree = microservicesGraph.inDegreeOf(verticeMaxIncomingDegree);
+		Set<DefaultEdge> edgesAlreadyIncoming = microservicesGraph.incomingEdgesOf(verticeMaxIncomingDegree);
+		vertexTypeRestrictions.addExtraRestrictions(verticeMaxIncomingDegree);
+		Iterator<DefaultEdge> edgesIterator = edgesAlreadyIncoming.iterator();
+		while (edgesIterator.hasNext()) {
+			vertexTypeRestrictions.addExtraRestrictions(microservicesGraph.getEdgeSource(edgesIterator.next()));
+		}
+		int servicesToChange = megaServiceDependents - currentDegree;
+		List<String> servicesToChangeList = MicroservicesGraphUtil.getRandomVertices(microservicesGraph,
+				servicesToChange, vertexTypeRestrictions);
+
+		for (int i = 0; i < servicesToChange; i++) {
+			removeRandomEdges(microservicesGraph, 1, servicesToChangeList.get(i));
+		}
+
+		Graphs.addIncomingEdges(microservicesGraph, verticeMaxIncomingDegree, servicesToChangeList);
+
+		return returnedGraph;
+	}
+
+	/**
+	 * @param microservicesGraph
+	 * @param edgesQuantitytity
+	 * @param verticeName
+	 */
+	private static void removeRandomEdges(MicroservicesGraph<String, DefaultEdge> microservicesGraph, int edgesQuantity,
+			String verticeName) {
+		Set<DefaultEdge> outEdges = microservicesGraph.outgoingEdgesOf(verticeName);
+		VertexTypeRestrictions vertexTypeRestrictions = new VertexTypeRestrictions(true, true, true, true, true, true);
+		DefaultEdge outEdgeToRemove = findFirstOutEdgeToAnyCommonService(microservicesGraph, outEdges,
+				vertexTypeRestrictions);
+		if (outEdgeToRemove != null) {
+			microservicesGraph.removeEdge(outEdgeToRemove);
+		} else {
+			Set<DefaultEdge> inEdges = microservicesGraph.incomingEdgesOf(verticeName);
+			DefaultEdge inEdgeToRemove = findFirstInEdgeToAnyCommonService(microservicesGraph, inEdges,
+					vertexTypeRestrictions);
+			if (inEdgeToRemove != null) {
+				microservicesGraph.removeEdge(inEdgeToRemove);
+			}
+		}
+	}
+
+	/**
+	 * @param microservicesGraph
+	 * @param inEdges
+	 * @param vertexTypeRestrictions
+	 * @return
+	 */
+	private static DefaultEdge findFirstInEdgeToAnyCommonService(
+			MicroservicesGraph<String, DefaultEdge> microservicesGraph, Set<DefaultEdge> inEdges,
+			VertexTypeRestrictions vertexTypeRestrictions) {
+		DefaultEdge firstEdge = null;
+
+		for (DefaultEdge edge : inEdges) {
+			String edgeSource = microservicesGraph.getEdgeSource(edge);
+			if (vertexTypeRestrictions.testVertexTypeRestrictions(edgeSource)) {
+				firstEdge = edge;
+			}
+		}
+		return firstEdge;
+	}
+
+	/**
+	 * @param outEdges
+	 * @return
+	 */
+	private static DefaultEdge findFirstOutEdgeToAnyCommonService(
+			MicroservicesGraph<String, DefaultEdge> microservicesGraph, Set<DefaultEdge> outEdges,
+			VertexTypeRestrictions vertexTypeRestrictions) {
+		DefaultEdge firstEdge = null;
+
+		for (DefaultEdge edge : outEdges) {
+			String edgeTarget = microservicesGraph.getEdgeTarget(edge);
+			if (vertexTypeRestrictions.testVertexTypeRestrictions(edgeTarget)) {
+				firstEdge = edge;
+			}
+		}
+		return firstEdge;
 	}
 
 	/**
