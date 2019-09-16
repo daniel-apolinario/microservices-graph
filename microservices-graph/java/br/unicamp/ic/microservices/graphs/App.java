@@ -1,5 +1,6 @@
 package br.unicamp.ic.microservices.graphs;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -24,7 +25,9 @@ import org.jgrapht.util.SupplierUtil;
  */
 public class App {
 
-	private static final String DIR_NAME = "/home/daniel/Downloads/";
+	private static final String PATH_NAME = "/home/daniel/Documentos/mestrado-2018/projeto/grafos-dependencia/";
+	private static final String APP_NAME = "application";
+	private static final String RELEASE_NAME = "release";
 
 	public static void main(String[] args) {
 
@@ -37,11 +40,18 @@ public class App {
 			grGeParams.add(graphGeneratorParameters);
 		}
 
-		int graphCount = 1;
+		int appNumber = 1;
 		for (GraphGeneratorParameters graphGenParameters : grGeParams) {
-			Graph<String, DefaultEdge> graph = generateGraph(graphGenParameters, graphCount);
-			MicroservicesGraphUtil.exportGraphToFile(graph, DIR_NAME, "grafo-" + Integer.toString(graphCount));
-			graphCount++;
+			File newDirectory = new File(MicroservicesGraphUtil.getExportCompletePath(PATH_NAME, APP_NAME, appNumber));
+			newDirectory.mkdir();
+
+			Graph<String, DefaultEdge> graph = generateGraph(graphGenParameters, appNumber);
+			// Creates a new directory to put all the graph files inside it
+
+			MicroservicesGraphUtil.exportGraphToFile(graph,
+					MicroservicesGraphUtil.getExportCompletePath(PATH_NAME, APP_NAME, appNumber),
+					MicroservicesGraphUtil.getApplicationFileName(RELEASE_NAME, 0, Integer.MIN_VALUE, null));
+			appNumber++;
 		}
 	}
 
@@ -78,28 +88,42 @@ public class App {
 	 * @return A updated graph object
 	 */
 	private static Graph<String, DefaultEdge> applyMicroserviceDesignPatterns(Graph<String, DefaultEdge> graph,
-			GraphGeneratorParameters graphGenParameters, int graphCount) {
+			GraphGeneratorParameters graphGenParameters, int appNumber) {
 		Graph<String, DefaultEdge> updatedGraph = graph;
 
-		MicroservicesGraphUtil.exportGraphToFile(updatedGraph, DIR_NAME, "grafo-" + graphCount + "-ini");
+//		MicroservicesGraphUtil.exportGraphToFile(updatedGraph,
+//				MicroservicesGraphUtil.getExportCompletePath(PATH_NAME, APP_NAME, appNumber),
+//				MicroservicesGraphUtil.getApplicationFileName(APP_NAME, appNumber, Integer.MIN_VALUE, "ini"));
 
 		updatedGraph = applyAPIComposition(updatedGraph, graphGenParameters);
-		MicroservicesGraphUtil.exportGraphToFile(updatedGraph, DIR_NAME, "grafo-" + graphCount + "-com");
-
+//		MicroservicesGraphUtil.exportGraphToFile(updatedGraph,
+//				MicroservicesGraphUtil.getExportCompletePath(PATH_NAME, APP_NAME, appNumber),
+//				MicroservicesGraphUtil.getApplicationFileName(APP_NAME, appNumber, Integer.MIN_VALUE, "cps"));
+		
 		updatedGraph = applyAPIGateway(updatedGraph, graphGenParameters);
-		MicroservicesGraphUtil.exportGraphToFile(updatedGraph, DIR_NAME, "grafo-" + graphCount + "-gtw");
+//		MicroservicesGraphUtil.exportGraphToFile(updatedGraph,
+//				MicroservicesGraphUtil.getExportCompletePath(PATH_NAME, APP_NAME, appNumber),
+//				MicroservicesGraphUtil.getApplicationFileName(APP_NAME, appNumber, Integer.MIN_VALUE, "gtw"));
 
 		updatedGraph = applyServiceRegistry(updatedGraph, graphGenParameters);
-		MicroservicesGraphUtil.exportGraphToFile(updatedGraph, DIR_NAME, "grafo-" + graphCount + "-reg");
+//		MicroservicesGraphUtil.exportGraphToFile(updatedGraph,
+//				MicroservicesGraphUtil.getExportCompletePath(PATH_NAME, APP_NAME, appNumber),
+//				MicroservicesGraphUtil.getApplicationFileName(APP_NAME, appNumber, Integer.MIN_VALUE, "reg"));
 
 		updatedGraph = applyEventDriven(updatedGraph, graphGenParameters);
-		MicroservicesGraphUtil.exportGraphToFile(updatedGraph, DIR_NAME, "grafo-" + graphCount + "-evD");
+//		MicroservicesGraphUtil.exportGraphToFile(updatedGraph,
+//				MicroservicesGraphUtil.getExportCompletePath(PATH_NAME, APP_NAME, appNumber),
+//				MicroservicesGraphUtil.getApplicationFileName(APP_NAME, appNumber, Integer.MIN_VALUE, "evD"));
 
 		updatedGraph = applyExternalizedConfiguration(updatedGraph, graphGenParameters);
-		MicroservicesGraphUtil.exportGraphToFile(updatedGraph, DIR_NAME, "grafo-" + graphCount + "-cfg");
+//		MicroservicesGraphUtil.exportGraphToFile(updatedGraph,
+//				MicroservicesGraphUtil.getExportCompletePath(PATH_NAME, APP_NAME, appNumber),
+//				MicroservicesGraphUtil.getApplicationFileName(APP_NAME, appNumber, Integer.MIN_VALUE, "cfg"));
 
 		updatedGraph = applyDistributedTracing(updatedGraph, graphGenParameters);
-		MicroservicesGraphUtil.exportGraphToFile(updatedGraph, DIR_NAME, "grafo-" + graphCount + "-trc");
+//		MicroservicesGraphUtil.exportGraphToFile(updatedGraph,
+//				MicroservicesGraphUtil.getExportCompletePath(PATH_NAME, APP_NAME, appNumber),
+//				MicroservicesGraphUtil.getApplicationFileName(APP_NAME, appNumber, Integer.MIN_VALUE, "trc"));
 
 		return updatedGraph;
 	}
@@ -136,7 +160,6 @@ public class App {
 
 	}
 
-
 	/**
 	 * @param updatedGraph
 	 * @param graphGenParameters
@@ -152,8 +175,8 @@ public class App {
 		}
 
 		if (rd.nextInt(10) <= prob) {
-			List<String> sourceVerticesToExternalizedConfig = MicroservicesGraphUtil.getPercentualRandomVertices(updatedGraph,
-					graphGenParameters.getExternalizedConfigProportion(),
+			List<String> sourceVerticesToExternalizedConfig = MicroservicesGraphUtil.getPercentualRandomVertices(
+					updatedGraph, graphGenParameters.getExternalizedConfigProportion(),
 					new VertexTypeRestrictions(true, true, false, true, true, true));
 			updatedGraph.addVertex(VertexType.EXTERNALIZED_CONFIGURATION);
 			for (String vertex : sourceVerticesToExternalizedConfig) {
@@ -370,7 +393,8 @@ public class App {
 				String vertex = (String) it.next();
 				if (vertexTypeRestrictions.testVertexTypeRestrictions(vertex)) {
 					updatedGraph.addEdge(vertex, VertexType.SERVICE_REGISTRY);
-					updatedGraph.addEdge(VertexType.SERVICE_REGISTRY, vertex);
+					// The code line below was removed because this is not a functional dependency
+					// updatedGraph.addEdge(VertexType.SERVICE_REGISTRY, vertex);
 				}
 			}
 		}

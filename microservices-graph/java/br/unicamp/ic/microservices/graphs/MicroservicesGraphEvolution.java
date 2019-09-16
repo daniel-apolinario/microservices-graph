@@ -4,22 +4,18 @@
 package br.unicamp.ic.microservices.graphs;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.PathMatcher;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
@@ -46,12 +42,12 @@ public class MicroservicesGraphEvolution {
 	 */
 	public static void main(String[] args) {
 
-		String searchFolder = "/home/daniel/Downloads/";
-		PathMatcher matcher = FileSystems.getDefault().getPathMatcher("glob:{**grafo*[0-9].dot}");
+		String searchFolder = "/home/daniel/Documentos/mestrado-2018/projeto/grafos-dependencia/";
+		PathMatcher matcher = FileSystems.getDefault().getPathMatcher("glob:{**release*[0-9].dot}");
 
 		// get all the files that store the graph initial structure of the microservices
 		// apps
-		Collection<Path> graphFilesDOT = findGraphFiles(searchFolder, matcher);
+		Collection<Path> graphFilesDOT = MicroservicesGraphUtil.findGraphFiles(searchFolder, matcher);
 		// transform the files to Graph objects to work with them
 		List<MicroservicesGraph<String, DefaultEdge>> microservicesGraphList = importMicroservicesGraphList(
 				graphFilesDOT);
@@ -116,14 +112,15 @@ public class MicroservicesGraphEvolution {
 						vertexTypeRestrictions);
 
 				int[] verticesToAdd = microservicesGraph.getVerticesToAddInReleases();
-				File newDirectory = new File(
-						microservicesGraph.getFileName().substring(0, microservicesGraph.getFileName().length() - 4));
-				newDirectory.mkdir();
+//				File newDirectory = new File(
+//						microservicesGraph.getFileName().substring(0, microservicesGraph.getFileName().length() - 4));
+//				newDirectory.mkdir();
 				if (verticesToAdd != null && verticesToAdd.length > 0) {
 					for (int i = 0; i < verticesToAdd.length; i++) {
 						breakDownMegaServices(microservicesGraph, megaServices, verticesToAdd[i], maxDependencies);
-						MicroservicesGraphUtil.exportGraphToFile(microservicesGraph, newDirectory.getAbsolutePath(),
-								"release-" + i);	
+						int releaseNumber = i + 1;
+						MicroservicesGraphUtil.exportGraphToFile(microservicesGraph, microservicesGraph.getPathName(),
+								"release-" + String.format("%02d", releaseNumber));
 					}
 				}
 			}
@@ -200,9 +197,9 @@ public class MicroservicesGraphEvolution {
 		if (microservicesGraph != null) {
 			if (microservicesGraph.getArchitectureEvolutionIssue() == ArchitectureEvolutionIssue.MEGA_SERVICE) {
 				int[] verticesToAdd = microservicesGraph.getVerticesToAddInReleases();
-				File newDirectory = new File(
-						microservicesGraph.getFileName().substring(0, microservicesGraph.getFileName().length() - 4));
-				newDirectory.mkdir();
+//				File newDirectory = new File(
+//						microservicesGraph.getFileName().substring(0, microservicesGraph.getFileName().length() - 4));
+//				newDirectory.mkdir();
 				if (verticesToAdd != null && verticesToAdd.length > 0) {
 					for (int i = 0; i < verticesToAdd.length; i++) {
 						if (verticesToAdd[i] > 0) {
@@ -217,8 +214,9 @@ public class MicroservicesGraphEvolution {
 								microservicesGraph = keepArchitectureConsistency(microservicesGraph, addedVertex);
 							}
 						}
-						MicroservicesGraphUtil.exportGraphToFile(microservicesGraph, newDirectory.getAbsolutePath(),
-								"release-" + i);
+						int releaseNumber = i + 1;
+						MicroservicesGraphUtil.exportGraphToFile(microservicesGraph, microservicesGraph.getPathName(),
+								"release-" + String.format("%02d", releaseNumber));
 					}
 				}
 			}
@@ -306,15 +304,16 @@ public class MicroservicesGraphEvolution {
 				String maxIncomingDegreeVertex = findMaxIncomingDegreeVertex(microservicesGraph,
 						vertexTypeRestrictions);
 				int[] verticesToAdd = microservicesGraph.getVerticesToAddInReleases();
-				File newDirectory = new File(
-						microservicesGraph.getFileName().substring(0, microservicesGraph.getFileName().length() - 4));
-				newDirectory.mkdir();
+//				File newDirectory = new File(
+//						microservicesGraph.getFileName().substring(0, microservicesGraph.getFileName().length() - 4));
+//				newDirectory.mkdir();
 				if (verticesToAdd != null && verticesToAdd.length > 0) {
 					for (int i = 0; i < verticesToAdd.length; i++) {
 						microservicesGraph = addNewVerticesToOneTargetVertice(microservicesGraph, verticesToAdd[i],
 								maxIncomingDegreeVertex);
-						MicroservicesGraphUtil.exportGraphToFile(microservicesGraph, newDirectory.getAbsolutePath(),
-								"release-" + i);
+						int releaseNumber = i + 1;
+						MicroservicesGraphUtil.exportGraphToFile(microservicesGraph, microservicesGraph.getPathName(),
+								"release-" + String.format("%02d", releaseNumber));
 					}
 				}
 			}
@@ -618,6 +617,7 @@ public class MicroservicesGraphEvolution {
 					importer.importGraph(graph, reader);
 					MicroservicesGraph<String, DefaultEdge> mg = (MicroservicesGraph<String, DefaultEdge>) graph;
 					mg.setFileName(path.toString());
+					mg.setPathName(path.getParent().toString());
 					microservicesGraphList.add(mg);
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
@@ -631,30 +631,6 @@ public class MicroservicesGraphEvolution {
 
 		}
 		return microservicesGraphList;
-	}
-
-	/**
-	 * @param searchFolder
-	 * @param matcher
-	 * @return
-	 */
-	private static Collection<Path> findGraphFiles(String searchFolder, PathMatcher matcher) {
-		Collection<Path> files = null;
-		try {
-			files = find("/home/daniel/Downloads/", matcher);
-			files.forEach(n -> System.out.println(n));
-		} catch (IOException e2) {
-			// TODO Auto-generated catch block
-			e2.printStackTrace();
-		}
-		return files;
-	}
-
-	protected static Collection<Path> find(String searchDirectory, PathMatcher matcher) throws IOException {
-		try (Stream<Path> files = Files.walk(Paths.get(searchDirectory))) {
-			return files.filter(matcher::matches).collect(Collectors.toList());
-
-		}
 	}
 
 }

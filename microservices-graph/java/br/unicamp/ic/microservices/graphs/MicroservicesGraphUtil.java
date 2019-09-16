@@ -6,10 +6,20 @@ package br.unicamp.ic.microservices.graphs;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.PathMatcher;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
@@ -23,6 +33,9 @@ import org.jgrapht.io.GraphExporter;
  *
  */
 public class MicroservicesGraphUtil {
+
+	private static final String RELEASE_IDENTIFICATOR = "release";
+	private static final String NAME_SEPARATOR = "-";
 
 	/**
 	 * Method to select randomly a percentual of vertices belonging to a graph
@@ -147,4 +160,46 @@ public class MicroservicesGraphUtil {
 		return vSupplier;
 	}
 
+	/**
+	 * @param searchFolder
+	 * @param matcher
+	 * @return
+	 */
+	public static List<Path> findGraphFiles(String searchFolder, PathMatcher matcher) {
+		List<Path> files = null;
+		try {
+			files = find(searchFolder, matcher);
+			Collections.sort(files);
+			files.forEach(n -> System.out.println(n));
+		} catch (IOException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+		return files;
+	}
+
+	private static List<Path> find(String searchDirectory, PathMatcher matcher) throws IOException {
+		try (Stream<Path> files = Files.walk(Paths.get(searchDirectory))) {
+			return (List<Path>)files.filter(matcher::matches).collect(Collectors.toList());
+
+		}
+	}
+
+	public static String getExportCompletePath(String pathName, String appName, int appNumber) {
+		StringBuffer completePath = new StringBuffer();
+		completePath.append(pathName).append(appName).append(NAME_SEPARATOR).append(appNumber);
+		return completePath.toString();
+	}
+
+	public static String getApplicationFileName(String appName, int appNumber, int releaseNumber, String suffix) {
+		StringBuffer fileName = new StringBuffer();
+		fileName.append(appName).append(NAME_SEPARATOR).append(String.format("%02d", appNumber));
+		if (releaseNumber > 0) {
+			fileName.append(NAME_SEPARATOR).append(RELEASE_IDENTIFICATOR).append(NAME_SEPARATOR).append(String.format("%02d", releaseNumber));
+		}
+		if (suffix != null) {
+			fileName.append(NAME_SEPARATOR).append(suffix);
+		}
+		return fileName.toString();
+	}
 }

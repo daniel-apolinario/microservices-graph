@@ -5,9 +5,7 @@ package br.unicamp.ic.microservices.graphs;
 
 import java.util.function.Supplier;
 
-import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleDirectedGraph;
-import org.jgrapht.util.SupplierUtil;
 
 /**
  * @author Daniel R. F. Apolinario
@@ -35,6 +33,8 @@ public class MicroservicesGraph<V, E> extends SimpleDirectedGraph<V, E> {
 	}
 
 	private String fileName;
+	
+	private String pathName;
 	
 	private InitialArchitectureState initialArchitectureState;
 
@@ -80,6 +80,20 @@ public class MicroservicesGraph<V, E> extends SimpleDirectedGraph<V, E> {
 	 */
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
+	}
+
+	/**
+	 * @return the pathName
+	 */
+	public String getPathName() {
+		return pathName;
+	}
+
+	/**
+	 * @param pathName the pathName to set
+	 */
+	public void setPathName(String pathName) {
+		this.pathName = pathName;
 	}
 
 	public InitialArchitectureState getInitialArchitectureState() {
