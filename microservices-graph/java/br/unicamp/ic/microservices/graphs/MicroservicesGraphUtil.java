@@ -3,9 +3,11 @@
  */
 package br.unicamp.ic.microservices.graphs;
 
+import java.io.BufferedReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.PathMatcher;
@@ -26,7 +28,13 @@ import org.jgrapht.Graphs;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.io.ComponentNameProvider;
 import org.jgrapht.io.DOTExporter;
+import org.jgrapht.io.DOTImporter;
+import org.jgrapht.io.EdgeProvider;
 import org.jgrapht.io.GraphExporter;
+import org.jgrapht.io.GraphImporter;
+import org.jgrapht.io.ImportException;
+import org.jgrapht.io.VertexProvider;
+import org.jgrapht.util.SupplierUtil;
 
 /**
  * @author Daniel R. F. Apolinario
@@ -201,5 +209,43 @@ public class MicroservicesGraphUtil {
 			fileName.append(NAME_SEPARATOR).append(suffix);
 		}
 		return fileName.toString();
+	}
+	
+	/**
+	 * @param graphFilesDOT
+	 * @return
+	 */
+	public static List<MicroservicesGraph<String, DefaultEdge>> importMicroservicesGraphList(
+			Collection<Path> graphFilesDOT) {
+		List<MicroservicesGraph<String, DefaultEdge>> microservicesGraphList = new ArrayList<MicroservicesGraph<String, DefaultEdge>>();
+		if (!graphFilesDOT.isEmpty()) {
+			VertexProvider<String> vp = (a, b) -> a;
+			EdgeProvider<String, DefaultEdge> ep = (f, t, l, a) -> new DefaultEdge();
+			GraphImporter<String, DefaultEdge> importer = new DOTImporter<String, DefaultEdge>(vp, ep);
+
+			for (Path path : graphFilesDOT) {
+				BufferedReader reader;
+				try {
+					reader = Files.newBufferedReader(path, Charset.forName("UTF-8"));
+					Graph<String, DefaultEdge> graph = new MicroservicesGraph<String, DefaultEdge>(
+							MicroservicesGraphUtil.createVerticeSupplier("MSV"),
+							SupplierUtil.createDefaultEdgeSupplier());
+					importer.importGraph(graph, reader);
+					MicroservicesGraph<String, DefaultEdge> mg = (MicroservicesGraph<String, DefaultEdge>) graph;
+					mg.setFileName(path.toString());
+					mg.setPathName(path.getParent().toString());
+					microservicesGraphList.add(mg);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (ImportException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			}
+
+		}
+		return microservicesGraphList;
 	}
 }

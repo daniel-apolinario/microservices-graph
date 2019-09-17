@@ -8,8 +8,9 @@ package br.unicamp.ic.microservices.graphs;
  *
  */
 public interface Application {
-	
+
 	String getName();
-	
+
 	void setName(String name);
+	
 }

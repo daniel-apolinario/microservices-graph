@@ -3,11 +3,7 @@
  */
 package br.unicamp.ic.microservices.graphs;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.nio.charset.Charset;
 import java.nio.file.FileSystems;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.PathMatcher;
 import java.util.ArrayList;
@@ -17,15 +13,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
 import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.io.DOTImporter;
-import org.jgrapht.io.EdgeProvider;
-import org.jgrapht.io.GraphImporter;
-import org.jgrapht.io.ImportException;
-import org.jgrapht.io.VertexProvider;
-import org.jgrapht.util.SupplierUtil;
 
 import br.unicamp.ic.microservices.graphs.MicroservicesGraph.ArchitectureEvolutionIssue;
 import br.unicamp.ic.microservices.graphs.MicroservicesGraph.ArchitectureEvolutionTarget;
@@ -49,8 +38,8 @@ public class MicroservicesGraphEvolution {
 		// apps
 		Collection<Path> graphFilesDOT = MicroservicesGraphUtil.findGraphFiles(searchFolder, matcher);
 		// transform the files to Graph objects to work with them
-		List<MicroservicesGraph<String, DefaultEdge>> microservicesGraphList = importMicroservicesGraphList(
-				graphFilesDOT);
+		List<MicroservicesGraph<String, DefaultEdge>> microservicesGraphList = MicroservicesGraphUtil
+				.importMicroservicesGraphList(graphFilesDOT);
 
 		// initialize general parameters to be used in the evolution through releases
 		GraphEvolutionParameters evolutionParameters = initializeEvolutionParameters();
@@ -112,12 +101,14 @@ public class MicroservicesGraphEvolution {
 						vertexTypeRestrictions);
 
 				int[] verticesToAdd = microservicesGraph.getVerticesToAddInReleases();
-//				File newDirectory = new File(
-//						microservicesGraph.getFileName().substring(0, microservicesGraph.getFileName().length() - 4));
-//				newDirectory.mkdir();
+
 				if (verticesToAdd != null && verticesToAdd.length > 0) {
 					for (int i = 0; i < verticesToAdd.length; i++) {
-						breakDownMegaServices(microservicesGraph, megaServices, verticesToAdd[i], maxDependencies);
+						List<String> addedVertices = breakDownMegaServices(microservicesGraph, megaServices,
+								verticesToAdd[i], maxDependencies);
+						for (String vertice : addedVertices) {
+							keepArchitectureConsistency(microservicesGraph, vertice);
+						}
 						int releaseNumber = i + 1;
 						MicroservicesGraphUtil.exportGraphToFile(microservicesGraph, microservicesGraph.getPathName(),
 								"release-" + String.format("%02d", releaseNumber));
@@ -133,8 +124,9 @@ public class MicroservicesGraphEvolution {
 	 * @param i
 	 * @return
 	 */
-	private static void breakDownMegaServices(MicroservicesGraph<String, DefaultEdge> microservicesGraph,
+	private static List<String> breakDownMegaServices(MicroservicesGraph<String, DefaultEdge> microservicesGraph,
 			List<String> megaServices, int verticesToAdd, int maxDependencies) {
+		List<String> addedVertices = new ArrayList<String>();
 		for (int i = 0; i < verticesToAdd; i++) {
 			if (megaServices != null && megaServices.size() > 0) {
 				String megaServiceName = megaServices.get(0);
@@ -150,6 +142,7 @@ public class MicroservicesGraphEvolution {
 				microservicesGraph.removeAllEdges(edgesToRemove);
 				String newVertex = microservicesGraph.addVertex();
 				Graphs.addIncomingEdges(microservicesGraph, newVertex, verticesSource);
+				addedVertices.add(newVertex);
 				if (incomingEdges.size() < maxDependencies) {
 					megaServices.remove(0);
 				} else {
@@ -167,7 +160,7 @@ public class MicroservicesGraphEvolution {
 				microservicesGraph = keepArchitectureConsistency(microservicesGraph, addedVertex);
 			}
 		}
-
+		return addedVertices;
 	}
 
 	/**
@@ -197,9 +190,7 @@ public class MicroservicesGraphEvolution {
 		if (microservicesGraph != null) {
 			if (microservicesGraph.getArchitectureEvolutionIssue() == ArchitectureEvolutionIssue.MEGA_SERVICE) {
 				int[] verticesToAdd = microservicesGraph.getVerticesToAddInReleases();
-//				File newDirectory = new File(
-//						microservicesGraph.getFileName().substring(0, microservicesGraph.getFileName().length() - 4));
-//				newDirectory.mkdir();
+
 				if (verticesToAdd != null && verticesToAdd.length > 0) {
 					for (int i = 0; i < verticesToAdd.length; i++) {
 						if (verticesToAdd[i] > 0) {
@@ -209,9 +200,9 @@ public class MicroservicesGraphEvolution {
 									verticesToAdd[i], vertexTypeRestrictions);
 							for (int j = 0; j < verticesToAdd[i]; j++) {
 								String addedVertex = microservicesGraph.addVertex();
-								microservicesGraph = MicroservicesGraphUtil.connectDirectedVerticesRandomly(
-										microservicesGraph, addedVertex, vertices.get(j));
-								microservicesGraph = keepArchitectureConsistency(microservicesGraph, addedVertex);
+								MicroservicesGraphUtil.connectDirectedVerticesRandomly(microservicesGraph, addedVertex,
+										vertices.get(j));
+								keepArchitectureConsistency(microservicesGraph, addedVertex);
 							}
 						}
 						int releaseNumber = i + 1;
@@ -239,7 +230,7 @@ public class MicroservicesGraphEvolution {
 			}
 		}
 		if (existsVertexType(microservicesGraph, VertexType.SERVICE_REGISTRY)) {
-			microservicesGraph.addEdge(VertexType.SERVICE_REGISTRY, addedVertex);
+			//microservicesGraph.addEdge(VertexType.SERVICE_REGISTRY, addedVertex);
 			microservicesGraph.addEdge(addedVertex, VertexType.SERVICE_REGISTRY);
 		}
 		if (existsVertexType(microservicesGraph, VertexType.EVENT_DRIVEN)) {
@@ -304,13 +295,14 @@ public class MicroservicesGraphEvolution {
 				String maxIncomingDegreeVertex = findMaxIncomingDegreeVertex(microservicesGraph,
 						vertexTypeRestrictions);
 				int[] verticesToAdd = microservicesGraph.getVerticesToAddInReleases();
-//				File newDirectory = new File(
-//						microservicesGraph.getFileName().substring(0, microservicesGraph.getFileName().length() - 4));
-//				newDirectory.mkdir();
+
 				if (verticesToAdd != null && verticesToAdd.length > 0) {
 					for (int i = 0; i < verticesToAdd.length; i++) {
-						microservicesGraph = addNewVerticesToOneTargetVertice(microservicesGraph, verticesToAdd[i],
-								maxIncomingDegreeVertex);
+						List<String> addedVertices = addNewVerticesToOneTargetVertice(microservicesGraph,
+								verticesToAdd[i], maxIncomingDegreeVertex);
+						for (String addedVertex : addedVertices) {
+							keepArchitectureConsistency(microservicesGraph, addedVertex);
+						}
 						int releaseNumber = i + 1;
 						MicroservicesGraphUtil.exportGraphToFile(microservicesGraph, microservicesGraph.getPathName(),
 								"release-" + String.format("%02d", releaseNumber));
@@ -327,14 +319,15 @@ public class MicroservicesGraphEvolution {
 	 * @param maxIncomingDegreeVertex
 	 * @return
 	 */
-	private static MicroservicesGraph<String, DefaultEdge> addNewVerticesToOneTargetVertice(
+	private static List<String> addNewVerticesToOneTargetVertice(
 			MicroservicesGraph<String, DefaultEdge> microservicesGraph, int verticesToAdd, String targetVertex) {
-		MicroservicesGraph<String, DefaultEdge> graph = microservicesGraph;
+		List<String> addedVertices = new ArrayList<String>();
 		for (int i = 0; i < verticesToAdd; i++) {
-			String addedVertex = graph.addVertex();
-			graph.addEdge(addedVertex, targetVertex);
+			String addedVertex = microservicesGraph.addVertex();
+			microservicesGraph.addEdge(addedVertex, targetVertex);
+			addedVertices.add(addedVertex);
 		}
-		return graph;
+		return addedVertices;
 	}
 
 	/**
@@ -593,44 +586,6 @@ public class MicroservicesGraphEvolution {
 		evolutionParameters.setArchitectureEvolutionGrowthRateMininum(30);
 		evolutionParameters.setArchitectureEvolutionGrowthRateMaximum(60);
 		return evolutionParameters;
-	}
-
-	/**
-	 * @param graphFilesDOT
-	 * @return
-	 */
-	private static List<MicroservicesGraph<String, DefaultEdge>> importMicroservicesGraphList(
-			Collection<Path> graphFilesDOT) {
-		List<MicroservicesGraph<String, DefaultEdge>> microservicesGraphList = new ArrayList<MicroservicesGraph<String, DefaultEdge>>();
-		if (!graphFilesDOT.isEmpty()) {
-			VertexProvider<String> vp = (a, b) -> a;
-			EdgeProvider<String, DefaultEdge> ep = (f, t, l, a) -> new DefaultEdge();
-			GraphImporter<String, DefaultEdge> importer = new DOTImporter<String, DefaultEdge>(vp, ep);
-
-			for (Path path : graphFilesDOT) {
-				BufferedReader reader;
-				try {
-					reader = Files.newBufferedReader(path, Charset.forName("UTF-8"));
-					Graph<String, DefaultEdge> graph = new MicroservicesGraph<String, DefaultEdge>(
-							MicroservicesGraphUtil.createVerticeSupplier("MSV"),
-							SupplierUtil.createDefaultEdgeSupplier());
-					importer.importGraph(graph, reader);
-					MicroservicesGraph<String, DefaultEdge> mg = (MicroservicesGraph<String, DefaultEdge>) graph;
-					mg.setFileName(path.toString());
-					mg.setPathName(path.getParent().toString());
-					microservicesGraphList.add(mg);
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} catch (ImportException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
-			}
-
-		}
-		return microservicesGraphList;
 	}
 
 }

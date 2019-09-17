@@ -3,9 +3,12 @@
  */
 package br.unicamp.ic.microservices.graphs;
 
+import java.util.Arrays;
 import java.util.function.Supplier;
 
 import org.jgrapht.graph.SimpleDirectedGraph;
+
+import com.google.gson.annotations.Expose;
 
 /**
  * @author Daniel R. F. Apolinario
@@ -32,6 +35,7 @@ public class MicroservicesGraph<V, E> extends SimpleDirectedGraph<V, E> {
 		MEGA_SERVICE, CYCLIC_DEPENDENCY;
 	}
 
+	@Expose
 	private String fileName;
 	
 	private String pathName;
@@ -159,4 +163,17 @@ public class MicroservicesGraph<V, E> extends SimpleDirectedGraph<V, E> {
 	public void setEdgesToRemoveInReleases(int[] edgesToRemoveInReleases) {
 		this.edgesToRemoveInReleases = edgesToRemoveInReleases;
 	}
+
+	@Override
+	public String toString() {
+		return "MicroservicesGraph [fileName=" + fileName + ", pathName=" + pathName + ", initialArchitectureState="
+				+ initialArchitectureState + ", architectureEvolutionTarget=" + architectureEvolutionTarget
+				+ ", architectureEvolutionIssue=" + architectureEvolutionIssue + ", architectureEvolutionGrowthRate="
+				+ architectureEvolutionGrowthRate + ", verticesToAddInReleases="
+				+ Arrays.toString(verticesToAddInReleases) + ", verticesToRemoveInReleases="
+				+ Arrays.toString(verticesToRemoveInReleases) + ", edgesToAddInReleases="
+				+ Arrays.toString(edgesToAddInReleases) + ", edgesToRemoveInReleases="
+				+ Arrays.toString(edgesToRemoveInReleases) + "]";
+	}
+	
 }
