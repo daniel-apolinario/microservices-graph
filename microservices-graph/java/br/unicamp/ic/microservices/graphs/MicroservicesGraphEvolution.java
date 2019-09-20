@@ -36,7 +36,7 @@ public class MicroservicesGraphEvolution {
 
 		// get all the files that store the graph initial structure of the microservices
 		// apps
-		Collection<Path> graphFilesDOT = MicroservicesGraphUtil.findGraphFiles(searchFolder, matcher);
+		Collection<Path> graphFilesDOT = MicroservicesGraphUtil.findFiles(searchFolder, matcher);
 		// transform the files to Graph objects to work with them
 		List<MicroservicesGraph<String, DefaultEdge>> microservicesGraphList = MicroservicesGraphUtil
 				.importMicroservicesGraphList(graphFilesDOT);

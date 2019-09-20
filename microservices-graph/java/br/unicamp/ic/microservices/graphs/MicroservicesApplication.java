@@ -23,10 +23,7 @@ public class MicroservicesApplication implements Application {
 	private List<MicroservicesGraph<String, DefaultEdge>> dependenciesGraphs;
 
 	@Expose
-	private List<Metric<Application, String, Double>> applicationMetrics;
-
-	@Expose
-	private List<Metric<Microservice, String, Double>> microservicesMetrics;
+	private List<Metric> metrics;
 
 	@Expose
 	private List<Microservice> microservices;
@@ -65,20 +62,12 @@ public class MicroservicesApplication implements Application {
 		this.dependenciesGraphs = dependenciesGraphs;
 	}
 
-	public List<Metric<Application, String, Double>> getApplicationMetrics() {
-		return applicationMetrics;
+	public List<Metric> getMetrics() {
+		return this.metrics;
 	}
 
-	public void setApplicationMetrics(List<Metric<Application, String, Double>> applicationMetrics) {
-		this.applicationMetrics = applicationMetrics;
-	}
-
-	public List<Metric<Microservice, String, Double>> getMicroservicesMetrics() {
-		return microservicesMetrics;
-	}
-
-	public void setMicroservicesMetrics(List<Metric<Microservice, String, Double>> microservicesMetrics) {
-		this.microservicesMetrics = microservicesMetrics;
+	public void setMetrics(List<Metric> metrics) {
+		this.metrics = metrics;
 	}
 
 	public List<Microservice> getMicroservices() {
@@ -96,9 +85,11 @@ public class MicroservicesApplication implements Application {
 		this.microservices.add(microservice);
 	}
 
-	@Override
-	public String toString() {
-		return "MicroservicesApplication [name=" + name + ", applicationMetrics=" + applicationMetrics
-				+ ", microservicesMetrics=" + microservicesMetrics + ", microservices=" + microservices + "]";
+	public void addMetric(Metric metric) {
+		if (this.metrics == null) {
+			this.metrics = new ArrayList<Metric>();
+		}
+		this.metrics.add(metric);
 	}
+
 }

@@ -144,7 +144,7 @@ public class App {
 
 		if (rd.nextInt(10) <= prob) {
 			List<String> allVertices = Graphs.getVertexToIntegerMapping(updatedGraph).getIndexList();
-			VertexTypeRestrictions vertexTypeRestrictions = new VertexTypeRestrictions(false, false, false, true, false,
+			VertexTypeRestrictions vertexTypeRestrictions = new VertexTypeRestrictions(false, true, false, true, false,
 					true);
 			updatedGraph.addVertex(VertexType.DISTRIBUTED_TRACING);
 			for (String vertex : allVertices) {

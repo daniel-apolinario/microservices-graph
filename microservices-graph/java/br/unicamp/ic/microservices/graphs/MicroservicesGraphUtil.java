@@ -173,7 +173,7 @@ public class MicroservicesGraphUtil {
 	 * @param matcher
 	 * @return
 	 */
-	public static List<Path> findGraphFiles(String searchFolder, PathMatcher matcher) {
+	public static List<Path> findFiles(String searchFolder, PathMatcher matcher) {
 		List<Path> files = null;
 		try {
 			files = find(searchFolder, matcher);
