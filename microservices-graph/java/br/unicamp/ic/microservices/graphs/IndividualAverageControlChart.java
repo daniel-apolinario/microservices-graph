@@ -3,6 +3,8 @@
  */
 package br.unicamp.ic.microservices.graphs;
 
+import java.util.List;
+
 /**
  * @author Daniel R. F. Apolinario
  * @param <X, Y>
@@ -17,6 +19,7 @@ public class IndividualAverageControlChart<X, Y> extends ControlChartBase<X, Y> 
 	// Book: Measuring the software process
 	private static final double CONSTANT_CONTROL_LIMIT_1 = 2.660;
 	private static final double CONSTANT_CONTROL_LIMIT_2 = 3.268;
+	private static final double CONSTANT_CONTROL_LIMIT_3 = 1.128;
 
 	/**
 	 * @return the movingRangeValues
@@ -42,9 +45,18 @@ public class IndividualAverageControlChart<X, Y> extends ControlChartBase<X, Y> 
 			calculateLowerControlLimit();
 			calculateRangeUpperControlLimit();
 			calculateRangeLowerControlLimit();
+			calculateOneSigma();
 		} else {
 			throw new ValuesNotFoundException("X and Y values must be provided for calculate the control limits");
 		}
+	}
+
+	/**
+	 * 
+	 */
+	private void calculateOneSigma() {
+		this.setOneSigma(getRangeCenterline() / CONSTANT_CONTROL_LIMIT_3);
+
 	}
 
 	/**
@@ -68,7 +80,7 @@ public class IndividualAverageControlChart<X, Y> extends ControlChartBase<X, Y> 
 		int xValuesSize = this.getXValues().length;
 		Double[] mRValues = new Double[xValuesSize - 1];
 		for (int i = 0; i < xValuesSize - 1; i++) {
-			mRValues[i] = (double) (this.getXValues()[i + 1]) - (double) (this.getXValues()[i]);
+			mRValues[i] = Math.abs((double) (this.getXValues()[i + 1]) - (double) (this.getXValues()[i]));
 		}
 		this.movingRangeValues = mRValues;
 
@@ -111,8 +123,8 @@ public class IndividualAverageControlChart<X, Y> extends ControlChartBase<X, Y> 
 	}
 
 	@Override
-	public void applyTests() {
-		// TODO Auto-generated method stub
+	public List<StatisticTestResult> applyTests() {
+		return null;
 
 	}
 

@@ -10,15 +10,15 @@ package br.unicamp.ic.microservices.graphs;
 public abstract class ControlChartBase<X, Y> implements ControlChart<X, Y> {
 
 	private Double centerline;
-	
+
 	private Double rangeCenterline;
 
 	private Double upperControlLimit;
-	
+
 	private Double rangeUpperControlLimit;
 
 	private Double lowerControlLimit;
-	
+
 	private Double rangeLowerControlLimit;
 
 	private Double oneSigma;
@@ -26,6 +26,8 @@ public abstract class ControlChartBase<X, Y> implements ControlChart<X, Y> {
 	private X[] xValues;
 
 	private Y[] yValues;
+
+	private Metric metric;
 
 	@Override
 	public X[] getXValues() {
@@ -43,6 +45,14 @@ public abstract class ControlChartBase<X, Y> implements ControlChart<X, Y> {
 
 	public void setYValues(Y[] yValues) {
 		this.yValues = yValues;
+	}
+
+	public Metric getMetric() {
+		return metric;
+	}
+
+	public void setMetric(Metric metric) {
+		this.metric = metric;
 	}
 
 	@Override

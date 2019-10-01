@@ -13,14 +13,13 @@ public class Metric<O, R, V> {
 
 	@Expose
 	private MetricType type;
-	
+
 	private O owner;
 	@Expose
 	private R[] releases;
 	@Expose
 	private V[] values;
-	
-	
+
 	public enum MetricType {
 		SIY, ADS, AIS, ACS, RCS, RIS, SCF, ADCS;
 	}

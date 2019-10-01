@@ -3,6 +3,8 @@
  */
 package br.unicamp.ic.microservices.graphs;
 
+import java.util.List;
+
 /**
  * @author Daniel R. F. Apolinario
  *
@@ -47,5 +49,9 @@ public interface ControlChart<X, Y> {
 	
 	void calculateControlLimits() throws ValuesNotFoundException;
 	
-	void applyTests();
+	List<StatisticTestResult> applyTests();
+	
+	Metric getMetric();
+	
+	void setMetric(Metric metric);
 }
