@@ -1,7 +1,7 @@
 /**
  * 
  */
-package br.unicamp.ic.microservices.graphs;
+package br.unicamp.ic.microservices.graphs.evolution;
 
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
@@ -16,6 +16,10 @@ import java.util.Set;
 import org.jgrapht.Graphs;
 import org.jgrapht.graph.DefaultEdge;
 
+import br.unicamp.ic.microservices.graphs.MicroservicesGraph;
+import br.unicamp.ic.microservices.graphs.MicroservicesGraphUtil;
+import br.unicamp.ic.microservices.graphs.VertexType;
+import br.unicamp.ic.microservices.graphs.VertexTypeRestrictions;
 import br.unicamp.ic.microservices.graphs.MicroservicesGraph.ArchitectureEvolutionIssue;
 import br.unicamp.ic.microservices.graphs.MicroservicesGraph.ArchitectureEvolutionTarget;
 import br.unicamp.ic.microservices.graphs.MicroservicesGraph.InitialArchitectureState;

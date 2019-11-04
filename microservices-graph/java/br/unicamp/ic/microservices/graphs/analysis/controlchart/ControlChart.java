@@ -1,9 +1,11 @@
 /**
  * 
  */
-package br.unicamp.ic.microservices.graphs;
+package br.unicamp.ic.microservices.graphs.analysis.controlchart;
 
 import java.util.List;
+
+import br.unicamp.ic.microservices.graphs.Metric;
 
 /**
  * @author Daniel R. F. Apolinario

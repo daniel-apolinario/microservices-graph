@@ -1,7 +1,7 @@
 /**
  * 
  */
-package br.unicamp.ic.microservices.graphs;
+package br.unicamp.ic.microservices.graphs.analysis.controlchart;
 
 import java.util.ArrayList;
 import java.util.List;

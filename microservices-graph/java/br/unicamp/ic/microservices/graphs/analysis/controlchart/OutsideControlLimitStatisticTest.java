@@ -1,7 +1,11 @@
 /**
  * 
  */
-package br.unicamp.ic.microservices.graphs;
+package br.unicamp.ic.microservices.graphs.analysis.controlchart;
+
+import br.unicamp.ic.microservices.graphs.Application;
+import br.unicamp.ic.microservices.graphs.Microservice;
+import br.unicamp.ic.microservices.graphs.analysis.controlchart.StatisticTest.StatisticTestType;
 
 /**
  * @author Daniel R. F. Apolinario

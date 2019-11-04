@@ -1,4 +1,4 @@
-package br.unicamp.ic.microservices.graphs;
+package br.unicamp.ic.microservices.graphs.generation;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -15,6 +15,10 @@ import org.jgrapht.generate.GnpRandomGraphGenerator;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleDirectedGraph;
 import org.jgrapht.util.SupplierUtil;
+
+import br.unicamp.ic.microservices.graphs.MicroservicesGraphUtil;
+import br.unicamp.ic.microservices.graphs.VertexType;
+import br.unicamp.ic.microservices.graphs.VertexTypeRestrictions;
 
 /**
  * @author Daniel R. F. Apolinario

@@ -1,4 +1,4 @@
-package br.unicamp.ic.microservices.graphs;
+package br.unicamp.ic.microservices.graphs.generation;
 
 import java.util.Random;
 

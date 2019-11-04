@@ -1,12 +1,12 @@
 /**
  * 
  */
-package br.unicamp.ic.microservices.graphs;
+package br.unicamp.ic.microservices.graphs.analysis.controlchart;
 
 import com.google.gson.annotations.Expose;
 
-import br.unicamp.ic.microservices.graphs.Metric.MetricType;
-import br.unicamp.ic.microservices.graphs.StatisticTest.StatisticTestType;
+import br.unicamp.ic.microservices.graphs.Metric;
+import br.unicamp.ic.microservices.graphs.analysis.controlchart.StatisticTest.StatisticTestType;
 
 /**
  * @author Daniel R. F. Apolinario

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package br.unicamp.ic.microservices.graphs;
+package br.unicamp.ic.microservices.graphs.csvexporter;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -25,6 +25,10 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.opencsv.CSVWriter;
 
+import br.unicamp.ic.microservices.graphs.Metric;
+import br.unicamp.ic.microservices.graphs.Microservice;
+import br.unicamp.ic.microservices.graphs.MicroservicesApplication;
+import br.unicamp.ic.microservices.graphs.MicroservicesGraphUtil;
 import br.unicamp.ic.microservices.graphs.Metric.MetricType;
 
 /**

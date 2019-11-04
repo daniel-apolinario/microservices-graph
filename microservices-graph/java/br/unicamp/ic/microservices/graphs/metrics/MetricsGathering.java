@@ -1,7 +1,7 @@
 /**
  * 
  */
-package br.unicamp.ic.microservices.graphs;
+package br.unicamp.ic.microservices.graphs.metrics;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -19,13 +19,21 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import org.jgrapht.Graph;
 import org.jgrapht.alg.cycle.CycleDetector;
+import org.jgrapht.alg.cycle.HawickJamesSimpleCycles;
 import org.jgrapht.graph.DefaultEdge;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import br.unicamp.ic.microservices.graphs.Application;
+import br.unicamp.ic.microservices.graphs.Metric;
 import br.unicamp.ic.microservices.graphs.Metric.MetricType;
+import br.unicamp.ic.microservices.graphs.Microservice;
+import br.unicamp.ic.microservices.graphs.MicroservicesApplication;
+import br.unicamp.ic.microservices.graphs.MicroservicesGraph;
+import br.unicamp.ic.microservices.graphs.MicroservicesGraphUtil;
 
 /**
  * @author Daniel R. F. Apolinario
@@ -415,14 +423,29 @@ public class MetricsGathering {
 						graph.getFileName().length() - 4);
 				metric.addRelease(i, Integer.parseInt(release));
 
-				CycleDetector<String, DefaultEdge> cycleDetector = new CycleDetector<>(graph);
-				Set<String> cycleVertices = cycleDetector.findCycles();
+//				CycleDetector<String, DefaultEdge> cycleDetector = new CycleDetector<>(graph);
+//				Set<String> cycleVertices = cycleDetector.findCycles();
 
-				int siyMetric = cycleVertices.size();
+				int siyMetric = calculateServicePairsWithinSimpleCycles(graph);
 				metric.addValue(i, siyMetric);
 			}
 			app.addMetric(metric);
 		}
+	}
+
+	private static int calculateServicePairsWithinSimpleCycles(Graph<String, DefaultEdge> graph) {
+		int servicePairs = 0;
+		HawickJamesSimpleCycles<String, DefaultEdge> sc = new HawickJamesSimpleCycles<>(graph);
+		List<List<String>> simpleCycles = sc.findSimpleCycles();
+
+		for (int i = 0; i < simpleCycles.size(); i++) {
+			List<String> cycle = simpleCycles.get(i);
+			if (cycle.size() == 2) {
+				servicePairs += 1;
+			}
+		}
+
+		return servicePairs;
 	}
 
 }
