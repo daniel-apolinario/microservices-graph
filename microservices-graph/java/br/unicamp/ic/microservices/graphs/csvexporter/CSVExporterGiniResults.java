@@ -8,6 +8,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
+import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
@@ -25,6 +26,7 @@ import com.google.gson.GsonBuilder;
 import com.opencsv.CSVWriter;
 
 import br.unicamp.ic.microservices.graphs.MicroservicesGraphUtil;
+import br.unicamp.ic.microservices.metrics.GiniSeries;
 import br.unicamp.ic.microservices.metrics.Metric;
 import br.unicamp.ic.microservices.metrics.Metric.MetricType;
 import br.unicamp.ic.microservices.model.Microservice;
@@ -34,22 +36,21 @@ import br.unicamp.ic.microservices.model.MicroservicesApplication;
  * @author Daniel R. F. Apolinario
  *
  */
-public class CSVExporter {
+public class CSVExporterGiniResults {
 
 	public static final String searchFolder = "/home/daniel/Documentos/mestrado-2018/projeto/grafos-dependencia/";
 
 	public static void main(String[] args) {
-		PathMatcher matcher = FileSystems.getDefault().getPathMatcher("glob:{**metrics.json}");
+		PathMatcher matcher = FileSystems.getDefault().getPathMatcher("glob:{**metrics-with-gini.json}");
 
 		List<Path> filesList = MicroservicesGraphUtil.findFiles(searchFolder, matcher);
 		Gson gson = new GsonBuilder().create();
 		for (Path path : filesList) {
 			try (Reader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
 				MicroservicesApplication app = gson.fromJson(reader, MicroservicesApplication.class);
-				List<String[]> applicationMetrics = transformApplicationMetricsIntoStringList(app);
-				List<String[]> microservicesMetrics = transformMicroservicesMetricsIntoStringList(app);
-				exportMetricsToCSV(app.getName(), applicationMetrics, "application-metrics.csv");
-				exportMetricsToCSV(app.getName(), microservicesMetrics, "microservices-metrics.csv");
+				List<String[]> applicationMetricsAndGiniValues = transformMetricsAndGiniValuesIntoStringList(app);
+				exportMetricsToCSV(app.getName(), applicationMetricsAndGiniValues,
+						"application-metrics-gini-values.csv");
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -86,7 +87,7 @@ public class CSVExporter {
 	 * @param app
 	 * @return
 	 */
-	private static List<String[]> transformMicroservicesMetricsIntoStringList(MicroservicesApplication app) {
+	private static List<String[]> transformMetricsAndGiniValuesIntoStringList(MicroservicesApplication app) {
 		List<String[]> microservicesMetrics = new ArrayList<String[]>();
 		List<Microservice> microservices = app.getMicroservices();
 		if (microservices != null && microservices.size() > 0) {
@@ -104,7 +105,20 @@ public class CSVExporter {
 					metricsHash.put(i, new StringBuffer(String.valueOf(i)));
 				}
 			}
-
+			// include gini values between ADS and AIS metrics for all the releases
+			StringBuffer headerToInclude = metricsHash.get(0);
+			headerToInclude.append("#").append("APP - ").append(MetricType.ADS);
+			headerToInclude.append("#").append("APP - ").append(MetricType.AIS);
+			List<GiniSeries<MetricType, Integer, BigDecimal>> appGiniSeriesList = app.getGiniSeries();
+			GiniSeries<MetricType, Integer, BigDecimal> appADSGiniSeries = findSpecificGiniSeriesByMetric(appGiniSeriesList, MetricType.ADS);
+			GiniSeries<MetricType, Integer, BigDecimal> appAISGiniSeries = findSpecificGiniSeriesByMetric(appGiniSeriesList, MetricType.AIS);
+			if (appADSGiniSeries != null && appAISGiniSeries != null) {
+				for (int i = 1; i <= numberOfReleases; i++) {
+					StringBuffer dataRow = metricsHash.get(i);
+					dataRow.append("#").append(appADSGiniSeries.getSeriesData().get(i - 1).toString());
+					dataRow.append("#").append(appAISGiniSeries.getSeriesData().get(i - 1).toString());
+				}
+			}
 			for (Microservice microservice : microservices) {
 				Optional<Metric> adsMetric = findSpecificMetric(microservice.getMetrics(), MetricType.ADS);
 				Object[] adsMetricValues = null;
@@ -116,36 +130,43 @@ public class CSVExporter {
 				if (aisMetric.isPresent()) {
 					aisMetricValues = aisMetric.get().getValues();
 				}
-				Optional<Metric> acsMetric = findSpecificMetric(microservice.getMetrics(), MetricType.ACS);
-				Object[] acsMetricValues = null;
-				if (acsMetric.isPresent()) {
-					acsMetricValues = acsMetric.get().getValues();
+				// Get the gini values for this microservice
+				List<GiniSeries<MetricType, Integer, BigDecimal>> giniSeriesList = microservice.getGiniSeries();
+				GiniSeries<MetricType, Integer, BigDecimal> adsGiniSeries = findSpecificGiniSeriesByMetric(giniSeriesList, MetricType.ADS);
+				Object adsGiniValue = null;
+				if (adsGiniSeries != null && adsGiniSeries.getSeriesData() != null) {
+					adsGiniValue = adsGiniSeries.getSeriesData().get(0);
 				}
-				Optional<Metric> rcsMetric = findSpecificMetric(microservice.getMetrics(), MetricType.RCS);
-				Object[] rcsMetricValues = null;
-				if (rcsMetric.isPresent()) {
-					rcsMetricValues = rcsMetric.get().getValues();
-				}
-				Optional<Metric> risMetric = findSpecificMetric(microservice.getMetrics(), MetricType.RIS);
-				Object[] risMetricValues = null;
-				if (risMetric.isPresent()) {
-					risMetricValues = risMetric.get().getValues();
+
+				GiniSeries aisGiniSeries = findSpecificGiniSeriesByMetric(giniSeriesList, MetricType.AIS);
+				Object aisGiniValue = null;
+				if (aisGiniSeries != null && aisGiniSeries.getSeriesData() != null) {
+					aisGiniValue = aisGiniSeries.getSeriesData().get(0);
 				}
 
 				StringBuffer headerRow = metricsHash.get(0);
 				headerRow.append("#").append(microservice.getName()).append("-").append(MetricType.ADS);
+				headerRow.append("#").append(microservice.getName()).append("-").append("GINI -")
+						.append(MetricType.ADS);
 				headerRow.append("#").append(microservice.getName()).append("-").append(MetricType.AIS);
-				headerRow.append("#").append(microservice.getName()).append("-").append(MetricType.ACS);
-				headerRow.append("#").append(microservice.getName()).append("-").append(MetricType.RCS);
-				headerRow.append("#").append(microservice.getName()).append("-").append(MetricType.RIS);
+				headerRow.append("#").append(microservice.getName()).append("-").append("GINI -")
+						.append(MetricType.AIS);
 
 				for (int i = 1; i <= numberOfReleases; i++) {
 					StringBuffer dataRow = metricsHash.get(i);
 					dataRow.append("#").append(adsMetricValues[i - 1].toString());
+					if (i == 1) {
+						dataRow.append("#").append(adsGiniValue.toString());
+					} else {
+						dataRow.append("#").append("");
+					}
 					dataRow.append("#").append(aisMetricValues[i - 1].toString());
-					dataRow.append("#").append(acsMetricValues[i - 1].toString());
-					dataRow.append("#").append(rcsMetricValues[i - 1].toString());
-					dataRow.append("#").append(risMetricValues[i - 1].toString());
+					if (i == 1) {
+						dataRow.append("#").append(aisGiniValue.toString());
+					} else {
+						dataRow.append("#").append("");
+					}
+
 				}
 			}
 			for (Map.Entry<Integer, StringBuffer> row : metricsHash.entrySet()) {
@@ -157,44 +178,22 @@ public class CSVExporter {
 		return microservicesMetrics;
 	}
 
-	/**
-	 * @param app
-	 * @return
-	 */
-	private static List<String[]> transformApplicationMetricsIntoStringList(MicroservicesApplication app) {
-		List<String[]> applicationMetrics = new ArrayList<String[]>();
-		String[] header = "release#SIY#SCF#ADCS".split("#");
-		applicationMetrics.add(header);
-		Optional<Metric> siyMetric = findSpecificMetric(app.getMetrics(), MetricType.SIY);
-		Object[] siyMetricValues = null;
-		int numberOfReleases = 0;
-		if (siyMetric.isPresent()) {
-			siyMetricValues = siyMetric.get().getValues();
-			numberOfReleases = siyMetricValues.length;
-		}
-		Optional<Metric> scfMetric = findSpecificMetric(app.getMetrics(), MetricType.SCF);
-		Object[] scfMetricValues = null;
-		if (siyMetric.isPresent()) {
-			scfMetricValues = scfMetric.get().getValues();
-		}
-		Optional<Metric> adcsMetric = findSpecificMetric(app.getMetrics(), MetricType.ADCS);
-		Object[] adcsMetricValues = null;
-		if (adcsMetric.isPresent()) {
-			adcsMetricValues = adcsMetric.get().getValues();
-		}
-
-		for (int i = 0; i < numberOfReleases; i++) {
-			StringBuffer sb = new StringBuffer(String.valueOf(i)).append("#").append(siyMetricValues[i].toString())
-					.append("#").append(scfMetricValues[i].toString()).append("#")
-					.append(adcsMetricValues[i].toString());
-			String[] row = sb.toString().split("#");
-			applicationMetrics.add(row);
-		}
-		return applicationMetrics;
-	}
-
 	private static Optional<Metric> findSpecificMetric(List<Metric> metrics, MetricType metricType) {
 		return metrics.stream().filter(m -> m.getType().equals(metricType)).findFirst();
+	}
+
+	private static GiniSeries<MetricType, Integer, BigDecimal> findSpecificGiniSeriesByMetric(List<GiniSeries<MetricType, Integer, BigDecimal>> giniSeriesList, MetricType metricType) {
+		GiniSeries<MetricType, Integer, BigDecimal> giniSeriesFound = null;
+		for (GiniSeries<MetricType, Integer, BigDecimal> giniSeries : giniSeriesList) {
+			if (giniSeries.getMetricType() != null) {
+				MetricType giniSeriesMetricType = (MetricType) giniSeries.getMetricType();
+				if (giniSeriesMetricType.equals(metricType)) {
+					giniSeriesFound = giniSeries;
+					break;
+				}
+			}
+		}
+		return giniSeriesFound;
 	}
 
 	/**
@@ -220,4 +219,5 @@ public class CSVExporter {
 		}
 		return response;
 	}
+
 }

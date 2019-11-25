@@ -5,8 +5,8 @@ package br.unicamp.ic.microservices.graphs.analysis.controlchart;
 
 import com.google.gson.annotations.Expose;
 
-import br.unicamp.ic.microservices.graphs.Metric;
 import br.unicamp.ic.microservices.graphs.analysis.controlchart.StatisticTest.StatisticTestType;
+import br.unicamp.ic.microservices.metrics.Metric;
 
 /**
  * @author Daniel R. F. Apolinario

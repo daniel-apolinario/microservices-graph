@@ -17,23 +17,21 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import org.jgrapht.Graph;
-import org.jgrapht.alg.cycle.CycleDetector;
 import org.jgrapht.alg.cycle.HawickJamesSimpleCycles;
 import org.jgrapht.graph.DefaultEdge;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import br.unicamp.ic.microservices.graphs.Application;
-import br.unicamp.ic.microservices.graphs.Metric;
-import br.unicamp.ic.microservices.graphs.Metric.MetricType;
-import br.unicamp.ic.microservices.graphs.Microservice;
-import br.unicamp.ic.microservices.graphs.MicroservicesApplication;
 import br.unicamp.ic.microservices.graphs.MicroservicesGraph;
 import br.unicamp.ic.microservices.graphs.MicroservicesGraphUtil;
+import br.unicamp.ic.microservices.metrics.Metric;
+import br.unicamp.ic.microservices.metrics.Metric.MetricType;
+import br.unicamp.ic.microservices.model.Application;
+import br.unicamp.ic.microservices.model.Microservice;
+import br.unicamp.ic.microservices.model.MicroservicesApplication;
 
 /**
  * @author Daniel R. F. Apolinario

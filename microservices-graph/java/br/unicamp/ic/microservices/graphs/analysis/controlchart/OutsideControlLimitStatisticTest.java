@@ -3,9 +3,8 @@
  */
 package br.unicamp.ic.microservices.graphs.analysis.controlchart;
 
-import br.unicamp.ic.microservices.graphs.Application;
-import br.unicamp.ic.microservices.graphs.Microservice;
-import br.unicamp.ic.microservices.graphs.analysis.controlchart.StatisticTest.StatisticTestType;
+import br.unicamp.ic.microservices.model.Application;
+import br.unicamp.ic.microservices.model.Microservice;
 
 /**
  * @author Daniel R. F. Apolinario

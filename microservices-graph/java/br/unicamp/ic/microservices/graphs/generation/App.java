@@ -36,7 +36,7 @@ public class App {
 	public static void main(String[] args) {
 
 		// Número de grafos a serem gerados.
-		int n = 6;
+		int n = 20;
 
 		List<GraphGeneratorParameters> grGeParams = new ArrayList<GraphGeneratorParameters>();
 		for (int i = 0; i < n; i++) {

@@ -30,7 +30,7 @@ public class GraphGeneratorParameters {
 	
 	public static final int API_COMPOSITION_AGGREGATED_MIN = 2;
 	public static final int API_COMPOSITION_AGGREGATED_MAX = 10;
-
+	
 	private int graphStructure;
 
 	private int graphSize;

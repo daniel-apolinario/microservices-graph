@@ -512,6 +512,9 @@ public class MicroservicesGraphEvolution {
 		}
 
 		Graphs.addIncomingEdges(microservicesGraph, verticeMaxIncomingDegree, servicesToChangeList);
+		// export graph changed with the mega-service issue to substitute the first release
+		MicroservicesGraphUtil.exportGraphToFile(microservicesGraph, microservicesGraph.getPathName(),
+				"release-" + String.format("%02d", 0));
 
 		return returnedGraph;
 	}

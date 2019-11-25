@@ -19,11 +19,11 @@ import java.util.List;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import br.unicamp.ic.microservices.graphs.Application;
-import br.unicamp.ic.microservices.graphs.Metric;
-import br.unicamp.ic.microservices.graphs.Microservice;
-import br.unicamp.ic.microservices.graphs.MicroservicesApplication;
 import br.unicamp.ic.microservices.graphs.MicroservicesGraphUtil;
+import br.unicamp.ic.microservices.metrics.Metric;
+import br.unicamp.ic.microservices.model.Application;
+import br.unicamp.ic.microservices.model.Microservice;
+import br.unicamp.ic.microservices.model.MicroservicesApplication;
 
 /**
  * @author Daniel R. F. Apolinario

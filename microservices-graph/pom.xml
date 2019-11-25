@@ -48,7 +48,14 @@
 		    <groupId>com.opencsv</groupId>
 		    <artifactId>opencsv</artifactId>
 		    <version>4.1</version>
-		</dependency>		
+		</dependency>	
+		
+		<dependency>
+			<groupId>br.unicamp.ic</groupId>
+			<artifactId>microservices-commons</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+		</dependency>	
+			
 	</dependencies>
 
 	<build>
