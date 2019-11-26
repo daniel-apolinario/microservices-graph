@@ -50,7 +50,7 @@ public class CSVExporterGiniResults {
 				MicroservicesApplication app = gson.fromJson(reader, MicroservicesApplication.class);
 				List<String[]> applicationMetricsAndGiniValues = transformMetricsAndGiniValuesIntoStringList(app);
 				exportMetricsToCSV(app.getName(), applicationMetricsAndGiniValues,
-						"application-metrics-gini-values.csv");
+						app.getName() + "-metrics-gini-values.csv");
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -107,11 +107,13 @@ public class CSVExporterGiniResults {
 			}
 			// include gini values between ADS and AIS metrics for all the releases
 			StringBuffer headerToInclude = metricsHash.get(0);
-			headerToInclude.append("#").append("APP - ").append(MetricType.ADS);
-			headerToInclude.append("#").append("APP - ").append(MetricType.AIS);
+			headerToInclude.append("#").append("APP - GINI -").append(MetricType.ADS);
+			headerToInclude.append("#").append("APP - GINI - ").append(MetricType.AIS);
 			List<GiniSeries<MetricType, Integer, BigDecimal>> appGiniSeriesList = app.getGiniSeries();
-			GiniSeries<MetricType, Integer, BigDecimal> appADSGiniSeries = findSpecificGiniSeriesByMetric(appGiniSeriesList, MetricType.ADS);
-			GiniSeries<MetricType, Integer, BigDecimal> appAISGiniSeries = findSpecificGiniSeriesByMetric(appGiniSeriesList, MetricType.AIS);
+			GiniSeries<MetricType, Integer, BigDecimal> appADSGiniSeries = findSpecificGiniSeriesByMetric(
+					appGiniSeriesList, MetricType.ADS);
+			GiniSeries<MetricType, Integer, BigDecimal> appAISGiniSeries = findSpecificGiniSeriesByMetric(
+					appGiniSeriesList, MetricType.AIS);
 			if (appADSGiniSeries != null && appAISGiniSeries != null) {
 				for (int i = 1; i <= numberOfReleases; i++) {
 					StringBuffer dataRow = metricsHash.get(i);
@@ -132,16 +134,17 @@ public class CSVExporterGiniResults {
 				}
 				// Get the gini values for this microservice
 				List<GiniSeries<MetricType, Integer, BigDecimal>> giniSeriesList = microservice.getGiniSeries();
-				GiniSeries<MetricType, Integer, BigDecimal> adsGiniSeries = findSpecificGiniSeriesByMetric(giniSeriesList, MetricType.ADS);
-				Object adsGiniValue = null;
+				GiniSeries<MetricType, Integer, BigDecimal> adsGiniSeries = findSpecificGiniSeriesByMetric(
+						giniSeriesList, MetricType.ADS);
+				HashMap adsGiniHash = null;
 				if (adsGiniSeries != null && adsGiniSeries.getSeriesData() != null) {
-					adsGiniValue = adsGiniSeries.getSeriesData().get(0);
+					adsGiniHash = adsGiniSeries.getSeriesData();
 				}
 
 				GiniSeries aisGiniSeries = findSpecificGiniSeriesByMetric(giniSeriesList, MetricType.AIS);
-				Object aisGiniValue = null;
+				HashMap aisGiniHash = null;
 				if (aisGiniSeries != null && aisGiniSeries.getSeriesData() != null) {
-					aisGiniValue = aisGiniSeries.getSeriesData().get(0);
+					aisGiniHash = aisGiniSeries.getSeriesData();
 				}
 
 				StringBuffer headerRow = metricsHash.get(0);
@@ -155,14 +158,14 @@ public class CSVExporterGiniResults {
 				for (int i = 1; i <= numberOfReleases; i++) {
 					StringBuffer dataRow = metricsHash.get(i);
 					dataRow.append("#").append(adsMetricValues[i - 1].toString());
-					if (i == 1) {
-						dataRow.append("#").append(adsGiniValue.toString());
+					if (adsGiniHash != null && adsGiniHash.get(i - 1) != null) {
+						dataRow.append("#").append(adsGiniHash.get(i - 1).toString());
 					} else {
 						dataRow.append("#").append("");
 					}
 					dataRow.append("#").append(aisMetricValues[i - 1].toString());
-					if (i == 1) {
-						dataRow.append("#").append(aisGiniValue.toString());
+					if (aisGiniHash != null && aisGiniHash.get(i - 1) != null) {
+						dataRow.append("#").append(aisGiniHash.get(i - 1).toString());
 					} else {
 						dataRow.append("#").append("");
 					}
@@ -182,7 +185,8 @@ public class CSVExporterGiniResults {
 		return metrics.stream().filter(m -> m.getType().equals(metricType)).findFirst();
 	}
 
-	private static GiniSeries<MetricType, Integer, BigDecimal> findSpecificGiniSeriesByMetric(List<GiniSeries<MetricType, Integer, BigDecimal>> giniSeriesList, MetricType metricType) {
+	private static GiniSeries<MetricType, Integer, BigDecimal> findSpecificGiniSeriesByMetric(
+			List<GiniSeries<MetricType, Integer, BigDecimal>> giniSeriesList, MetricType metricType) {
 		GiniSeries<MetricType, Integer, BigDecimal> giniSeriesFound = null;
 		for (GiniSeries<MetricType, Integer, BigDecimal> giniSeries : giniSeriesList) {
 			if (giniSeries.getMetricType() != null) {

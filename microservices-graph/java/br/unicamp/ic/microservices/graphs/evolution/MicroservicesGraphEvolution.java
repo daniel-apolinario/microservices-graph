@@ -3,6 +3,11 @@
  */
 package br.unicamp.ic.microservices.graphs.evolution;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.nio.file.PathMatcher;
@@ -15,6 +20,9 @@ import java.util.Set;
 
 import org.jgrapht.Graphs;
 import org.jgrapht.graph.DefaultEdge;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import br.unicamp.ic.microservices.graphs.MicroservicesGraph;
 import br.unicamp.ic.microservices.graphs.MicroservicesGraphUtil;
@@ -30,12 +38,12 @@ import br.unicamp.ic.microservices.graphs.MicroservicesGraph.InitialArchitecture
  */
 public class MicroservicesGraphEvolution {
 
+	private static final String searchFolder = "/home/daniel/Documentos/mestrado-2018/projeto/grafos-dependencia/";
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
 
-		String searchFolder = "/home/daniel/Documentos/mestrado-2018/projeto/grafos-dependencia/";
 		PathMatcher matcher = FileSystems.getDefault().getPathMatcher("glob:{**release*[0-9].dot}");
 
 		// get all the files that store the graph initial structure of the microservices
@@ -82,6 +90,19 @@ public class MicroservicesGraphEvolution {
 							simulateArchitectureEvoluionToKeep(microservicesGraph);
 						}
 					}
+				}
+				// generate a json file to store the parameters for each app evolution
+				try (FileOutputStream fos = new FileOutputStream(microservicesGraph.getPathName() + "/evolution.json");
+						OutputStreamWriter isr = new OutputStreamWriter(fos, StandardCharsets.UTF_8)) {
+					Gson gson = new GsonBuilder().setPrettyPrinting().excludeFieldsWithoutExposeAnnotation().create();
+
+					gson.toJson(microservicesGraph, isr);
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 			}
 		}
