@@ -2,6 +2,12 @@ package br.unicamp.ic.microservices.graphs.generation;
 
 import java.util.Random;
 
+import com.google.gson.annotations.Expose;
+
+import br.unicamp.ic.microservices.experiment.ExperimentDesignConfig.GraphScenario;
+import br.unicamp.ic.microservices.experiment.ExperimentDesignConfig.GraphSize;
+import br.unicamp.ic.microservices.experiment.ExperimentDesignConfig.GraphStructure;
+
 /**
  * @author Daniel R. F. Apolinario
  * 
@@ -11,13 +17,6 @@ import java.util.Random;
  *
  */
 public class GraphGeneratorParameters {
-
-	public static final int RANDOM_GRAPH = 0;
-	public static final int BARABASI_ALBERT_GRAPH = 1;
-
-	public static final int SMALL_GRAPH = 0;
-	public static final int MEDIUM_GRAPH = 1;
-	public static final int BIG_GRAPH = 2;
 
 	public static final int SMALL_GRAPH_MIN = 5;
 	public static final int SMALL_GRAPH_MAX = 10;
@@ -31,12 +30,16 @@ public class GraphGeneratorParameters {
 	public static final int API_COMPOSITION_AGGREGATED_MIN = 2;
 	public static final int API_COMPOSITION_AGGREGATED_MAX = 10;
 	
-	private int graphStructure;
+	@Expose
+	private GraphStructure graphStructure;
 
-	private int graphSize;
-
-	private int graphScenario;
-
+	@Expose
+	private GraphSize graphSize;
+	
+	@Expose
+	private GraphScenario graphScenario;
+	
+	@Expose
 	private int verticesNumber;
 	
 	private int serviceRegistryProbability =Integer.MIN_VALUE;
@@ -57,27 +60,33 @@ public class GraphGeneratorParameters {
 	
 	private int externalizedConfigProportion = Integer.MIN_VALUE;
 
-	public int getGraphStructure() {
+	public GraphStructure getGraphStructure() {
 		return graphStructure;
 	}
 
-	public void setGraphStructure(int graphStructure) {
+	public void setGraphStructure(GraphStructure graphStructure) {
 		this.graphStructure = graphStructure;
 	}
 
-	public int getGraphSize() {
+	public GraphSize getGraphSize() {
 		return graphSize;
 	}
 
-	public void setGraphSize(int graphSize) {
+	public void setGraphSize(GraphSize graphSize) {
 		this.graphSize = graphSize;
 	}
 
-	public int getGraphScenario() {
+	/**
+	 * @return the graphScenario
+	 */
+	public GraphScenario getGraphScenario() {
 		return graphScenario;
 	}
 
-	public void setGraphScenario(int graphScenario) {
+	/**
+	 * @param graphScenario the graphScenario to set
+	 */
+	public void setGraphScenario(GraphScenario graphScenario) {
 		this.graphScenario = graphScenario;
 	}
 
@@ -189,13 +198,13 @@ public class GraphGeneratorParameters {
 		int verticesNumber = 0;
 		Random rdVertNumber = new Random();
 		switch (this.graphSize) {
-		case SMALL_GRAPH:
+		case SMALL:
 			verticesNumber = SMALL_GRAPH_MIN + rdVertNumber.nextInt(SMALL_GRAPH_MAX - SMALL_GRAPH_MIN);
 			break;
-		case MEDIUM_GRAPH:
+		case MEDIUM:
 			verticesNumber = MEDIUM_GRAPH_MIN + rdVertNumber.nextInt(MEDIUM_GRAPH_MAX - MEDIUM_GRAPH_MIN);
 			break;
-		case BIG_GRAPH:
+		case BIG:
 			verticesNumber = BIG_GRAPH_MIN + rdVertNumber.nextInt(BIG_GRAPH_MAX - BIG_GRAPH_MIN);
 			break;
 		default:
@@ -208,9 +217,18 @@ public class GraphGeneratorParameters {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + graphScenario;
-		result = prime * result + graphSize;
-		result = prime * result + graphStructure;
+		result = prime * result + apiCompositionAggregatedProportion;
+		result = prime * result + apiCompositionProbability;
+		result = prime * result + apiGatewayProbability;
+		result = prime * result + distributedTracingProbability;
+		result = prime * result + eventDrivingProbability;
+		result = prime * result + eventDrivingProportionProbability;
+		result = prime * result + externalizedConfigProportion;
+		result = prime * result + externalizedConfigurationProbability;
+		result = prime * result + ((graphSize == null) ? 0 : graphSize.hashCode());
+		result = prime * result + ((graphStructure == null) ? 0 : graphStructure.hashCode());
+		result = prime * result + serviceRegistryProbability;
+		result = prime * result + verticesNumber;
 		return result;
 	}
 
@@ -223,13 +241,33 @@ public class GraphGeneratorParameters {
 		if (getClass() != obj.getClass())
 			return false;
 		GraphGeneratorParameters other = (GraphGeneratorParameters) obj;
-		if (graphScenario != other.graphScenario)
+		if (apiCompositionAggregatedProportion != other.apiCompositionAggregatedProportion)
+			return false;
+		if (apiCompositionProbability != other.apiCompositionProbability)
+			return false;
+		if (apiGatewayProbability != other.apiGatewayProbability)
+			return false;
+		if (distributedTracingProbability != other.distributedTracingProbability)
+			return false;
+		if (eventDrivingProbability != other.eventDrivingProbability)
+			return false;
+		if (eventDrivingProportionProbability != other.eventDrivingProportionProbability)
+			return false;
+		if (externalizedConfigProportion != other.externalizedConfigProportion)
+			return false;
+		if (externalizedConfigurationProbability != other.externalizedConfigurationProbability)
 			return false;
 		if (graphSize != other.graphSize)
 			return false;
 		if (graphStructure != other.graphStructure)
 			return false;
+		if (serviceRegistryProbability != other.serviceRegistryProbability)
+			return false;
+		if (verticesNumber != other.verticesNumber)
+			return false;
 		return true;
 	}
+
+
 
 }

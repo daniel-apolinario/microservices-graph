@@ -1,12 +1,20 @@
 package br.unicamp.ic.microservices.graphs.generation;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Reader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
@@ -15,7 +23,15 @@ import org.jgrapht.generate.GnpRandomGraphGenerator;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleDirectedGraph;
 import org.jgrapht.util.SupplierUtil;
+import org.paukov.combinatorics3.Generator;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import br.unicamp.ic.microservices.experiment.ExperimentDesignConfig;
+import br.unicamp.ic.microservices.experiment.ExperimentDesignConfig.GraphScenario;
+import br.unicamp.ic.microservices.experiment.ExperimentDesignConfig.GraphSize;
+import br.unicamp.ic.microservices.experiment.ExperimentDesignConfig.GraphStructure;
 import br.unicamp.ic.microservices.graphs.MicroservicesGraphUtil;
 import br.unicamp.ic.microservices.graphs.VertexType;
 import br.unicamp.ic.microservices.graphs.VertexTypeRestrictions;
@@ -32,31 +48,114 @@ public class App {
 	private static final String PATH_NAME = "/home/daniel/Documentos/mestrado-2018/projeto/grafos-dependencia/";
 	private static final String APP_NAME = "application";
 	private static final String RELEASE_NAME = "release";
+	private static final String EXPERIMENTAL_DESIGN_CONFIG_FILE = "/home/daniel/Documentos/mestrado-2018/projeto/grafos-dependencia/experimentDesignConfig.json";
 
 	public static void main(String[] args) {
 
-		// Número de grafos a serem gerados.
-		int n = 20;
+		// get the experimental design to create the graphs
+		List<List> experimentalDesign = getExperimentalTreatments(EXPERIMENTAL_DESIGN_CONFIG_FILE);
 
-		List<GraphGeneratorParameters> grGeParams = new ArrayList<GraphGeneratorParameters>();
-		for (int i = 0; i < n; i++) {
-			GraphGeneratorParameters graphGeneratorParameters = generateGraphParameters();
-			grGeParams.add(graphGeneratorParameters);
+		if (experimentalDesign != null && !experimentalDesign.isEmpty()) {
+			List<GraphGeneratorParameters> grGeParams = new ArrayList<GraphGeneratorParameters>();
+			// create a list for treatmens to be saved in a json file
+			List<ExperimentTreatment> treatmentsList = new ArrayList<ExperimentTreatment>();
+
+			for (List treatment : experimentalDesign) {
+				GraphGeneratorParameters graphGeneratorParameters = generateGraphParameters(treatment);
+				grGeParams.add(graphGeneratorParameters);
+			}
+
+			int appNumber = 1;
+			for (GraphGeneratorParameters graphGenParameters : grGeParams) {
+				File newDirectory = new File(
+						MicroservicesGraphUtil.getExportCompletePath(PATH_NAME, APP_NAME, appNumber));
+				newDirectory.mkdir();
+
+				ExperimentTreatment treatment = new ExperimentTreatment(
+						MicroservicesGraphUtil.getExportCompletePath(PATH_NAME, APP_NAME, appNumber),
+						graphGenParameters);
+				treatmentsList.add(treatment);
+
+				Graph<String, DefaultEdge> graph = generateGraph(graphGenParameters, appNumber);
+				// Creates a new directory to put all the graph files inside it
+
+				MicroservicesGraphUtil.exportGraphToFile(graph,
+						MicroservicesGraphUtil.getExportCompletePath(PATH_NAME, APP_NAME, appNumber),
+						MicroservicesGraphUtil.getApplicationFileName(RELEASE_NAME, 0, Integer.MIN_VALUE, null));
+				appNumber++;
+			}
+
+			exportExperimentTreatments(treatmentsList);
+		}
+	}
+
+	/**
+	 * @param treatmentsList
+	 */
+	private static void exportExperimentTreatments(List<ExperimentTreatment> treatmentsList) {
+		try (FileOutputStream fos = new FileOutputStream(PATH_NAME + "/experimentTreatments.json");
+				OutputStreamWriter isr = new OutputStreamWriter(fos, StandardCharsets.UTF_8)) {
+			Gson gson = new GsonBuilder().setPrettyPrinting().excludeFieldsWithoutExposeAnnotation().create();
+
+			gson.toJson(treatmentsList, isr);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * @param experimentalDesignConfigFile
+	 * @return
+	 */
+	private static ExperimentDesignConfig getExperimentalDesign(String experimentalDesignConfigFile) {
+		ExperimentDesignConfig experimentDesignConfig = null;
+
+		File file = new File(experimentalDesignConfigFile);
+
+		if (file.exists()) {
+			Gson gson = new GsonBuilder().create();
+
+			try (Reader targetReader = new FileReader(file)) {
+				experimentDesignConfig = gson.fromJson(targetReader, ExperimentDesignConfig.class);
+				targetReader.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 
-		int appNumber = 1;
-		for (GraphGeneratorParameters graphGenParameters : grGeParams) {
-			File newDirectory = new File(MicroservicesGraphUtil.getExportCompletePath(PATH_NAME, APP_NAME, appNumber));
-			newDirectory.mkdir();
+		return experimentDesignConfig;
+	}
 
-			Graph<String, DefaultEdge> graph = generateGraph(graphGenParameters, appNumber);
-			// Creates a new directory to put all the graph files inside it
+	/**
+	 * 
+	 * @param experimentalDesignConfigFile
+	 * @return
+	 */
+	private static List<List> getExperimentalTreatments(String experimentalDesignConfigFile) {
+		List<List> result = new ArrayList<>();
 
-			MicroservicesGraphUtil.exportGraphToFile(graph,
-					MicroservicesGraphUtil.getExportCompletePath(PATH_NAME, APP_NAME, appNumber),
-					MicroservicesGraphUtil.getApplicationFileName(RELEASE_NAME, 0, Integer.MIN_VALUE, null));
-			appNumber++;
+		ExperimentDesignConfig experimentDesignConfig = getExperimentalDesign(experimentalDesignConfigFile);
+
+		if (experimentDesignConfig != null) {
+			List<List> design = (List<List>) Generator
+					.cartesianProduct(experimentDesignConfig.getGraphStructureFactor(),
+							experimentDesignConfig.getGraphSizeFactor(),
+							experimentDesignConfig.getGraphScenarioFactor())
+					.stream().collect(Collectors.toList());
+
+			if (design != null && !design.isEmpty()) {
+				for (int i = 0; i < experimentDesignConfig.getReplicasQuantity(); i++) {
+					result.addAll(new ArrayList(design));
+				}
+			}
 		}
+
+		return result;
 	}
 
 	/**
@@ -69,10 +168,10 @@ public class App {
 		Graph<String, DefaultEdge> graph = null;
 		switch (graphGenParameters.getGraphStructure()) {
 
-		case GraphGeneratorParameters.RANDOM_GRAPH:
+		case RANDOM_GRAPH:
 			graph = generateRandomGraph(graphGenParameters);
 			break;
-		case GraphGeneratorParameters.BARABASI_ALBERT_GRAPH:
+		case BARABASI_ALBERT_GRAPH:
 			graph = generateBarabasiAlbertGraph(graphGenParameters);
 			break;
 
@@ -103,7 +202,7 @@ public class App {
 //		MicroservicesGraphUtil.exportGraphToFile(updatedGraph,
 //				MicroservicesGraphUtil.getExportCompletePath(PATH_NAME, APP_NAME, appNumber),
 //				MicroservicesGraphUtil.getApplicationFileName(APP_NAME, appNumber, Integer.MIN_VALUE, "cps"));
-		
+
 		updatedGraph = applyAPIGateway(updatedGraph, graphGenParameters);
 //		MicroservicesGraphUtil.exportGraphToFile(updatedGraph,
 //				MicroservicesGraphUtil.getExportCompletePath(PATH_NAME, APP_NAME, appNumber),
@@ -469,13 +568,14 @@ public class App {
 		return randomGraph;
 	}
 
-	public static GraphGeneratorParameters generateGraphParameters() {
+	public static GraphGeneratorParameters generateGraphParameters(List treatment) {
 		GraphGeneratorParameters gParams = new GraphGeneratorParameters();
 		Random rdGrParams = new Random();
-		// só há 2 opções para a estrutura do grafo
-		gParams.setGraphStructure(rdGrParams.nextInt(2));
-		// há 3 opções de tamanho de grafo
-		gParams.setGraphSize(rdGrParams.nextInt(3));
+		// initially set the treatment paremeters for the experimental design
+		gParams.setGraphStructure((GraphStructure) treatment.get(0));
+		gParams.setGraphSize((GraphSize) treatment.get(1));
+		gParams.setGraphScenario((GraphScenario) treatment.get(2));
+
 		gParams.calculateVerticesNumber();
 		gParams.setApiCompositionProbability(50);
 		gParams.setApiCompositionAggregatedProportion(20);
