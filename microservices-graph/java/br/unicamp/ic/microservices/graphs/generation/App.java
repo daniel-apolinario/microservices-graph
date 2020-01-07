@@ -72,8 +72,7 @@ public class App {
 				newDirectory.mkdir();
 
 				ExperimentTreatment treatment = new ExperimentTreatment(
-						MicroservicesGraphUtil.getExportCompletePath(PATH_NAME, APP_NAME, appNumber),
-						graphGenParameters);
+						new StringBuffer(APP_NAME).append("-").append(appNumber).toString(), graphGenParameters);
 				treatmentsList.add(treatment);
 
 				Graph<String, DefaultEdge> graph = generateGraph(graphGenParameters, appNumber);
@@ -93,6 +92,7 @@ public class App {
 	 * @param treatmentsList
 	 */
 	private static void exportExperimentTreatments(List<ExperimentTreatment> treatmentsList) {
+
 		try (FileOutputStream fos = new FileOutputStream(PATH_NAME + "/experimentTreatments.json");
 				OutputStreamWriter isr = new OutputStreamWriter(fos, StandardCharsets.UTF_8)) {
 			Gson gson = new GsonBuilder().setPrettyPrinting().excludeFieldsWithoutExposeAnnotation().create();
@@ -194,39 +194,39 @@ public class App {
 			GraphGeneratorParameters graphGenParameters, int appNumber) {
 		Graph<String, DefaultEdge> updatedGraph = graph;
 
-//		MicroservicesGraphUtil.exportGraphToFile(updatedGraph,
-//				MicroservicesGraphUtil.getExportCompletePath(PATH_NAME, APP_NAME, appNumber),
-//				MicroservicesGraphUtil.getApplicationFileName(APP_NAME, appNumber, Integer.MIN_VALUE, "ini"));
+		/*MicroservicesGraphUtil.exportGraphToFile(updatedGraph,
+				MicroservicesGraphUtil.getExportCompletePath(PATH_NAME, APP_NAME, appNumber),
+				MicroservicesGraphUtil.getApplicationFileName(APP_NAME, appNumber, Integer.MIN_VALUE, "appy-DP-1"));*/
 
 		updatedGraph = applyAPIComposition(updatedGraph, graphGenParameters);
 //		MicroservicesGraphUtil.exportGraphToFile(updatedGraph,
 //				MicroservicesGraphUtil.getExportCompletePath(PATH_NAME, APP_NAME, appNumber),
-//				MicroservicesGraphUtil.getApplicationFileName(APP_NAME, appNumber, Integer.MIN_VALUE, "cps"));
+//				MicroservicesGraphUtil.getApplicationFileName(APP_NAME, appNumber, Integer.MIN_VALUE, "appy-DP-2"));
 
 		updatedGraph = applyAPIGateway(updatedGraph, graphGenParameters);
 //		MicroservicesGraphUtil.exportGraphToFile(updatedGraph,
 //				MicroservicesGraphUtil.getExportCompletePath(PATH_NAME, APP_NAME, appNumber),
-//				MicroservicesGraphUtil.getApplicationFileName(APP_NAME, appNumber, Integer.MIN_VALUE, "gtw"));
+//				MicroservicesGraphUtil.getApplicationFileName(APP_NAME, appNumber, Integer.MIN_VALUE, "appy-DP-3"));
 
 		updatedGraph = applyServiceRegistry(updatedGraph, graphGenParameters);
 //		MicroservicesGraphUtil.exportGraphToFile(updatedGraph,
 //				MicroservicesGraphUtil.getExportCompletePath(PATH_NAME, APP_NAME, appNumber),
-//				MicroservicesGraphUtil.getApplicationFileName(APP_NAME, appNumber, Integer.MIN_VALUE, "reg"));
+//				MicroservicesGraphUtil.getApplicationFileName(APP_NAME, appNumber, Integer.MIN_VALUE, "appy-DP-4"));
 
 		updatedGraph = applyEventDriven(updatedGraph, graphGenParameters);
 //		MicroservicesGraphUtil.exportGraphToFile(updatedGraph,
 //				MicroservicesGraphUtil.getExportCompletePath(PATH_NAME, APP_NAME, appNumber),
-//				MicroservicesGraphUtil.getApplicationFileName(APP_NAME, appNumber, Integer.MIN_VALUE, "evD"));
+//				MicroservicesGraphUtil.getApplicationFileName(APP_NAME, appNumber, Integer.MIN_VALUE, "appy-DP-5"));
 
 		updatedGraph = applyExternalizedConfiguration(updatedGraph, graphGenParameters);
 //		MicroservicesGraphUtil.exportGraphToFile(updatedGraph,
 //				MicroservicesGraphUtil.getExportCompletePath(PATH_NAME, APP_NAME, appNumber),
-//				MicroservicesGraphUtil.getApplicationFileName(APP_NAME, appNumber, Integer.MIN_VALUE, "cfg"));
+//				MicroservicesGraphUtil.getApplicationFileName(APP_NAME, appNumber, Integer.MIN_VALUE, "appy-DP-6"));
 
 		updatedGraph = applyDistributedTracing(updatedGraph, graphGenParameters);
 //		MicroservicesGraphUtil.exportGraphToFile(updatedGraph,
 //				MicroservicesGraphUtil.getExportCompletePath(PATH_NAME, APP_NAME, appNumber),
-//				MicroservicesGraphUtil.getApplicationFileName(APP_NAME, appNumber, Integer.MIN_VALUE, "trc"));
+//				MicroservicesGraphUtil.getApplicationFileName(APP_NAME, appNumber, Integer.MIN_VALUE, "appy-DP-7"));
 
 		return updatedGraph;
 	}
@@ -323,9 +323,9 @@ public class App {
 			int verticesToAggregateQty = Math
 					.floorDiv(graphGenParameters.getApiCompositionAggregatedProportion() * verticesQty, 100);
 			// if leaf nodes is not enough, we will add aleatory nodes
-			System.out.println("verticesQty=" + verticesQty);
-			System.out.println("verticesToAggregateQty=" + verticesToAggregateQty);
-			System.out.println("candidateVertices.size()=" + candidateVertices.size());
+//			System.out.println("verticesQty=" + verticesQty);
+//			System.out.println("verticesToAggregateQty=" + verticesToAggregateQty);
+//			System.out.println("candidateVertices.size()=" + candidateVertices.size());
 			if (verticesToAggregateQty > candidateVertices.size()) {
 				List<String> verticesList = Graphs.getVertexToIntegerMapping(updatedGraph).getIndexList();
 				int aleatoryIndex = -1;
@@ -337,7 +337,8 @@ public class App {
 					}
 				}
 			}
-			System.out.println("candidateVertices.size() depois=" + candidateVertices.size());
+			// System.out.println("candidateVertices.size() depois=" +
+			// candidateVertices.size());
 			int countWhile = 1;
 			while (candidateVertices.size() > 0) {
 				int aggregateQty = GraphGeneratorParameters.API_COMPOSITION_AGGREGATED_MIN + rdProp.nextInt(
@@ -410,6 +411,11 @@ public class App {
 					}
 				}
 			}
+			// verify if the MSB node is alone
+			if (updatedGraph.outDegreeOf(VertexType.EVENT_DRIVEN) == 0
+					&& updatedGraph.inDegreeOf(VertexType.EVENT_DRIVEN) == 0) {				
+				updatedGraph.removeVertex(VertexType.EVENT_DRIVEN);
+			}
 		}
 		return updatedGraph;
 	}
@@ -446,7 +452,8 @@ public class App {
 			// edges.
 			// In this case, we will selected a percentage of the vertices to be called by
 			// gateway
-			System.out.println("gateway degree = " + updatedGraph.degreeOf(VertexType.API_GATEWAY));
+			// System.out.println("gateway degree = " +
+			// updatedGraph.degreeOf(VertexType.API_GATEWAY));
 			if (updatedGraph.degreeOf(VertexType.API_GATEWAY) == 0) {
 				Random rdVertices = new Random();
 				int numberOfVertices = updatedGraph.vertexSet().size();

@@ -3,10 +3,14 @@
  */
 package br.unicamp.ic.microservices.graphs.evolution;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.io.Reader;
+import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
@@ -15,22 +19,27 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.jgrapht.Graphs;
 import org.jgrapht.graph.DefaultEdge;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 
+import br.unicamp.ic.microservices.experiment.ExperimentDesignConfig.GraphScenario;
 import br.unicamp.ic.microservices.graphs.MicroservicesGraph;
-import br.unicamp.ic.microservices.graphs.MicroservicesGraphUtil;
-import br.unicamp.ic.microservices.graphs.VertexType;
-import br.unicamp.ic.microservices.graphs.VertexTypeRestrictions;
 import br.unicamp.ic.microservices.graphs.MicroservicesGraph.ArchitectureEvolutionIssue;
 import br.unicamp.ic.microservices.graphs.MicroservicesGraph.ArchitectureEvolutionTarget;
 import br.unicamp.ic.microservices.graphs.MicroservicesGraph.InitialArchitectureState;
+import br.unicamp.ic.microservices.graphs.MicroservicesGraphUtil;
+import br.unicamp.ic.microservices.graphs.VertexType;
+import br.unicamp.ic.microservices.graphs.VertexTypeRestrictions;
+import br.unicamp.ic.microservices.graphs.generation.ExperimentTreatment;
 
 /**
  * @author Daniel R. F. Apolinario
@@ -39,6 +48,8 @@ import br.unicamp.ic.microservices.graphs.MicroservicesGraph.InitialArchitecture
 public class MicroservicesGraphEvolution {
 
 	private static final String searchFolder = "/home/daniel/Documentos/mestrado-2018/projeto/grafos-dependencia/";
+	private static final String EXPERIMENTAL_TREATMENTS_FILE = "/home/daniel/Documentos/mestrado-2018/projeto/grafos-dependencia/experimentTreatments.json";
+
 	/**
 	 * @param args
 	 */
@@ -57,14 +68,82 @@ public class MicroservicesGraphEvolution {
 		GraphEvolutionParameters evolutionParameters = initializeEvolutionParameters();
 
 		// configure evolution parameters for each microservices graph in according
-		// their sizes and the
-		// general evolution parameters
-		microservicesGraphList = configureEvolutionParameters(microservicesGraphList, evolutionParameters);
+		// their sizes and the general evolution parameters
+		microservicesGraphList = setEvolutionParameters(microservicesGraphList, evolutionParameters);
 
 		// heuristic to distribute the growth rate by the releases
 		microservicesGraphList = drawEvolutionSteps(microservicesGraphList, evolutionParameters);
 
 		simulateArchitectureEvolution(microservicesGraphList, evolutionParameters);
+	}
+
+	/**
+	 * @param microservicesGraphList
+	 * @param evolutionParameters
+	 * @return
+	 */
+	private static List<MicroservicesGraph<String, DefaultEdge>> setEvolutionParameters(
+			List<MicroservicesGraph<String, DefaultEdge>> microservicesGraphList,
+			GraphEvolutionParameters evolutionParameters) {
+		File treatmentsFile = new File(EXPERIMENTAL_TREATMENTS_FILE);
+
+		// if the treatments file exists, then we will use it to get the evolution
+		// parameters
+		if (treatmentsFile.exists()) {
+			microservicesGraphList = getEvolutionParametersFromTreatments(treatmentsFile, microservicesGraphList,
+					evolutionParameters);
+		} else {// we will automatically configure the evolution parameters
+			microservicesGraphList = configureEvolutionParameters(microservicesGraphList, evolutionParameters);
+		}
+
+		return microservicesGraphList;
+	}
+
+	/**
+	 * @param microservicesGraphList
+	 * @param evolutionParameters
+	 * @return
+	 */
+	private static List<MicroservicesGraph<String, DefaultEdge>> getEvolutionParametersFromTreatments(
+			File treatmentsFile, List<MicroservicesGraph<String, DefaultEdge>> microservicesGraphList,
+			GraphEvolutionParameters evolutionParameters) {
+		// Gson gson = new GsonBuilder().create();
+
+		Gson gson = new Gson();
+
+		Type type = new TypeToken<ArrayList<ExperimentTreatment>>() {
+		}.getType();
+
+		try (Reader targetReader = new FileReader(treatmentsFile)) {
+			List<ExperimentTreatment> treatmentsList = gson.fromJson(targetReader, type);
+			for (MicroservicesGraph<String, DefaultEdge> graph : microservicesGraphList) {
+				// graph.getApplicationName()
+				Optional<ExperimentTreatment> expTreatmentOptional = treatmentsList.stream()
+						.filter(treatment -> graph.getApplicationName().equals(treatment.getApplicationName()))
+						.findFirst();
+				if (expTreatmentOptional.isPresent()) {
+					ExperimentTreatment expTreatment = expTreatmentOptional.get();
+					graph.setArchitectureEvolutionIssue(ArchitectureEvolutionIssue.MEGA_SERVICE);
+					if (expTreatment.getGraphGeneratorParameters().getGraphScenario().equals(GraphScenario.IMPROVE)) {
+						graph.setInitialArchitectureState(InitialArchitectureState.BAD);
+						graph.setArchitectureEvolutionTarget(ArchitectureEvolutionTarget.BETTER);
+						applyMegaServiceIssue(graph, evolutionParameters);
+					} else {
+						if (expTreatment.getGraphGeneratorParameters().getGraphScenario()
+								.equals(GraphScenario.WORSEN)) {
+							graph.setInitialArchitectureState(InitialArchitectureState.GOOD);
+							graph.setArchitectureEvolutionTarget(ArchitectureEvolutionTarget.WORSE);
+						}
+					}
+				}
+			}
+			targetReader.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return microservicesGraphList;
 	}
 
 	/**
@@ -255,7 +334,7 @@ public class MicroservicesGraphEvolution {
 			}
 		}
 		if (existsVertexType(microservicesGraph, VertexType.SERVICE_REGISTRY)) {
-			//microservicesGraph.addEdge(VertexType.SERVICE_REGISTRY, addedVertex);
+			// microservicesGraph.addEdge(VertexType.SERVICE_REGISTRY, addedVertex);
 			microservicesGraph.addEdge(addedVertex, VertexType.SERVICE_REGISTRY);
 		}
 		if (existsVertexType(microservicesGraph, VertexType.EVENT_DRIVEN)) {
@@ -528,12 +607,16 @@ public class MicroservicesGraphEvolution {
 		List<String> servicesToChangeList = MicroservicesGraphUtil.getRandomVertices(microservicesGraph,
 				servicesToChange, vertexTypeRestrictions);
 
+		// update servicesToChange
+		servicesToChange = servicesToChangeList.size();
+
 		for (int i = 0; i < servicesToChange; i++) {
 			removeRandomEdges(microservicesGraph, 1, servicesToChangeList.get(i));
 		}
 
 		Graphs.addIncomingEdges(microservicesGraph, verticeMaxIncomingDegree, servicesToChangeList);
-		// export graph changed with the mega-service issue to substitute the first release
+		// export graph changed with the mega-service issue to substitute the first
+		// release
 		MicroservicesGraphUtil.exportGraphToFile(microservicesGraph, microservicesGraph.getPathName(),
 				"release-" + String.format("%02d", 0));
 
@@ -607,12 +690,12 @@ public class MicroservicesGraphEvolution {
 	private static GraphEvolutionParameters initializeEvolutionParameters() {
 		GraphEvolutionParameters evolutionParameters = new GraphEvolutionParameters();
 		evolutionParameters.setNumberOfReleases(20);
-		evolutionParameters.setInitialArchitectureGoodPercentage(50);
-		evolutionParameters.setArchitectureEvolutionTargetBetterPercentage(100 / 3);
-		evolutionParameters.setArchitectureEvolutionTargetWorsePercentage(100 / 3);
-		evolutionParameters.setArchitectureEvolutionTargetKeepPercentage(100 / 3);
+		// evolutionParameters.setInitialArchitectureGoodPercentage(50);
+		// evolutionParameters.setArchitectureEvolutionTargetBetterPercentage(100 / 3);
+		// evolutionParameters.setArchitectureEvolutionTargetWorsePercentage(100 / 3);
+		// evolutionParameters.setArchitectureEvolutionTargetKeepPercentage(100 / 3);
 		evolutionParameters.setArchitectureEvolutionGrowthRateMininum(30);
-		evolutionParameters.setArchitectureEvolutionGrowthRateMaximum(60);
+		evolutionParameters.setArchitectureEvolutionGrowthRateMaximum(80);
 		return evolutionParameters;
 	}
 

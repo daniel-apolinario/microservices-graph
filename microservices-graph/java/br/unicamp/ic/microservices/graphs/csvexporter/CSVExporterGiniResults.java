@@ -110,18 +110,18 @@ public class CSVExporterGiniResults {
 			// metric values
 			// for all the releases
 			StringBuffer headerToInclude = metricsHash.get(0);
-			headerToInclude.append("#").append(MetricType.SIY);
-			headerToInclude.append("#").append("GINI - ").append(MetricType.SIY);
+			//headerToInclude.append("#").append(MetricType.SIY);
+			//headerToInclude.append("#").append("GINI - ").append(MetricType.SIY);
 			headerToInclude.append("#").append("APP - GINI -").append(MetricType.ADS);
 			headerToInclude.append("#").append("APP - GINI - ").append(MetricType.AIS);
 			List<GiniSeries<MetricType, Integer, BigDecimal>> appGiniSeriesList = app.getGiniSeries();
-			Optional<Metric> siyMetric = findSpecificMetric(app.getMetrics(), MetricType.SIY);
-			Object[] siyMetricValues = null;
-			if (siyMetric.isPresent()) {
-				siyMetricValues = siyMetric.get().getValues();
-			}
-			GiniSeries<MetricType, Integer, BigDecimal> appSIYGiniSeries = findSpecificGiniSeriesByMetric(
-					appGiniSeriesList, MetricType.SIY);
+//			Optional<Metric> siyMetric = findSpecificMetric(app.getMetrics(), MetricType.SIY);
+//			Object[] siyMetricValues = null;
+//			if (siyMetric.isPresent()) {
+//				siyMetricValues = siyMetric.get().getValues();
+//			}
+//			GiniSeries<MetricType, Integer, BigDecimal> appSIYGiniSeries = findSpecificGiniSeriesByMetric(
+//					appGiniSeriesList, MetricType.SIY);
 			GiniSeries<MetricType, Integer, BigDecimal> appADSGiniSeries = findSpecificGiniSeriesByMetric(
 					appGiniSeriesList, MetricType.ADS);
 			GiniSeries<MetricType, Integer, BigDecimal> appAISGiniSeries = findSpecificGiniSeriesByMetric(
@@ -129,8 +129,8 @@ public class CSVExporterGiniResults {
 			if (appADSGiniSeries != null && appAISGiniSeries != null) {
 				for (int i = 1; i <= numberOfReleases; i++) {
 					StringBuffer dataRow = metricsHash.get(i);
-					dataRow.append("#").append(siyMetricValues[i - 1].toString());
-					dataRow.append("#").append(appSIYGiniSeries.getSeriesData().get(i - 1).toString());
+//					dataRow.append("#").append(siyMetricValues[i - 1].toString());
+//					dataRow.append("#").append(appSIYGiniSeries.getSeriesData().get(i - 1).toString());
 					dataRow.append("#").append(appADSGiniSeries.getSeriesData().get(i - 1).toString());
 					dataRow.append("#").append(appAISGiniSeries.getSeriesData().get(i - 1).toString());
 				}

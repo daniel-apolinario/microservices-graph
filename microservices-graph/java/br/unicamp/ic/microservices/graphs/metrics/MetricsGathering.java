@@ -313,7 +313,7 @@ public class MetricsGathering {
 	 * @param app
 	 */
 	private static void calculateApplicationMetrics(MicroservicesApplication app) {
-		calculateServicesInterdependenceInTheSystem(app);
+		//calculateServicesInterdependenceInTheSystem(app);
 		calculateServiceCouplingFactor(app);
 		calculateAverageNumberOfDirectlyConnectedServices(app);
 	}
