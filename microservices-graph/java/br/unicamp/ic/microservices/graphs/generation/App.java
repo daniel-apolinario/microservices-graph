@@ -52,8 +52,10 @@ public class App {
 
 	public static void main(String[] args) {
 
-		// get the experimental design to create the graphs
-		List<List> experimentalDesign = getExperimentalTreatments(EXPERIMENTAL_DESIGN_CONFIG_FILE);
+		// get the experimental Design configured in the json file
+		ExperimentDesignConfig experimentDesignConfig = getExperimentalDesign(EXPERIMENTAL_DESIGN_CONFIG_FILE);
+		// generate the treatments based on experimental design to create the graphs
+		List<List> experimentalDesign = getExperimentalTreatments(experimentDesignConfig);
 
 		if (experimentalDesign != null && !experimentalDesign.isEmpty()) {
 			List<GraphGeneratorParameters> grGeParams = new ArrayList<GraphGeneratorParameters>();
@@ -72,7 +74,8 @@ public class App {
 				newDirectory.mkdir();
 
 				ExperimentTreatment treatment = new ExperimentTreatment(
-						new StringBuffer(APP_NAME).append("-").append(appNumber).toString(), graphGenParameters);
+						new StringBuffer(APP_NAME).append("-").append(String.format("%03d", appNumber)).toString(),
+						graphGenParameters);
 				treatmentsList.add(treatment);
 
 				Graph<String, DefaultEdge> graph = generateGraph(graphGenParameters, appNumber);
@@ -136,10 +139,8 @@ public class App {
 	 * @param experimentalDesignConfigFile
 	 * @return
 	 */
-	private static List<List> getExperimentalTreatments(String experimentalDesignConfigFile) {
+	private static List<List> getExperimentalTreatments(ExperimentDesignConfig experimentDesignConfig) {
 		List<List> result = new ArrayList<>();
-
-		ExperimentDesignConfig experimentDesignConfig = getExperimentalDesign(experimentalDesignConfigFile);
 
 		if (experimentDesignConfig != null) {
 			List<List> design = (List<List>) Generator
@@ -149,13 +150,16 @@ public class App {
 					.stream().collect(Collectors.toList());
 
 			if (design != null && !design.isEmpty()) {
-				for (int i = 0; i < experimentDesignConfig.getReplicasQuantity(); i++) {
-					result.addAll(new ArrayList(design));
+				for (int i = 0; i < design.size(); i++) {
+					for (int j = 0; j < experimentDesignConfig.getReplicasQuantity(); j++) {
+						result.add(design.get(i));
+					}
 				}
 			}
 		}
 
-		return result;
+		return result;		
+
 	}
 
 	/**
@@ -194,9 +198,12 @@ public class App {
 			GraphGeneratorParameters graphGenParameters, int appNumber) {
 		Graph<String, DefaultEdge> updatedGraph = graph;
 
-		/*MicroservicesGraphUtil.exportGraphToFile(updatedGraph,
-				MicroservicesGraphUtil.getExportCompletePath(PATH_NAME, APP_NAME, appNumber),
-				MicroservicesGraphUtil.getApplicationFileName(APP_NAME, appNumber, Integer.MIN_VALUE, "appy-DP-1"));*/
+		/*
+		 * MicroservicesGraphUtil.exportGraphToFile(updatedGraph,
+		 * MicroservicesGraphUtil.getExportCompletePath(PATH_NAME, APP_NAME, appNumber),
+		 * MicroservicesGraphUtil.getApplicationFileName(APP_NAME, appNumber,
+		 * Integer.MIN_VALUE, "appy-DP-1"));
+		 */
 
 		updatedGraph = applyAPIComposition(updatedGraph, graphGenParameters);
 //		MicroservicesGraphUtil.exportGraphToFile(updatedGraph,
@@ -413,7 +420,7 @@ public class App {
 			}
 			// verify if the MSB node is alone
 			if (updatedGraph.outDegreeOf(VertexType.EVENT_DRIVEN) == 0
-					&& updatedGraph.inDegreeOf(VertexType.EVENT_DRIVEN) == 0) {				
+					&& updatedGraph.inDegreeOf(VertexType.EVENT_DRIVEN) == 0) {
 				updatedGraph.removeVertex(VertexType.EVENT_DRIVEN);
 			}
 		}

@@ -165,17 +165,14 @@ public class CSVExporter {
 		List<String[]> applicationMetrics = new ArrayList<String[]>();
 		String[] header = "release#SIY#SCF#ADCS".split("#");
 		applicationMetrics.add(header);
-		Optional<Metric> siyMetric = findSpecificMetric(app.getMetrics(), MetricType.SIY);
-		Object[] siyMetricValues = null;
-		int numberOfReleases = 0;
-		if (siyMetric.isPresent()) {
-			siyMetricValues = siyMetric.get().getValues();
-			numberOfReleases = siyMetricValues.length;
-		}
+//		Optional<Metric> siyMetric = findSpecificMetric(app.getMetrics(), MetricType.SIY);
+//		Object[] siyMetricValues = null;
 		Optional<Metric> scfMetric = findSpecificMetric(app.getMetrics(), MetricType.SCF);
-		Object[] scfMetricValues = null;
-		if (siyMetric.isPresent()) {
+		Object[] scfMetricValues = null;		
+		int numberOfReleases = 0;
+		if (scfMetric.isPresent()) {
 			scfMetricValues = scfMetric.get().getValues();
+			numberOfReleases = scfMetricValues.length;
 		}
 		Optional<Metric> adcsMetric = findSpecificMetric(app.getMetrics(), MetricType.ADCS);
 		Object[] adcsMetricValues = null;
@@ -184,7 +181,7 @@ public class CSVExporter {
 		}
 
 		for (int i = 0; i < numberOfReleases; i++) {
-			StringBuffer sb = new StringBuffer(String.valueOf(i)).append("#").append(siyMetricValues[i].toString())
+			StringBuffer sb = new StringBuffer(String.valueOf(i)).append("#").append("")
 					.append("#").append(scfMetricValues[i].toString()).append("#")
 					.append(adcsMetricValues[i].toString());
 			String[] row = sb.toString().split("#");
