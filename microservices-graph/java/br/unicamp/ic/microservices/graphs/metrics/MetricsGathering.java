@@ -81,7 +81,7 @@ public class MetricsGathering {
 			}
 
 		}
-
+		System.out.println("Metrics gathering successfully!");
 	}
 
 	/**

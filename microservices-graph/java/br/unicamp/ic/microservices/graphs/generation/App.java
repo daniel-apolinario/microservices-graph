@@ -74,7 +74,7 @@ public class App {
 				newDirectory.mkdir();
 
 				ExperimentTreatment treatment = new ExperimentTreatment(
-						new StringBuffer(APP_NAME).append("-").append(String.format("%03d", appNumber)).toString(),
+						new StringBuffer(APP_NAME).append("-").append(String.format("%04d", appNumber)).toString(),
 						graphGenParameters);
 				treatmentsList.add(treatment);
 
@@ -89,6 +89,7 @@ public class App {
 
 			exportExperimentTreatments(treatmentsList);
 		}
+		System.out.println("Dependencies graphs created successfully!");
 	}
 
 	/**

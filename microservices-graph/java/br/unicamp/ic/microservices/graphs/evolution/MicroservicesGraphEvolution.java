@@ -75,6 +75,8 @@ public class MicroservicesGraphEvolution {
 		microservicesGraphList = drawEvolutionSteps(microservicesGraphList, evolutionParameters);
 
 		simulateArchitectureEvolution(microservicesGraphList, evolutionParameters);
+		
+		System.out.println("Dependencies graphs evolution ran successfully!");
 	}
 
 	/**
@@ -442,7 +444,7 @@ public class MicroservicesGraphEvolution {
 			VertexTypeRestrictions vertexTypeRestrictions) {
 		String selectedVertex = null;
 		if (microservicesGraph != null && microservicesGraph.vertexSet().size() > 0) {
-			int maxIncomingDegree = 0;
+			int maxIncomingDegree = -1;
 			for (String vertex : microservicesGraph.vertexSet()) {
 				int incomingDegree = microservicesGraph.inDegreeOf(vertex);
 				if (incomingDegree > maxIncomingDegree && vertexTypeRestrictions.testVertexTypeRestrictions(vertex)) {
@@ -595,6 +597,7 @@ public class MicroservicesGraphEvolution {
 		int graphSize = microservicesGraph.vertexSet().size();
 		int megaServiceDependents = (int) Math.ceil(graphSize * ((double) growthRate / 100));
 		VertexTypeRestrictions vertexTypeRestrictions = new VertexTypeRestrictions(true, true, true, true, true, true);
+		System.out.println(microservicesGraph.getApplicationName());
 		String verticeMaxIncomingDegree = findMaxIncomingDegreeVertex(microservicesGraph, vertexTypeRestrictions);
 		int currentDegree = microservicesGraph.inDegreeOf(verticeMaxIncomingDegree);
 		Set<DefaultEdge> edgesAlreadyIncoming = microservicesGraph.incomingEdgesOf(verticeMaxIncomingDegree);
