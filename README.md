@@ -1,7 +1,7 @@
 # microservices-graph-generator
 Microservices Dependencies Graph Generation Tool
 
-Tool configurations related to the design patterns to generate and evolve the graphs:
+Tool configurations related to the dependency graph generation and evolution:
 
 | Parameter | Value | Description |
 | --- | :---: | --- |
