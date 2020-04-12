@@ -1,6 +1,14 @@
 # microservices-graph-generator
+
 Microservices Dependencies Graph Generation Tool
 
+## Implementation Details ##
+
+### Technologies used ###
+
+We used the graph algorithms contained in the JGraphT library to generate the initial dependencies graphs. For the random graphs, we utilized the GnpRandomGraphGenerator class that follows the Erdős–Rényi model [13]. For the Barabasi Albert graphs, we utilized the BarabasiAlbertGraphGenerator class [1] that implements preferential attachment growth. 
+
+## Tool Configurations ##
 Tool configurations related to the dependency graph generation and evolution:
 
 | Parameter | Value | Description |
