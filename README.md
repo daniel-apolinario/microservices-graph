@@ -41,3 +41,7 @@ Tool configurations related to the dependency graph generation and evolution:
 | Externalized Configuration Probability | 50\% | Probability of a microservice application to implement externalized configuration pattern.|
 | Externalized Configuration Ratio | 40\% | Ratio of nodes using the externalized configuration.|
 | Connected nodes range for megaservice | 30-80\% | One node is a megaservice if a percentage of all nodes of this application call this service.|
+
+### Graph Dependency Evolution ###
+
+In this experiment, we established twenty releases (beyond the initial release) for the whole evolution of one application. The default changes during the evolution are limited to inclusion of nodes. We focus on implementing a simple evolution of a dependency graph through releases. We calculate the growth rate for each experimental unit that must be a percentage of nodes randomly chosen from a predefined range. After the number of new nodes to be added is calculated, we apply a distribution of the nodes into the number of releases. This distribution is random and balanced to avoid all the nodes to be included in a single release, considering a short iteration development. The number of releases is also taken into account. 
