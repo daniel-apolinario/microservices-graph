@@ -6,7 +6,7 @@ Microservices Dependencies Graph Generation Tool
 
 ### Technologies used ###
 
-We used the graph algorithms contained in the JGraphT library to generate the initial dependencies graphs. For the random graphs, we utilized the GnpRandomGraphGenerator class that follows the Erdős–Rényi model [13]. For the Barabasi Albert graphs, we utilized the BarabasiAlbertGraphGenerator class [1] that implements preferential attachment growth. 
+We used the graph algorithms contained in the JGraphT library to generate the initial dependencies graphs. For the random graphs, we utilized the GnpRandomGraphGenerator class that follows the Erdős–Rényi model [[1]](#1). For the Barabasi Albert graphs, we utilized the BarabasiAlbertGraphGenerator class [1] that implements preferential attachment growth. 
 
 ### Microservices-related Design Patterns ###
 
@@ -54,3 +54,7 @@ The evolution of a dependency graph through releases in this experiment follows 
 In OO programming, there are different methods to identify a god class. Generally, these methods use coupling and cohesion metrics related to the classes and their methods. For service-based systems, we did not find methods to detect a megaservice at the level of dependencies of services only. Also, we do not have any reference to a typical dependency graph representing a megaservice. Therefore, we assume a megaservice as a node (representation of microservice in a dependency graph) that has many input edges. The number of entry edges for each megaservice will be defined by a percentage of the number of services in the system within a configured range. 
 
 The architectural improvement scenario will be characterized by the decomposition of features of a megaservice in other services, thus balancing incoming calls. This decomposition will be done throughout the releases until there are no more nodes considered megaservices. In the architectural erosion scenario, after selecting a node to be a megaservice, the main action in the next releases is to include new nodes with edges that invoke the selected megaservice, thus representing the accumulation of responsibilities.
+
+### References ###
+<a id="1">[1]</a> 
+Erdős, P., & Rényi, A. (1960). On the evolution of random graphs. Publ. Math. Inst. Hung. Acad. Sci, 5(1), 17-60.
