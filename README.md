@@ -58,5 +58,6 @@ The architectural improvement scenario will be characterized by the decompositio
 ### References ###
 <a id="1">[1]</a> 
 Erdős, P., & Rényi, A. (1960). On the evolution of random graphs. Publ. Math. Inst. Hung. Acad. Sci, 5(1), 17-60.
+
 <a id="2">[2]</a> 
 https://jgrapht.org/javadoc/org/jgrapht/generate/BarabasiAlbertGraphGenerator.html
