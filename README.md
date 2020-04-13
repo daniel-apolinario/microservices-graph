@@ -6,7 +6,7 @@ Microservices Dependencies Graph Generation Tool
 
 ### Technologies used ###
 
-We used the graph algorithms contained in the JGraphT library to generate the initial dependencies graphs. For the random graphs, we utilized the GnpRandomGraphGenerator class that follows the Erdős–Rényi model [[1]](#1). For the Barabasi Albert graphs, we utilized the BarabasiAlbertGraphGenerator class [1] that implements preferential attachment growth. 
+We used the graph algorithms contained in the JGraphT library to generate the initial dependencies graphs. For the random graphs, we utilized the GnpRandomGraphGenerator class that follows the Erdős–Rényi model [[1]](#1). For the Barabasi Albert graphs, we utilized the BarabasiAlbertGraphGenerator class [[2]](#2) that implements preferential attachment growth. 
 
 ### Microservices-related Design Patterns ###
 
@@ -58,3 +58,5 @@ The architectural improvement scenario will be characterized by the decompositio
 ### References ###
 <a id="1">[1]</a> 
 Erdős, P., & Rényi, A. (1960). On the evolution of random graphs. Publ. Math. Inst. Hung. Acad. Sci, 5(1), 17-60.
+<a id="2">[2]</a> 
+https://jgrapht.org/javadoc/org/jgrapht/generate/BarabasiAlbertGraphGenerator.html
