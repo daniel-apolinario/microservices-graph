@@ -29,7 +29,7 @@ Tool configurations related to the dependency graph generation and evolution:
 
 | Parameter | Value | Description |
 | --- | :---: | --- |
-| Replications | 210 | Number of replicas for each scenario. |
+| Replications | 210 | Number of [replicas](#replications) for each scenario. |
 | Minimum growth rate | 30\% | Minimum percentage of nodes to be included in the evolution.|
 | Maximum growth rate | 80\% | Maximum percentage of nodes to be included in the evolution.|
 | Service Registry Probability | 100\% | Probability of a microservice application to implement the Service Registry pattern.|
@@ -52,7 +52,7 @@ Considering the confidence-interval half-length
 The procedure adopted to achieve the minimum number of replicas is: 
 * We choose <img src="https://render.githubusercontent.com/render/math?math=n = 10"> as initial number of replications, <img src="https://render.githubusercontent.com/render/math?math=\gamma = 0.05"> as the error relative, and <img src="https://render.githubusercontent.com/render/math?math=\alpha = 0.05"> as the confidence level.
 * We compute <img src="https://render.githubusercontent.com/render/math?math=\overline{X}(n)"> and <img src="https://render.githubusercontent.com/render/math?math=\delta(n, \alpha)"> for each of the metrics in each of the releases for all of the experiment scenarios.
-* We increment <img src="https://render.githubusercontent.com/render/math?math=n"> until <img src="https://render.githubusercontent.com/render/math?math=\delta(n, \alpha)/|\overline{X}| \leq \gamma\;'"> for all the means computed, where <img src="https://render.githubusercontent.com/render/math?math=\gamma\;' = \gamma/(1 + \gamma)">.
+* We increment <img src="https://render.githubusercontent.com/render/math?math=n"> until <img src="https://render.githubusercontent.com/render/math?math=\delta(n, \alpha)/|\overline{X}| \leq \gamma\:'"> for all the means computed, where <img src="https://render.githubusercontent.com/render/math?math=\gamma\:' = \gamma/(1 %2B \gamma)">.
 
 After executing this procedure above, we reached the amount of 210 replications
 
