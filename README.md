@@ -47,7 +47,14 @@ Tool configurations related to the dependency graph generation and evolution:
 The number of replications configured in this tool was calculated following a statistical procedure for simulations found in [[9]](#9).
 Considering the confidence-interval half-length
 
-<a href="https://www.codecogs.com/eqnedit.php?latex=\delta(n,&space;\alpha)&space;=&space;t_{n-1,&space;1-\frac{\alpha}&space;{2}}&space;\sqrt{\frac{S^{2}(n)}&space;{n}}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\delta(n,&space;\alpha)&space;=&space;t_{n-1,&space;1-\frac{\alpha}&space;{2}}&space;\sqrt{\frac{S^{2}(n)}&space;{n}}" title="\delta(n, \alpha) = t_{n-1, 1-\frac{\alpha} {2}} \sqrt{\frac{S^{2}(n)} {n}}" /></a>
+<img src="https://render.githubusercontent.com/render/math?math=\delta(n, \alpha) = t_{n-1, 1-\frac{\alpha} {2}} \sqrt{\frac{S^{2}(n)} {n}}">
+
+The procedure adopted to achieve the minimum number of replicas is: 
+* We choose <img src="https://render.githubusercontent.com/render/math?math=n = 10"> as initial number of replications, <img src="https://render.githubusercontent.com/render/math?math=\gamma = 0.05"> as the error relative, and <img src="https://render.githubusercontent.com/render/math?math=\alpha = 0.05"> as the confidence level.
+* We compute <img src="https://render.githubusercontent.com/render/math?math=\overline{X}(n)"> and <img src="https://render.githubusercontent.com/render/math?math=\delta(n, \alpha)"> for each of the metrics in each of the releases for all of the experiment scenarios.
+* We increment <img src="https://render.githubusercontent.com/render/math?math=n"> until <img src="https://render.githubusercontent.com/render/math?math=\delta(n, \alpha)/|\overline{X}| \leq \gamma\;'"> for all the means computed, where <img src="https://render.githubusercontent.com/render/math?math=\gamma\;' = \gamma/(1 + \gamma)">.
+
+After executing this procedure above, we reached the amount of 210 replications
 
 ### Graph Dependency Evolution ###
 
