@@ -46,9 +46,8 @@ Tool configurations related to the dependency graph generation and evolution:
 ### Replications ###
 The number of replications configured in this tool was calculated following a statistical procedure for simulations found in [[9]](#9).
 Considering the confidence-interval half-length
-<a href="https://www.codecogs.com/eqnedit.php?latex=G&space;=&space;\delta(n, \alpha) = t_{n-1, 1-\frac{\alpha} {2}} \sqrt{\frac{S^{2}(n)} {n}}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?G&space;=&space;\delta(n, \alpha) = t_{n-1, 1-\frac{\alpha} {2}} \sqrt{\frac{S^{2}(n)} {n}}" title="\delta(n, \alpha) = t_{n-1, 1-\frac{\alpha} {2}} \sqrt{\frac{S^{2}(n)} {n}}" /></a>
 
-
+<a href="https://www.codecogs.com/eqnedit.php?latex=\delta(n,&space;\alpha)&space;=&space;t_{n-1,&space;1-\frac{\alpha}&space;{2}}&space;\sqrt{\frac{S^{2}(n)}&space;{n}}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\delta(n,&space;\alpha)&space;=&space;t_{n-1,&space;1-\frac{\alpha}&space;{2}}&space;\sqrt{\frac{S^{2}(n)}&space;{n}}" title="\delta(n, \alpha) = t_{n-1, 1-\frac{\alpha} {2}} \sqrt{\frac{S^{2}(n)} {n}}" /></a>
 
 ### Graph Dependency Evolution ###
 
