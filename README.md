@@ -11,7 +11,7 @@ We used the graph algorithms contained in the JGraphT library to generate the in
 ### Microservices-related Design Patterns ###
 
 Aiming at generating dependency graphs similar to real microservice-based systems, we apply six usual design patterns found in microservice-based software applications. We selected them from the catalog in [[3]](#3).
-Thus, the main selection criterion is their possibility to be expressed in a dependency graph. The selected patterns are: API Composition, Event Domain, Externalized Configuration, API Gateway, Service Registry, and Distributed Tracing. These patterns are commonly adopted together, using for example the Netflix microservices components [[4]](#4).
+Thus, the main selection criterion is their possibility to be expressed in a dependency graph. The selected patterns are API Composition, Message Service Broker, Externalized Configuration, API Gateway, Service Registry, and Distributed Tracing. [[4]](#4). These patterns are commonly adopted together, using for example the [Netflix microservices components](https://netflix.github.io).
 
 To diversify the creation of graphs, each design pattern has a probability of being introduced in the generated graph. The [Tools Configuration Table](#tool-configurations) describes all the configurations related to the design patterns to generate and evolve the graphs. 
 For example, if API Composition is configured with a 50\% percentage of probability, half of the generated graphs will have this pattern included. Some design patterns are applied only to a set of services in an application. Consequently, we created a configuration related to the proportion of nodes that will participate in the applied standard. Therefore, in these cases, there is a percentage range that is randomly chosen for each graph generated that will be used to calculate the number of nodes who have the design pattern applied.
@@ -29,6 +29,7 @@ Tool configurations related to the dependency graph generation and evolution:
 
 | Parameter | Value | Description |
 | --- | :---: | --- |
+| Replications | 210 | Number of replicas for each scenario. |
 | Minimum growth rate | 30\% | Minimum percentage of nodes to be included in the evolution.|
 | Maximum growth rate | 80\% | Maximum percentage of nodes to be included in the evolution.|
 | Service Registry Probability | 100\% | Probability of a microservice application to implement the Service Registry pattern.|
@@ -41,6 +42,13 @@ Tool configurations related to the dependency graph generation and evolution:
 | Externalized Configuration Probability | 50\% | Probability of a microservice application to implement externalized configuration pattern.|
 | Externalized Configuration Ratio | 40\% | Ratio of nodes using the externalized configuration.|
 | Connected nodes range for megaservice | 30-80\% | One node is a megaservice if a percentage of all nodes of this application call this service.|
+
+### Replications ###
+The number of replications configured in this tool was calculated following a statistical procedure for simulations found in [[9]](#9).
+Considering the confidence-interval half-length
+<a href="https://www.codecogs.com/eqnedit.php?latex=G&space;=&space;\delta(n, \alpha) = t_{n-1, 1-\frac{\alpha} {2}} \sqrt{\frac{S^{2}(n)} {n}}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?G&space;=&space;\delta(n, \alpha) = t_{n-1, 1-\frac{\alpha} {2}} \sqrt{\frac{S^{2}(n)} {n}}" title="\delta(n, \alpha) = t_{n-1, 1-\frac{\alpha} {2}} \sqrt{\frac{S^{2}(n)} {n}}" /></a>
+
+
 
 ### Graph Dependency Evolution ###
 
@@ -90,3 +98,6 @@ service-based antipatterns and bad smells,” in 2019 IEEE International
 Conference on Software Architecture Companion (ICSA-C).
 IEEE,
 2019, pp. 95–101.
+
+<a id="9">[9]</a>
+A. M. Law, W. D. Kelton, and W. D. Kelton,Simulation modeling andanalysis. McGraw-Hill Education, 2013, vol. 5
