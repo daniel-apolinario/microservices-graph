@@ -2,6 +2,8 @@
 
 Microservices Dependencies Graph Generation Tool
 
+Tool developed to assist a research experiment described [here](EXPERIMENT.md).
+
 ## Implementation Details ##
 
 ### Technologies used ###
