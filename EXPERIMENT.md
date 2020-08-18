@@ -65,3 +65,20 @@ General assumptions in the evolution of architecture:
 1. New nodes are inserted with an outgoing edge for the selected node to be the bearer of problem 1. 
 2. Newly nodes are inserted with an incoming edge from the selected node to be the bearer of the problem 2.
 
+### Microservices-related Design Patterns
+
+Aiming at generating dependency graphs similar to real microservice-based systems, we apply six usual design patterns found in microservice-based software applications \footnote{https://microservices.io/} and that can also be expressed in a dependency graph. The selected patterns are API Composition, Message Service Broker, Externalized Configuration, API Gateway, Service Registry, and Distributed Tracing. We know that some design patterns can increase coupling and also concentrate incoming or outgoing edges on a few nodes. Therefore, the method is applied to the evolution of metrics values, performing the comparison with itself, thus avoiding the creation of generic thresholds that fail to consider the different architectural decisions of each software. 
+The configurations related to the inclusion of these design patterns are available in the GitHub\textsuperscript{\ref{githubNote}} repository.
+
+### Replications and Procedure
+
+We need multiple trials as we have stochastic components to generate graphs, so that we can quantify variation in the results. 
+To determine the minimum number of replications we adopted the procedure in \cite{Law2013}. 
+After executing this procedure, we reached the amount of 210 replications. Based on this, we followed the experimental procedure:
+* *Graph Generation*: based on the factors and levels, the tool generates the dependency graph corresponding to the first release of each MSA. As we have 6 scenarios and 210 replications each, we generated 1260 experimental units. For all the units in the improvement scenario, we introduced one architecture smell in the first release.
+* *Application evolution*: according to the evolution scenario, the tool generates a dependency graph for each of the next 20 releases.
+* *Metrics calculation*: the metrics are calculated for each release of each MSA. 
+* *Metrics analysis*: we used the Cox-Stuart test to detect trends for each experimental unit, being ten statistical tests per unit considering a range of 12 observations per test. Additionally, we explore trends for the scenarios visually using the mean values for the coupling metrics evolution.
+* *Hypothesis testing*: we used the *Chi-Square* Test of Independence to evaluate the experimental hypotheses for each individual replication. Also, we used the Cramér's V statistic as the *Chi-Square* Test is sensitive to large sample sizes.
+
+
