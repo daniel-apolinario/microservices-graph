@@ -19,7 +19,7 @@ We calculated the Gini coefficient <img src="https://render.githubusercontent.co
 
 <img src="https://render.githubusercontent.com/render/math?math=G = \frac{\sum_{i=1}^{n} (2i - n - 1) x_i} {n \sum_{i=1}^{n} x_i}"> 
 
-where the values <img src="https://render.githubusercontent.com/render/math?math=x_i">, <img src="https://render.githubusercontent.com/render/math?math=x_{i+1}">,...<img src="https://render.githubusercontent.com/render/math?math=x_n"> are ordered, <img src="https://render.githubusercontent.com/render/math?math=n"> is the number of values to be computed, and <img src="https://render.githubusercontent.com/render/math?math=i"> represents the rank of the value <img src="https://render.githubusercontent.com/render/math?math=x">. 
+where the values <img src="https://render.githubusercontent.com/render/math?math=x_i">, <img src="https://render.githubusercontent.com/render/math?math=x_{i%2B1}">,...<img src="https://render.githubusercontent.com/render/math?math=x_n"> are ordered, <img src="https://render.githubusercontent.com/render/math?math=n"> is the number of values to be computed, and <img src="https://render.githubusercontent.com/render/math?math=i"> represents the rank of the value <img src="https://render.githubusercontent.com/render/math?math=x">. 
 <img src="https://render.githubusercontent.com/render/math?math=G"> assumes values between 0 and 1, in which the value 0 indicates perfect equality, whereas values closer to 1 indicate more inequality among the observations. 
 
 Therefore, the metrics evaluated in this experimental analysis are **SCF** and **ADCS** (both explained above), as well as two derived metrics:
