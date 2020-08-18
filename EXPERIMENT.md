@@ -4,17 +4,28 @@ We have designed an experiment for testing the metrics behavior in different sce
 
 ### Goal and Hypotheses
 
-The aim of this study is *to analyze* releases of microservices applications, *for the purpose of* characterizing *with respect to* a coupling metrics suite and their sensitivity to reveal architecture erosion, *in the context of* artificially-generated dependency graphs representing microservice-based applications.
+This study aims *to analyze* four coupling metrics, *for the purpose of* characterizing *with respect to* their behavior over time, *in the context of* artificially-generated dependency graphs representing MSA releases.
+Based on this, we test the following hypotheses for each metric:
 
 Based on this goal, we are testing the following hypotheses:
 
-**Null Hypothesis**: The coupling metrics suite **is not** sensitive to reveal signs of architectural deterioration in dependency graphs that represent applications based on microservice architecture.
+**Null Hypothesis (H0)**: There **is not** a significant difference in trends in the evolution of the one SID/SDD/ADCS/SCF metric between introducing and removing a architecture smell throughout releases of a MSA.
 
-**Alternative Hypothesis**: The coupling metrics suite **is** sensitive to reveal signs of architectural deterioration in dependency graphs that represent applications based on microservice architecture.
+**Alternative Hypothesis (H1)**: There **is** a significant difference in trends in the evolution of the one SID/SDD/ADCS/SCF metric between introducing and removing a architecture smell throughout releases of a MSA.
 
 ## Experimental Design 
 
-For designing different scenarios, we control three factors (independent variables) that are explained in the following sections: *Graph Structure*, *Graph Size*, *Graph Evolution Scenario*.
+We adopted a full factorial design. Table~\ref{tab:experimentScenarios} shows the scenarios resulting from the combinations between the two factors (*Graph Size*, and *Graph Evolution Scenario*) and their levels.
+
+| Scenario | Graph Size | Graph Evolution |
+| --- | :---: | :---: |
+| 1 | Small| Improvement |
+| 2 | Small| Erosion |
+| 3 | Medium| Improvement |
+| 4 | Medium| Erosion |
+| 5 | Large| Improvement |
+| 6 | Large| Erosion |
+
 
 ### Graph Structure
 The generated dependency graphs need to be as realistic as possible w.r.t. coupling between microservices. In the absence of one specific reference model for microservice-based systems in the literature, we decided to follow the Barabasi-Albert model\cite{Barabasi1999}, which is an algorithm for generating random *scale-free networks* (SFN). SFN is a network whose degree distribution follows a power-law. Some works \cite{Wheeldon2003} \cite{Potanin2005} \cite{Wen2009} \cite{Myers2003} \cite{Vsubelj2012} \cite{Jing2006} have found characteristics of the SFN \cite{Barabasi1999} in software objects, mainly related to the object-oriented systems. Alternatively, we also use a random model of graph generation for comparison purposes.  
