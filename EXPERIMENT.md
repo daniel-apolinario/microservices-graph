@@ -157,11 +157,15 @@ Finally, the *Chi-Square* Test is sensitive to large sample sizes like the one w
 Bogner - metrics
 
 <a id="1">[1]</a> 
-
-
-<a id="1">[1]</a> 
-<a id="1">[1]</a> 
-<a id="1">[1]</a> 
-
 \cite{Giger2011} 
-\cite{Vasa2009} \cite{Adnan2019}
+
+<a id="1">[1]</a>
+\cite{Vasa2009}
+
+<a id="1">[1]</a> 
+ \cite{Adnan2019}
+ 
+<a id="1">[1]</a> 
+
+
+
