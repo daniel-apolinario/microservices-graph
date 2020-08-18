@@ -19,8 +19,8 @@ We calculated the Gini coefficient <img src="https://render.githubusercontent.co
 
     <img src="https://render.githubusercontent.com/render/math?math=G = \frac{\sum_{i=1}^{n} (2i - n - 1) x_i} {n \sum_{i=1}^{n} x_i}"> 
 
-where the values $x_i, x_{i+1},...x_n$ are ordered, $n$ is the number of values to be computed, and $i$ represents the rank of the value $x$. 
-$G$ assumes values between 0 and 1, in which the value 0 indicates perfect equality, whereas values closer to 1 indicate more inequality among the observations. 
+where the values <img src="https://render.githubusercontent.com/render/math?math=x_i">, <img src="https://render.githubusercontent.com/render/math?math=x_{i+1}">,...<img src="https://render.githubusercontent.com/render/math?math=x_n"> are ordered, <img src="https://render.githubusercontent.com/render/math?math=n"> is the number of values to be computed, and <img src="https://render.githubusercontent.com/render/math?math=i"> represents the rank of the value <img src="https://render.githubusercontent.com/render/math?math=x">. 
+<img src="https://render.githubusercontent.com/render/math?math=G"> assumes values between 0 and 1, in which the value 0 indicates perfect equality, whereas values closer to 1 indicate more inequality among the observations. 
 
 Therefore, the metrics evaluated in this experimental analysis are **SCF** and **ADCS** (both explained above), as well as two derived metrics:
 * *Gini coefficient for AIS*: calculated using the individual AIS measures for each microservice in a given release. That is, this coefficient indicates how the importance of services are distributed among themselves. Values close to zero mean an even distribution of importance among the microservices. Otherwise, values close to one mean the importance are very concentrated in a few services. To simplify, we call this metric ***Service Importance Distribution (SID)***.
