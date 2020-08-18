@@ -57,7 +57,7 @@ We adopted a full factorial design. Table below shows the scenarios resulting fr
 
 
 ### Graph Structure
-The generated dependency graphs need to be as realistic as possible w.r.t. coupling between microservices. In the absence of one specific reference model for microservice-based systems in the literature, we decided to follow the Barabasi-Albert model\cite{Barabasi1999}, which is an algorithm for generating random *scale-free networks* (SFN). SFN is a network whose degree distribution follows a power-law. Wheeldon et al \cite{Wheeldon2003} and Potanin et al. \cite{Potanin2005} verified in real Java programs that distributions of coupling metrics follow a power-law function, i.e., the vast majority classes have few dependencies whilst few classes have many dependencies. Wen et al. \cite{Wen2009} observed that dependencies between Java packages also follow scale-free properties. Many other studies \cite{Vsubelj2012} \cite{Jing2006}, observed that software objects have characteristics of complex networks such as scale-free and power-law. We understand that, semantically, coupling metrics for (micro)services have the meaning than OO coupling metrics. Therefore, all of the dependency graph\gammafollowing the power-law, which the probability of one new node connects with the pre-existing node is 
+The generated dependency graphs need to be as realistic as possible w.r.t. coupling between microservices. In the absence of one specific reference model for microservice-based systems in the literature, we decided to follow the Barabasi-Albert model [[6]](#6), which is an algorithm for generating random *scale-free networks* (SFN). SFN is a network whose degree distribution follows a power-law. Wheeldon et al \cite{Wheeldon2003} and Potanin et al. \cite{Potanin2005} verified in real Java programs that distributions of coupling metrics follow a power-law function, i.e., the vast majority classes have few dependencies whilst few classes have many dependencies. Wen et al. \cite{Wen2009} observed that dependencies between Java packages also follow scale-free properties. Many other studies \cite{Vsubelj2012} \cite{Jing2006}, observed that software objects have characteristics of complex networks such as scale-free and power-law. We understand that, semantically, coupling metrics for (micro)services have the meaning than OO coupling metrics. Therefore, all of the dependency graph\gammafollowing the power-law, which the probability of one new node connects with the pre-existing node is 
 
 <img src="https://render.githubusercontent.com/render/math?math=p(k) = k ^{-\gamma}">
 
@@ -168,4 +168,6 @@ Bogner - metrics
 <a id="5">[5]</a> 
 \cite{Xu2003}
 
+<a id="6">[6]</a> 
+\cite{Barabasi1999}
 
