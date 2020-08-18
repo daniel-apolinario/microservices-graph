@@ -156,16 +156,16 @@ Finally, the *Chi-Square* Test is sensitive to large sample sizes like the one w
 <a id="1">[1]</a> 
 Bogner - metrics
 
-<a id="1">[1]</a> 
+<a id="2">[2]</a> 
 \cite{Giger2011} 
 
-<a id="1">[1]</a>
+<a id="3">[3]</a>
 \cite{Vasa2009}
 
-<a id="1">[1]</a> 
+<a id="4">[4]</a> 
  \cite{Adnan2019}
  
-<a id="1">[1]</a> 
+<a id="5">[5]</a> 
 
 
 
