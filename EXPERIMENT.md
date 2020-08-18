@@ -1,6 +1,6 @@
 ## Research Summary
 
-This experiment was performed as part of a Software Engineering research project. The research project aims to develop a method for monitoring the evolution of coupling metrics for microservice-based architectures (MSAs), assuming it can support software engineers on improving software maintainability. For this, we select a subset of metrics for MSA found in the research literature \cite{Bogner}.
+This experiment was performed as part of a Software Engineering research project. The research project aims to develop a method for monitoring the evolution of coupling metrics for microservice-based architectures (MSAs), assuming it can support software engineers on improving software maintainability. For this, we select a subset of metrics for MSA found in the research literature [[1]](#1).
 
 ### Coupling Metrics
 
@@ -152,3 +152,8 @@ In the wild scenario, several problems can occur together, and there may be prob
 The trend analysis is effective but does not take into account *level changes* in a time series, and can cause misinterpretations when this occurs. We mitigate this by using several intervals for a single evolution, so that we could detect multiple change points.
 
 Finally, the *Chi-Square* Test is sensitive to large sample sizes like the one we have in the experiment design considering the number of replications. Thus, it may impose a threat to conclusion validity. However, we associated the Cramér's V statistic to support the effect size analysis. Besides, the Chi-Square test statistic represent the independence magnitude, from which we can highlight the difference across the three metrics, corroborating the results in Table~\ref{tab:calculatedMetrics} and discussion. 
+
+### References ###
+<a id="1">[1]</a> 
+Bogner - metrics
+
