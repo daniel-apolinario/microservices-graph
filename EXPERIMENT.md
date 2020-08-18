@@ -1,6 +1,36 @@
 ### Research Summary
 
-This experiment was developed as part of a software engineering research project. The research project aims to develop a method for monitoring the evolution of coupling metrics for microservice-based architectures (MSA), assuming it can support software engineers on improving software maintainability. For this, we select the following coupling metrics for MSA found in the research literature \cite{Bogner}.
+This experiment was developed as part of a Software Engineering research project. The research project aims to develop a method for monitoring the evolution of coupling metrics for microservice-based architectures (MSA), assuming it can support software engineers on improving software maintainability. For this, we select the coupling metrics for MSA found in the research literature \cite{Bogner}.
+
+## Coupling Metrics
+
+The following metrics should be collected per individual service:
+* **Absolute Importance of the Service (AIS)**: number of consumers invoking at least one operation from a service S1. The higher the AIS, the more important the service S1 is within the system. Average AIS can be useful for identifying and quantifying the most critical services.
+* **Absolute Dependence of the Service (ADS)**: number of services on which the S1 service depends. In other words, ADS is the number of services that S1 calls for its operation to be complete. The higher the ADS, the more this service depends on other services, i.e., it is more vulnerable to the side effects of failures in the services invoked.
+
+The following metrics work for the entire application:
+* **Service Coupling Factor (SCF)**: this is a measure of the density of a graph's connectivity. $SCF = SC/(N^2 - N)$, where $SC$ is the sum of all calls between services, and $N$ is the total number of services.
+* **Average Number of Directly Connected Services (ADCS)**: Average of ADS metric of all services.
+
+Analyzing metrics individually per microservice could lead to misunderstandings about the evolution of the complete system. This way, we use the Gini coefficient to analyze both the ADS and AIS metrics described above.
+
+The Gini' coefficient is currently widely used to measure the distribution of wealth in the field of Economics. This index has the advantage of working with a [0;1] interval regardless of the statistical distribution of the data. Its value reveals how unequal the values of the coupling metrics (ADS and AIS) are among microservices in the same application. Thus, it allows to observe if few microservices concentrates coupling. For example, the *Single Responsibility Principle* is an important design principle for microservices, in which a service has one single responsibility. A Gini coefficient with a higher value may indicate a possible violation of the *Single Responsibility Principle*, as there must be a small number of services concentrating incoming or outgoing calls (logical coupling). There are several applications of the Gini coefficient in the literature for the software evolution analysis %\cite{Giger2011} 
+\cite{Vasa2009} \cite{Adnan2019}. However, non of these works apply it in the context of microservices. 
+We calculated the Gini coefficient $G$ as defined in \cite{Xu2003} (1).
+
+    G = \frac{\sum_{i=1}^{n} (2i - n - 1) x_i} {n \sum_{i=1}^{n} x_i}
+
+where the values $x_i, x_{i+1},...x_n$ are ordered, $n$ is the number of values to be computed, and $i$ represents the rank of the value $x$. 
+$G$ assumes values between 0 and 1, in which the value 0 indicates perfect equality, whereas values closer to 1 indicate more inequality among the observations. 
+
+Therefore, the metrics evaluated in this experimental analysis are \textbf{SCF} and \textbf{ADCS} (both explained above), as well as two derived metrics:
+\begin{itemize}
+    \item \emph{Gini coefficient for AIS}: calculated using the individual AIS measures for each microservice in a given release. That is, this coefficient indicates how the importance of services are distributed among themselves. Values close to zero mean an even distribution of importance among the microservices. Otherwise, values close to one mean the importance are very concentrated in a few services. To simplify, we call this metric \emph{\textbf{Service Importance Distribution (SID)}}.
+     \item \emph{Gini coefficient for ADS}: calculated using the individual ADS measures for each microservice in a given release. That is, this coefficient indicates how balanced are dependencies among services. When close to zero, it represents evenly distributed dependencies among the microservices. Otherwise, values close to one mean that few services concentrate many dependencies. To simplify, we call this metric \emph{\textbf{Service Dependency Distribution (SDD)}}.
+\end{itemize}
+
+Moreover, metrics presenting the following criteria were not considered for the analysis of coupling evolution in our paper:
+
 
 ## Experiment Report
 
