@@ -1,6 +1,6 @@
 ## Research Summary
 
-This experiment was performed as part of a Software Engineering research project. The research project aims to develop a method for monitoring the evolution of coupling metrics for microservice-based architectures (MSAs), assuming it can support software engineers on improving software maintainability. For this, we select a subset of metrics for MSA found in the research literature [[1]](#1).
+This experiment was performed as part of a Software Engineering research project. The research project aims to develop a method for monitoring the evolution of coupling metrics for microservice-based architectures (MSAs), assuming it can support software engineers on improving software maintainability. For this, we select a subset of metrics for MSA found in the research literature [[1]](#1). 
 
 ### Coupling Metrics
 
@@ -14,8 +14,7 @@ The following metrics work for the entire application:
 
 Analyzing metrics individually per microservice could lead to misunderstandings about the evolution of the complete system. This way, we use the Gini coefficient to analyze both the ADS and AIS metrics described above.
 
-The Gini' coefficient is currently widely used to measure the distribution of wealth in the field of Economics. This index has the advantage of working with a [0;1] interval regardless of the statistical distribution of the data. Its value reveals how unequal the values of the coupling metrics (ADS and AIS) are among microservices in the same application. Thus, it allows to observe if few microservices concentrates coupling. For example, the *Single Responsibility Principle* is an important design principle for microservices, in which a service has one single responsibility. A Gini coefficient with a higher value may indicate a possible violation of the *Single Responsibility Principle*, as there must be a small number of services concentrating incoming or outgoing calls (logical coupling). There are several applications of the Gini coefficient in the literature for the software evolution analysis %\cite{Giger2011} 
-\cite{Vasa2009} \cite{Adnan2019}. However, non of these works apply it in the context of microservices. 
+The Gini' coefficient is currently widely used to measure the distribution of wealth in the field of Economics. This index has the advantage of working with a [0;1] interval regardless of the statistical distribution of the data. Its value reveals how unequal the values of the coupling metrics (ADS and AIS) are among microservices in the same application. Thus, it allows to observe if few microservices concentrates coupling. For example, the *Single Responsibility Principle* is an important design principle for microservices, in which a service has one single responsibility. A Gini coefficient with a higher value may indicate a possible violation of the *Single Responsibility Principle*, as there must be a small number of services concentrating incoming or outgoing calls (logical coupling). There are several applications of the Gini coefficient in the literature for the software evolution analysis [[2]](#2) [[3]](#3) [[4]](#4). However, non of these works apply it in the context of microservices. 
 We calculated the Gini coefficient $G$ as defined in \cite{Xu2003} (1).
 
     G = \frac{\sum_{i=1}^{n} (2i - n - 1) x_i} {n \sum_{i=1}^{n} x_i}
@@ -157,3 +156,12 @@ Finally, the *Chi-Square* Test is sensitive to large sample sizes like the one w
 <a id="1">[1]</a> 
 Bogner - metrics
 
+<a id="1">[1]</a> 
+
+
+<a id="1">[1]</a> 
+<a id="1">[1]</a> 
+<a id="1">[1]</a> 
+
+\cite{Giger2011} 
+\cite{Vasa2009} \cite{Adnan2019}
