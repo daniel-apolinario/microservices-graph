@@ -29,7 +29,7 @@ Therefore, the metrics evaluated in this experimental analysis are **SCF** and *
 
 ## Experiment Report
 
-We have designed an experiment for testing the metrics behavior in different scenarios. Due to the lack of open and available repositories with real cases of microservices applications, we worked with synthetic data (artificially-generated dependency graphs) representing microservice architectures to develop the proposed method. Therefore, we developed a [tool][README.cmd] for generating this data. This simulated environment enabled us to test different scenarios and provided additional insights to make decisions regarding the method development.
+We have designed an experiment for testing the metrics behavior in different scenarios. Due to the lack of open and available repositories with real cases of microservices applications, we worked with synthetic data (artificially-generated dependency graphs) representing microservice architectures to develop the proposed method. Therefore, we developed a [tool](README.cmd) for generating this data. This simulated environment enabled us to test different scenarios and provided additional insights to make decisions regarding the method development.
 
 ### Goal and Hypotheses
 
