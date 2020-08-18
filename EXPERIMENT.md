@@ -1,4 +1,4 @@
-## Experiment Description
+## Experiment Report
 
 We have designed an experiment for testing the metrics behavior in different scenarios. Due to the lack of open and available repositories with real cases of microservices applications, we worked with synthetic data (artificially-generated dependency graphs) representing microservice architectures to develop the proposed method. Therefore, we developed a tool for generating this data. This simulated environment enabled us to test different scenarios and provided additional insights to make decisions regarding the method development.
 
@@ -15,7 +15,7 @@ Based on this goal, we are testing the following hypotheses:
 
 ## Experimental Design 
 
-We adopted a full factorial design. Table~\ref{tab:experimentScenarios} shows the scenarios resulting from the combinations between the two factors (*Graph Size*, and *Graph Evolution Scenario*) and their levels.
+We adopted a full factorial design. Table below shows the scenarios resulting from the combinations between the two factors (*Graph Size*, and *Graph Evolution Scenario*) and their levels.
 
 | Scenario | Graph Size | Graph Evolution |
 | --- | :---: | :---: |
@@ -28,13 +28,13 @@ We adopted a full factorial design. Table~\ref{tab:experimentScenarios} shows th
 
 
 ### Graph Structure
-The generated dependency graphs need to be as realistic as possible w.r.t. coupling between microservices. In the absence of one specific reference model for microservice-based systems in the literature, we decided to follow the Barabasi-Albert model\cite{Barabasi1999}, which is an algorithm for generating random *scale-free networks* (SFN). SFN is a network whose degree distribution follows a power-law. Some works \cite{Wheeldon2003} \cite{Potanin2005} \cite{Wen2009} \cite{Myers2003} \cite{Vsubelj2012} \cite{Jing2006} have found characteristics of the SFN \cite{Barabasi1999} in software objects, mainly related to the object-oriented systems. Alternatively, we also use a random model of graph generation for comparison purposes.  
+The generated dependency graphs need to be as realistic as possible w.r.t. coupling between microservices. In the absence of one specific reference model for microservice-based systems in the literature, we decided to follow the Barabasi-Albert model\cite{Barabasi1999}, which is an algorithm for generating random *scale-free networks* (SFN). SFN is a network whose degree distribution follows a power-law. Wheeldon et al \cite{Wheeldon2003} and Potanin et al. \cite{Potanin2005} verified in real Java programs that distributions of coupling metrics follow a power-law function, i.e., the vast majority classes have few dependencies whilst few classes have many dependencies. Wen et al. \cite{Wen2009} observed that dependencies between Java packages also follow scale-free properties. Many other studies \cite{Vsubelj2012} \cite{Jing2006}, observed that software objects have characteristics of complex networks such as scale-free and power-law. We understand that, semantically, coupling metrics for (micro)services have the meaning than OO coupling metrics. Therefore, all of the dependency graph\gammafollowing the power-law, which the probability of one new node connects with the pre-existing node is 
 
-Therefore, we have two levels for the factor of graph structure (or generation models): the first is the traditional random graph generation, in which the probability of one new node connects with one already existent node is the same for all the nodes in the graph; the second is the preferential attachment process that follows the power-law, which the probability of one new node connects with the pre-existing node is 
-\begin{equation}
+<img src="https://render.githubusercontent.com/render/math?math=p(k) = k ^{-\gamma}">
+
 p(k) = k ^{-\gamma} ,
-\end{equation}
-where $k$ is the number of connections of a node and $\gamma$ is the degree distribution component. In the Figure ~\ref{fig:dependency-graphs-samples}, there is an example of a graph for each level.
+
+where <img src="https://render.githubusercontent.com/render/math?math=k}"> is the number of connections of a node and <img src="https://render.githubusercontent.com/render/math?math=\gamma"> is the degree distribution component. In the Figure below, there is an example of a graph for each level.
 
 \subsubsection{Graph Size}
 A microservice-based system may vary in scale. Netflix and Amazon, pioneers in microservices architecture, claim to have hundreds of microservices in their core products \cite{NetflixMicroservices} \cite{AmazonMicroservices}. On the other hand, in open-source projects, we have many examples of applications that have few microservices, as we can see in "The Microservice Dataset, Version 1.0". \cite{Rahman2019}. 
