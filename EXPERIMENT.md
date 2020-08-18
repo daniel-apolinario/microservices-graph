@@ -1,8 +1,8 @@
-### Research Summary
+## Research Summary
 
 This experiment was performed as part of a Software Engineering research project. The research project aims to develop a method for monitoring the evolution of coupling metrics for microservice-based architectures (MSAs), assuming it can support software engineers on improving software maintainability. For this, we select a subset of metrics for MSA found in the research literature \cite{Bogner}.
 
-## Coupling Metrics
+### Coupling Metrics
 
 The following metrics should be collected per individual service:
 * **Absolute Importance of the Service (AIS)**: number of consumers invoking at least one operation from a service S1. The higher the AIS, the more important the service S1 is within the system. Average AIS can be useful for identifying and quantifying the most critical services.
