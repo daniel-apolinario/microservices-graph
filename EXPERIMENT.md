@@ -57,7 +57,7 @@ We adopted a full factorial design. Table below shows the scenarios resulting fr
 
 
 ### Graph Structure
-The generated dependency graphs need to be as realistic as possible w.r.t. coupling between microservices. In the absence of one specific reference model for microservice-based systems in the literature, we decided to follow the Barabasi-Albert model [[6]](#6), which is an algorithm for generating random *scale-free networks* (SFN). SFN is a network whose degree distribution follows a power-law. Wheeldon et al \cite{Wheeldon2003} and Potanin et al. \cite{Potanin2005} verified in real Java programs that distributions of coupling metrics follow a power-law function, i.e., the vast majority classes have few dependencies whilst few classes have many dependencies. Wen et al. \cite{Wen2009} observed that dependencies between Java packages also follow scale-free properties. Many other studies \cite{Vsubelj2012} \cite{Jing2006}, observed that software objects have characteristics of complex networks such as scale-free and power-law. We understand that, semantically, coupling metrics for (micro)services have the meaning than OO coupling metrics. Therefore, all of the dependency graph\gammafollowing the power-law, which the probability of one new node connects with the pre-existing node is 
+The generated dependency graphs need to be as realistic as possible w.r.t. coupling between microservices. In the absence of one specific reference model for microservice-based systems in the literature, we decided to follow the Barabasi-Albert model [[6]](#6), which is an algorithm for generating random *scale-free networks* (SFN). SFN is a network whose degree distribution follows a power-law. Wheeldon et al [[7]](#7) and Potanin et al. [[8]](#8) verified in real Java programs that distributions of coupling metrics follow a power-law function, i.e., the vast majority classes have few dependencies whilst few classes have many dependencies. Wen et al. [[9]](#9) observed that dependencies between Java packages also follow scale-free properties. Many other studies [[10]](#10) [[11]](#11), observed that software objects have characteristics of complex networks such as scale-free and power-law. We understand that, semantically, coupling metrics for (micro)services have the meaning than OO coupling metrics. Therefore, all of the dependency graph following the power-law, which the probability of one new node connects with the pre-existing node is 
 
 <img src="https://render.githubusercontent.com/render/math?math=p(k) = k ^{-\gamma}">
 
@@ -67,7 +67,7 @@ where <img src="https://render.githubusercontent.com/render/math?math=k"> is the
 
 ### Graph Size
 
-A microservice-based system may vary in scale. Netflix and Amazon, pioneers in microservices architecture, claim to have hundreds of microservices in their core products \cite{NetflixMicroservices} \cite{AmazonMicroservices}. On the other hand, in open-source projects, we have many examples of applications that have few microservices, as we can see in "The Microservice Dataset, Version 1.0". \cite{Rahman2019}. 
+A microservice-based system may vary in scale. Netflix and Amazon, pioneers in microservices architecture, claim to have hundreds of microservices in their core products [[12]](#12) [[13]](#13). On the other hand, in open-source projects, we have many examples of applications that have few microservices, as we can see in "The Microservice Dataset, Version 1.0" [[14]](#14). 
 
 In our experiment, we create three levels for the size of an application: small, medium and large. As we have no benchmark on the size of microservices application, we made an attempt to defined the application size in terms of amount of services as follows: from five to ten services it is considered a small application; from eleven to twenty-five services it is medium; above 25 is large, however, due to computational restrictions, we decided to limit it to 60 in this experiment, since we intend to evaluate the first results before scaling the number of services. 
 
@@ -77,9 +77,9 @@ We are interested in how the metrics behave throughout software evolution. We es
 
 ### Architecture Smells
 
-For the improvement or erosion scenarios, we have chosen two coupling-related architecture problems: the concentration of incoming dependencies (problem 1) and outgoing dependencies (problem 2) around a single microservice. These problems reflect symptoms of known architecture smells with evidence of their existance in the field, such as God Component \cite{Azadi2019} or Megaservice \cite{Taibi2020}\cite{Bogner2019}, Hub-like Dependency \cite{Azadi2019}, Bottleneck Service\cite{Bogner2019}, Nanoservices\cite{Bogner2019} and The Knot\cite{Bogner2019}.
+For the improvement or erosion scenarios, we have chosen two coupling-related architecture problems: the concentration of incoming dependencies (problem 1) and outgoing dependencies (problem 2) around a single microservice. These problems reflect symptoms of known architecture smells with evidence of their existance in the field, such as God Component [[15]](#15) or Megaservice [[16]](#16) [[17]](#17), Hub-like Dependency [[15]](#15), Bottleneck Service[[17]](#17), Nanoservices[[17]](#17) and The Knot[[17]](#17).
 
-The number of edges to characterize a microservice with high concentration of incoming or outgoing dependencies is defined by a percentage of the total number of services in the system, which is a parameter of this experiment. Further details on experiment parameters and how architecture smells are included and removed from dependency graphs are available in a GitHub\textsuperscript{\ref{githubNote}} repository.
+The number of edges to characterize a microservice with high concentration of incoming or outgoing dependencies is defined by a percentage of the total number of services in the system, which is a parameter of this experiment.
 
 General assumptions in the evolution of architecture: 
 1. Both problems are characterized in nodes that have a configured percentage of concentration of outgoing or incoming edges. Therefore, a problem is reached or resolved when it goes up or down this limit. 
@@ -96,13 +96,13 @@ General assumptions in the evolution of architecture:
 
 ### Microservices-related Design Patterns
 
-Aiming at generating dependency graphs similar to real microservice-based systems, we apply six usual design patterns found in microservice-based software applications \footnote{https://microservices.io/} and that can also be expressed in a dependency graph. The selected patterns are API Composition, Message Service Broker, Externalized Configuration, API Gateway, Service Registry, and Distributed Tracing. We know that some design patterns can increase coupling and also concentrate incoming or outgoing edges on a few nodes. Therefore, the method is applied to the evolution of metrics values, performing the comparison with itself, thus avoiding the creation of generic thresholds that fail to consider the different architectural decisions of each software. 
-The configurations related to the inclusion of these design patterns are available in the GitHub\textsuperscript{\ref{githubNote}} repository.
+Aiming at generating dependency graphs similar to real microservice-based systems, we apply six usual design patterns found in microservice-based software applications [[18]](#18) and that can also be expressed in a dependency graph. The selected patterns are API Composition, Message Service Broker, Externalized Configuration, API Gateway, Service Registry, and Distributed Tracing. We know that some design patterns can increase coupling and also concentrate incoming or outgoing edges on a few nodes. Therefore, the method is applied to the evolution of metrics values, performing the comparison with itself, thus avoiding the creation of generic thresholds that fail to consider the different architectural decisions of each software. 
+The configurations related to the inclusion of these design patterns are available in this [page](README.md).
 
 ### Replications and Procedure
 
 We need multiple trials as we have stochastic components to generate graphs, so that we can quantify variation in the results. 
-To determine the minimum number of replications we adopted the procedure in \cite{Law2013}. 
+To determine the minimum number of replications we adopted the procedure in [[19]](#19). 
 After executing this procedure, we reached the amount of 210 replications. Based on this, we followed the experimental procedure:
 * *Graph Generation*: based on the factors and levels, the tool generates the dependency graph corresponding to the first release of each MSA. As we have 6 scenarios and 210 replications each, we generated 1260 experimental units. For all the units in the improvement scenario, we introduced one architecture smell in the first release.
 * *Application evolution*: according to the evolution scenario, the tool generates a dependency graph for each of the next 20 releases.
@@ -125,8 +125,65 @@ performing better for small applications.
 
 We use Cox-Stuart test to characterize statistically a trend (upward or downward) in the series metrics values through the releases. In this experiment, we performed ten trend tests for each experimental unit (MSA), considering all possible intervals of 12 releases length (from release <img src="https://render.githubusercontent.com/render/math?math=n"> to <img src="https://render.githubusercontent.com/render/math?math=n %2B 1"> successively). For each scenario, we determined a contingency table similar to Table~\ref{tab:contingencyTable}.
 
+<table>
+    <thead>
+        <tr>
+            <th rowspan="2">Scenario</th>
+            <th colspan="3">SID</th>
+            <th colspan="3">SDD</th>
+            <th colspan="3">ADCS</th>
+            <th colspan="3">SCF</th>
+        </tr>
+        <tr>            
+            <th style="width:7%">Imp.</th>
+            <th style="width:7%">No Trend</th>
+            <th style="width:7%">Eros.</th>
+            <th style="width:7%">Imp.</th>
+            <th style="width:7%">No Trend</th>
+            <th style="width:7%">Eros.</th>
+            <th style="width:7%">Imp.</th>
+            <th style="width:7%">No Trend</th>
+            <th style="width:7%">Eros.</th>
+            <th style="width:7%">Imp.</th>
+            <th style="width:7%">No Trend</th>
+            <th style="width:7%">Eros.</th>          
+        </tr>
 
-TABELAS
+    </thead>
+    
+    <tbody>
+        <tr>
+            <td align="center">Improve</td>
+            <td align="center">60</td>
+            <td align="center">80</td>
+            <td align="center">70</td>
+            <td align="center">73</td>
+            <td align="center">85</td>
+            <td align="center">52</td>
+            <td align="center">82</td>
+            <td align="center">89</td>
+            <td align="center">39</td>
+            <td align="center">117</td>
+            <td align="center">85</td>
+            <td align="center">8</td>
+        </tr>
+         <tr>
+            <td align="center">Erosion</td>
+            <td align="center">12</td>
+            <td align="center">0</td>
+            <td align="center">198</td>
+            <td align="center">27</td>
+            <td align="center">2</td>
+            <td align="center">181</td>
+            <td align="center">67</td>
+            <td align="center">9</td>
+            <td align="center">134</td>
+            <td align="center">210</td>
+            <td align="center">0</td>
+            <td align="center">0</td>
+        </tr>
+    </tbody>    
+</table>
 
 For each MSA, we count as *Improve Scenario* and *Improving Trend* when at least one of the ten tests resulted in Improving Trend. For instance (in Table~\ref{tab:contingencyTable}), the evolution of 60 applications reveals a significant improving trend for the SID metric when we remove the architecture smell. The same is valid for counting as *Erosion Scenario* and *Erosion Trend*; that is when at least one of the ten tests resulted in Erosion Trend. Similarly, from 210 unities (MSA) in the erosion scenario, SID revealed a significant increase for 198 MSAs.
 
@@ -170,4 +227,49 @@ Bogner - metrics
 
 <a id="6">[6]</a> 
 \cite{Barabasi1999}
+
+<a id="7">[7]</a> 
+\cite{Wheeldon2003}
+
+<a id="8">[8]</a> 
+\cite{Potanin2005}
+
+<a id="9">[9]</a> 
+\cite{Wen2009}
+
+<a id="10">[10]</a> 
+\cite{Vsubelj2012}
+
+<a id="11">[11]</a> 
+\cite{Jing2006}
+
+<a id="12">[12]</a> 
+\cite{NetflixMicroservices}
+
+<a id="13">[13]</a> 
+\cite{AmazonMicroservices}
+
+<a id="14">[14]</a> 
+\cite{Rahman2019}
+
+<a id="15">[15]</a> 
+\cite{Azadi2019}
+
+<a id="16">[16]</a> 
+\cite{Taibi2020}
+
+<a id="17">[17]</a> 
+\cite{Bogner2019}
+
+<a id="18">[18]</a> 
+https://microservices.io/
+
+<a id="19">[19]</a> 
+\cite{Law2013}
+
+<a id="20">[20]</a> 
+
+<a id="21">[21]</a> 
+
+<a id="22">[22]</a> 
 
