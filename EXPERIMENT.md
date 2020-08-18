@@ -9,7 +9,7 @@ The following metrics should be collected per individual service:
 * **Absolute Dependence of the Service (ADS)**: number of services on which the S1 service depends. In other words, ADS is the number of services that S1 calls for its operation to be complete. The higher the ADS, the more this service depends on other services, i.e., it is more vulnerable to the side effects of failures in the services invoked.
 
 The following metrics work for the entire application:
-* **Service Coupling Factor (SCF)**: this is a measure of the density of a graph's connectivity. $SCF = SC/(N^2 - N)$, where $SC$ is the sum of all calls between services, and $N$ is the total number of services.
+* **Service Coupling Factor (SCF)**: this is a measure of the density of a graph's connectivity. <img src="https://render.githubusercontent.com/render/math?math=SCF = SC/(N^2 - N)">, where <img src="https://render.githubusercontent.com/render/math?math=SCF"> is the sum of all calls between services, and <img src="https://render.githubusercontent.com/render/math?math=N"> is the total number of services.
 * **Average Number of Directly Connected Services (ADCS)**: Average of ADS metric of all services.
 
 Analyzing metrics individually per microservice could lead to misunderstandings about the evolution of the complete system. This way, we use the Gini coefficient to analyze both the ADS and AIS metrics described above.
