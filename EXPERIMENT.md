@@ -81,7 +81,7 @@ After executing this procedure, we reached the amount of 210 replications. Based
 * *Metrics analysis*: we used the Cox-Stuart test to detect trends for each experimental unit, being ten statistical tests per unit considering a range of 12 observations per test. Additionally, we explore trends for the scenarios visually using the mean values for the coupling metrics evolution.
 * *Hypothesis testing*: we used the *Chi-Square* Test of Independence to evaluate the experimental hypotheses for each individual replication. Also, we used the Cramér's V statistic as the *Chi-Square* Test is sensitive to large sample sizes.
 
-### Experimental Results
+## Experimental Results
 
 Firstly, we analyze the general behavior of the metrics. For each scenario, we grouped the metric values of all replications, and we calculated the mean values for each release as they are independent. Figure below shows the plot of the four metrics for the scenario using graphs of medium size as an 
 example of how we can get a visual sense of the metrics with most evident upward or downward trends.
@@ -113,7 +113,7 @@ The SDD metric for large graphs shows great results, since Cramér's V points to
 
 The results presented help us to discard the use of the SCF metric and to validate the use of statistical trend calculations.
 
-### Threats to Validity
+## Threats to Validity
 
 We have no empirical evidence whether the model we used to create and evolve the graph structures used in the experiment resembles the graph structures of real MSAs. However, we do have evidence on this for other types of software. In architectural terms, the main difference is that MSAs have an extra level of abstraction (services).
 
