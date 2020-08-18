@@ -123,7 +123,7 @@ We also realized the vast majority of cases in architectural erosion scenarios p
 The ADCS metric shows more considerable differences in behavior according to the size of the application, 
 performing better for small applications.
 
-We use Cox-Stuart test to characterize statistically a trend (upward or downward) in the series metrics values through the releases. In this experiment, we performed ten trend tests for each experimental unit (MSA), considering all possible intervals of 12 releases length (from release <img src="https://render.githubusercontent.com/render/math?math=n"> to <img src="https://render.githubusercontent.com/render/math?math=n %2B 1"> successively). For each scenario, we determined a contingency table similar to Table~\ref{tab:contingencyTable}.
+We use Cox-Stuart test to characterize statistically a trend (upward or downward) in the series metrics values through the releases. In this experiment, we performed ten trend tests for each experimental unit (MSA), considering all possible intervals of 12 releases length (from release <img src="https://render.githubusercontent.com/render/math?math=n"> to <img src="https://render.githubusercontent.com/render/math?math=n %2B 1"> successively). For each scenario, we determined a contingency table similar to this table (Contingency Tables for Medium Graphs Scenario).
 
 <table>
     <thead>
