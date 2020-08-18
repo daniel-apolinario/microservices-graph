@@ -1,6 +1,6 @@
 ### Research Summary
 
-This experiment was performed as part of a Software Engineering research project. The research project aims to develop a method for monitoring the evolution of coupling metrics for microservice-based architectures (MSA), assuming it can support software engineers on improving software maintainability. For this, we select the coupling metrics for MSA found in the research literature \cite{Bogner}.
+This experiment was performed as part of a Software Engineering research project. The research project aims to develop a method for monitoring the evolution of coupling metrics for microservice-based architectures (MSAs), assuming it can support software engineers on improving software maintainability. For this, we select a subset of metrics for MSA found in the research literature \cite{Bogner}.
 
 ## Coupling Metrics
 
