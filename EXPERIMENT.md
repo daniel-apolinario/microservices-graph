@@ -1,3 +1,7 @@
+### Research Summary
+
+This experiment was developed as part of a software engineering research project. The research project aims to develop a method for monitoring the evolution of coupling metrics for microservice-based architectures (MSA), assuming it can support software engineers on improving software maintainability. For this, we select the following coupling metrics for MSA found in the research literature \cite{Bogner}.
+
 ## Experiment Report
 
 We have designed an experiment for testing the metrics behavior in different scenarios. Due to the lack of open and available repositories with real cases of microservices applications, we worked with synthetic data (artificially-generated dependency graphs) representing microservice architectures to develop the proposed method. Therefore, we developed a tool for generating this data. This simulated environment enabled us to test different scenarios and provided additional insights to make decisions regarding the method development.
