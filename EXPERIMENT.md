@@ -23,13 +23,9 @@ We calculated the Gini coefficient $G$ as defined in \cite{Xu2003} (1).
 where the values $x_i, x_{i+1},...x_n$ are ordered, $n$ is the number of values to be computed, and $i$ represents the rank of the value $x$. 
 $G$ assumes values between 0 and 1, in which the value 0 indicates perfect equality, whereas values closer to 1 indicate more inequality among the observations. 
 
-Therefore, the metrics evaluated in this experimental analysis are \textbf{SCF} and \textbf{ADCS} (both explained above), as well as two derived metrics:
-\begin{itemize}
-    \item \emph{Gini coefficient for AIS}: calculated using the individual AIS measures for each microservice in a given release. That is, this coefficient indicates how the importance of services are distributed among themselves. Values close to zero mean an even distribution of importance among the microservices. Otherwise, values close to one mean the importance are very concentrated in a few services. To simplify, we call this metric \emph{\textbf{Service Importance Distribution (SID)}}.
-     \item \emph{Gini coefficient for ADS}: calculated using the individual ADS measures for each microservice in a given release. That is, this coefficient indicates how balanced are dependencies among services. When close to zero, it represents evenly distributed dependencies among the microservices. Otherwise, values close to one mean that few services concentrate many dependencies. To simplify, we call this metric \emph{\textbf{Service Dependency Distribution (SDD)}}.
-\end{itemize}
-
-Moreover, metrics presenting the following criteria were not considered for the analysis of coupling evolution in our paper:
+Therefore, the metrics evaluated in this experimental analysis are **SCF** and **ADCS** (both explained above), as well as two derived metrics:
+* *Gini coefficient for AIS*: calculated using the individual AIS measures for each microservice in a given release. That is, this coefficient indicates how the importance of services are distributed among themselves. Values close to zero mean an even distribution of importance among the microservices. Otherwise, values close to one mean the importance are very concentrated in a few services. To simplify, we call this metric ***Service Importance Distribution (SID)***.
+* *Gini coefficient for ADS*: calculated using the individual ADS measures for each microservice in a given release. That is, this coefficient indicates how balanced are dependencies among services. When close to zero, it represents evenly distributed dependencies among the microservices. Otherwise, values close to one mean that few services concentrate many dependencies. To simplify, we call this metric ***Service Dependency Distribution (SDD)***.
 
 
 ## Experiment Report
