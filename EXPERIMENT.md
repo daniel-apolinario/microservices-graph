@@ -63,9 +63,8 @@ The generated dependency graphs need to be as realistic as possible w.r.t. coupl
 
 where <img src="https://render.githubusercontent.com/render/math?math=k"> is the number of connections of a node and <img src="https://render.githubusercontent.com/render/math?math=\gamma"> is the degree distribution component. In the Figure [below](#barabasi-albert-graph-example), there is an example of a graph for each level.
 
-
-<p align="center">    
-    ##### Barabasi Albert Graph Example
+##### Barabasi Albert Graph Example
+<p align="center">     
     <img src="https://github.com/daniel-apolinario/microservices-graph/blob/master/barabasi-albert-example.png"/>
 </p>
 
@@ -116,10 +115,10 @@ After executing this procedure, we reached the amount of 210 replications. Based
 
 ## Experimental Results
 
-Firstly, we analyze the general behavior of the metrics. For each scenario, we grouped the metric values of all replications, and we calculated the mean values for each release as they are independent. Figure [below](#contingency-tables-for-medium-graphs-scenario) shows the plot of the four metrics for the scenario using graphs of medium size as an 
+Firstly, we analyze the general behavior of the metrics. For each scenario, we grouped the metric values of all replications, and we calculated the mean values for each release as they are independent. Figure [below](#mean-trends-for-the-medium-size-graphs) shows the plot of the four metrics for the scenario using graphs of medium size as an 
 example of how we can get a visual sense of the metrics with most evident upward or downward trends.
 
-##### Contingency Tables for Medium Graphs Scenario
+##### Mean trends for the medium-size graphs
 <p align="center">
      <img src="https://github.com/daniel-apolinario/microservices-graph/blob/master/BA-MEDIUM-METRICS.png"/>
 </p>
@@ -130,8 +129,9 @@ We also realized the vast majority of cases in architectural erosion scenarios p
 The ADCS metric shows more considerable differences in behavior according to the size of the application, 
 performing better for small applications.
 
-We use Cox-Stuart test to characterize statistically a trend (upward or downward) in the series metrics values through the releases. In this experiment, we performed ten trend tests for each experimental unit (MSA), considering all possible intervals of 12 releases length (from release <img src="https://render.githubusercontent.com/render/math?math=n"> to <img src="https://render.githubusercontent.com/render/math?math=n %2B 1"> successively). For each scenario, we determined a contingency table similar to this table (Contingency Tables for Medium Graphs Scenario).
+We use Cox-Stuart test to characterize statistically a trend (upward or downward) in the series metrics values through the releases. In this experiment, we performed ten trend tests for each experimental unit (MSA), considering all possible intervals of 12 releases length (from release <img src="https://render.githubusercontent.com/render/math?math=n"> to <img src="https://render.githubusercontent.com/render/math?math=n %2B 1"> successively). For each scenario, we determined a contingency table similar to this [table](#contingency-tables-for-medium-graphs-scenario).
 
+##### Contingency Tables for Medium Graphs Scenario
 <table>
     <thead>
         <tr>
@@ -190,7 +190,7 @@ We use Cox-Stuart test to characterize statistically a trend (upward or downward
     </tbody>    
 </table>
 
-For each MSA, we count as *Improve Scenario* and *Improving Trend* when at least one of the ten tests resulted in Improving Trend. For instance (in Table~\ref{tab:contingencyTable}), the evolution of 60 applications reveals a significant improving trend for the SID metric when we remove the architecture smell. The same is valid for counting as *Erosion Scenario* and *Erosion Trend*; that is when at least one of the ten tests resulted in Erosion Trend. Similarly, from 210 unities (MSA) in the erosion scenario, SID revealed a significant increase for 198 MSAs.
+For each MSA, we count as *Improve Scenario* and *Improving Trend* when at least one of the ten tests resulted in Improving Trend. For instance (in table [above](#contingency-tables-for-medium-graphs-scenario), the evolution of 60 applications reveals a significant improving trend for the SID metric when we remove the architecture smell. The same is valid for counting as *Erosion Scenario* and *Erosion Trend*; that is when at least one of the ten tests resulted in Erosion Trend. Similarly, from 210 unities (MSA) in the erosion scenario, SID revealed a significant increase for 198 MSAs.
 
 We justify this rationale as just one single intervention is made to improve or deteriorate the application, so it must affect the series in a unique change-point. Conversely, *Improve Scenario* and *Erosion Trend* will be computed when there is at least one test resulting in Erosion Trend and none resulting in Improving Trend. The opposite case (*Erosion Scenario* and *Improving Trend*) occurs when there is at least one test resulting in Improving Trend and none Erosion Trend. Finally, we count as *No Trend* only when all ten tests result in No Trend, i.e., it has no statistical significance.
 
