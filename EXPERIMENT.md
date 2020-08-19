@@ -332,26 +332,20 @@ MayukhNair.[n.d.]. How Netflix works:the (hugelysimplified) complex stuf fthat h
 Cristian Satnic. [n.d.]. Amazon, microservices and the birth of AWS cloud computing. https://www.linkedin.com/pulse/amazon-microservices-birth-aws-cloud-computing-cristian-satnic[On-line] [Accessed: 28-Mar-2020].
 
 <a id="14">[14]</a> 
-\cite{Rahman2019}
+Davide Rahman, MI.and Taibi. 2019. A curated Dataset of Microservices-Based Systems. In Joint Proceedings of the Summer School on Software Maintenance and Evolution (Tampere, Finland). CEUR-WS.
 
 <a id="15">[15]</a> 
-\cite{Azadi2019}
+U. Azadi, F. Arcelli Fontana, and D. Taibi. 2019. Architectural Smells Detected by Tools: a Catalogue Proposal. In2 019 IEEE/ACM International Conference on Technical Debt (TechDebt). 88–97.
 
 <a id="16">[16]</a> 
-\cite{Taibi2020}
+Davide Taibi, Valentina Lenarduzzi, and Claus Pahl. 2020. Microservices Anti-patterns: A Taxonomy. In Microservices. Springer, 111–128.
 
 <a id="17">[17]</a> 
-\cite{Bogner2019}
+J. Bogner, T. Boceck, M. Popp, D. Tschechlov, S. Wagner, and A. Zimmermann. 2019.  Towards a Collaborative Repository for the Documentation of Service-Based Antipatterns and Bad Smells. In 2019 IEEE International Conference on Software Architecture Companion (ICSA-C). 95–101.
 
 <a id="18">[18]</a> 
 https://microservices.io/
 
 <a id="19">[19]</a> 
-\cite{Law2013}
-
-<a id="20">[20]</a> 
-
-<a id="21">[21]</a> 
-
-<a id="22">[22]</a> 
+Averill M Law, W David Kelton, and W David Kelton. 2013. Simulation modeling and analysis. Vol. 5. McGraw-Hill Education.
 
