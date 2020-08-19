@@ -215,13 +215,13 @@ Based on the contingency table for each scenario, we used the Chi-Square test of
             <th style="width:7%">Size</th>
             <th style="width:7%">Chi</th>
             <th style="width:7%">p-value</th>
-            <th style="width:7%">Cramers</th>
+            <th style="width:7%"><img src="https://render.githubusercontent.com/render/math?math=\varphi_c"></th>
             <th style="width:7%">Chi</th>
             <th style="width:7%">p-value</th>
-            <th style="width:7%">Cramers</th>
+            <th style="width:7%"><img src="https://render.githubusercontent.com/render/math?math=\varphi_c"></th>
             <th style="width:7%">Chi</th>
             <th style="width:7%">p-value</th>
-            <th style="width:7%">Cramers</th>            
+            <th style="width:7%"><img src="https://render.githubusercontent.com/render/math?math=\varphi_c"></th>            
         </tr>
     </thead>    
     <tbody>
@@ -261,13 +261,17 @@ Based on the contingency table for each scenario, we used the Chi-Square test of
             <td align="center">6.1e-33</td>
             <td align="center">0.59</td>
         </tr>        
-        <tr style="border:0">
+        <tr style="border-style: none">
             <td colspan="9">
-            <b>Chi </b>= Chi-squared test statistic
+                <b>Chi </b>= Chi-squared test statistic
             </td>
+        </tr>
+        <tr>            
             <td colspan="9">
             <b>Chi </b>= Chi-squared test's p-value
             </td>
+        </tr>
+        <tr>
             <td colspan="9">
             <b><img src="https://render.githubusercontent.com/render/math?math=\varphi_c"> </b>= Cramér’s V statistic 
             </td>
