@@ -115,9 +115,10 @@ After executing this procedure, we reached the amount of 210 replications. Based
 
 ## Experimental Results
 
-Firstly, we analyze the general behavior of the metrics. For each scenario, we grouped the metric values of all replications, and we calculated the mean values for each release as they are independent. Figure below shows the plot of the four metrics for the scenario using graphs of medium size as an 
+Firstly, we analyze the general behavior of the metrics. For each scenario, we grouped the metric values of all replications, and we calculated the mean values for each release as they are independent. Figure [below](#contingency-tables-for-medium-graphs-scenario) shows the plot of the four metrics for the scenario using graphs of medium size as an 
 example of how we can get a visual sense of the metrics with most evident upward or downward trends.
 
+##### Contingency Tables for Medium Graphs Scenario
 <p align="center">
      <img src="https://github.com/daniel-apolinario/microservices-graph/blob/master/BA-MEDIUM-METRICS.png"/>
 </p>
@@ -194,7 +195,7 @@ We justify this rationale as just one single intervention is made to improve or 
 
 Based on the contingency table for each scenario, we used the Chi-Square test of independence to verify how correlated are the intended evolution scenarios (Improve or Erosion) and the result of the Cox-Stuart test for trend analysis (results in Table~\ref{tab:calculatedMetrics}). We do not consider the SCF metric for testing the experiment's hypotheses due to its anomalous behavior (monotonic-decreasing no matter the scenario), which is also reflected in Table~\ref{tab:contingencyTable}.
 
-Table~\ref{tab:calculatedMetrics} also presents the Cramer's V measure. We use it in association with the Chi-Square test as the latter is sensitive to large sample sizes. The Cramer's V measures the correlation between two nominal variables (architectural evolution scenario and detected trends) for each coupling metric as an interval between zero (no association) and one (strong association). We consider rejecting the null hypothesis when the Chi-Square test (\emph{p-value} < 0.05) and the Cramer's V statistic ($\varphi_c > 0.5$) result in a significant association. 
+Table~\ref{tab:calculatedMetrics} also presents the Cramer's V measure. We use it in association with the Chi-Square test as the latter is sensitive to large sample sizes. The Cramer's V measures the correlation between two nominal variables (architectural evolution scenario and detected trends) for each coupling metric as an interval between zero (no association) and one (strong association). We consider rejecting the null hypothesis when the Chi-Square test (*p-value* < 0.05) and the Cramer's V statistic ($\varphi_c > 0.5$) result in a significant association. 
 
 Therefore, we could not reject **H0** in the scenarios: SID metric with small MSAs and SDD metric with small MSAs. Except for these two combinations of metrics and scenarios, we can reject **H0** and accept the **H1** for the other 10 combinations (metrics x MSA size). 
 
