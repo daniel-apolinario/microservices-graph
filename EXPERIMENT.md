@@ -61,11 +61,12 @@ The generated dependency graphs need to be as realistic as possible w.r.t. coupl
 
 <img src="https://render.githubusercontent.com/render/math?math=p(k) = k ^{-\gamma}">
 
-where <img src="https://render.githubusercontent.com/render/math?math=k"> is the number of connections of a node and <img src="https://render.githubusercontent.com/render/math?math=\gamma"> is the degree distribution component. In the Figure below, there is an example of a graph for each level.
+where <img src="https://render.githubusercontent.com/render/math?math=k"> is the number of connections of a node and <img src="https://render.githubusercontent.com/render/math?math=\gamma"> is the degree distribution component. In the Figure [below](#bagraphexample), there is an example of a graph for each level.
 
-###### Barabasi Albert Graph Sample
 <p align="center">
+    <a href="#bagraphexample">
     <img src="https://github.com/daniel-apolinario/microservices-graph/blob/master/barabasi-albert-example.png"/>
+    </a>
 </p>
 
 ### Graph Size
@@ -119,7 +120,7 @@ Firstly, we analyze the general behavior of the metrics. For each scenario, we g
 example of how we can get a visual sense of the metrics with most evident upward or downward trends.
 
 <p align="center">
-    <img src="https://github.com/daniel-apolinario/microservices-graph/blob/master/BA-MEDIUM-METRICS.png"/>
+     <img src="https://github.com/daniel-apolinario/microservices-graph/blob/master/BA-MEDIUM-METRICS.png"/>
 </p>
 
 In this analysis, the SCF metric presents a downward trend in all scenarios, even when purposefully introducing smells. Therefore, it is not sensitive enough to detect the architecture changes introduced during the experiment. The SCF metric seems to be more sensitive to the number of nodes in the graph than to the coupling between them, since the average number of edges does not vary significantly during evolution. An increase in SCF would reveal a chaotic architecture, where it should be evident the architecture remarkably deteriorated. 
