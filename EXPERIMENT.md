@@ -260,7 +260,7 @@ Based on the contingency table for each scenario, we used the Chi-Square test of
 
 
 
-Table [above](#experiment-results-per-metric) also presents the Cramer's V measure. We use it in association with the Chi-Square test as the latter is sensitive to large sample sizes. The Cramer's V measures the correlation between two nominal variables (architectural evolution scenario and detected trends) for each coupling metric as an interval between zero (no association) and one (strong association). We consider rejecting the null hypothesis when the Chi-Square test (*p-value* < 0.05) and the Cramer's V statistic ($\varphi_c > 0.5$) result in a significant association. 
+Table [above](#experiment-results-per-metric) also presents the Cramer's V measure. We use it in association with the Chi-Square test as the latter is sensitive to large sample sizes. The Cramer's V measures the correlation between two nominal variables (architectural evolution scenario and detected trends) for each coupling metric as an interval between zero (no association) and one (strong association). We consider rejecting the null hypothesis when the Chi-Square test (<img src="https://render.githubusercontent.com/render/math?math=p-value < 0.05">) and the Cramer's V statistic (<img src="https://render.githubusercontent.com/render/math?math=\varphi_c > 0.5">) result in a significant association. 
 
 Therefore, we could not reject **H0** in the scenarios: SID metric with small MSAs and SDD metric with small MSAs. Except for these two combinations of metrics and scenarios, we can reject **H0** and accept the **H1** for the other 10 combinations (metrics x MSA size). 
 
@@ -276,7 +276,7 @@ In the wild scenario, several problems can occur together, and there may be prob
 
 The trend analysis is effective but does not take into account *level changes* in a time series, and can cause misinterpretations when this occurs. We mitigate this by using several intervals for a single evolution, so that we could detect multiple change points.
 
-Finally, the *Chi-Square* Test is sensitive to large sample sizes like the one we have in the experiment design considering the number of replications. Thus, it may impose a threat to conclusion validity. However, we associated the Cramér's V statistic to support the effect size analysis. Besides, the Chi-Square test statistic represent the independence magnitude, from which we can highlight the difference across the three metrics, corroborating the results in Table~\ref{tab:calculatedMetrics} and discussion. 
+Finally, the *Chi-Square* Test is sensitive to large sample sizes like the one we have in the experiment design considering the number of replications. Thus, it may impose a threat to conclusion validity. However, we associated the Cramér's V statistic to support the effect size analysis. Besides, the Chi-Square test statistic represent the independence magnitude, from which we can highlight the difference across the three metrics, corroborating the results in the Table [above](#experiment-results-per-metric) and discussion. 
 
 ### References ###
 <a id="1">[1]</a> 
