@@ -261,18 +261,10 @@ Based on the contingency table for each scenario, we used the Chi-Square test of
             <td align="center">6.1e-33</td>
             <td align="center">0.59</td>
         </tr>        
-        <tr style="border-style: none">
-            <td colspan="9">
-                <b>Chi </b>= Chi-squared test statistic
-            </td>
-        </tr>
-        <tr>            
-            <td colspan="9">
-            <b>Chi </b>= Chi-squared test's p-value
-            </td>
-        </tr>
         <tr>
-            <td colspan="9">
+            <td colspan="10">
+                <b>Chi </b>= Chi-squared test statistic </br>
+            <b>Chi </b>= Chi-squared test's p-value </br>
             <b><img src="https://render.githubusercontent.com/render/math?math=\varphi_c"> </b>= Cramér’s V statistic 
             </td>
         </tr>
