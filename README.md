@@ -8,7 +8,7 @@ Tool developed to assist a research experiment reported [here](EXPERIMENT.md).
 
 ### Technologies used ###
 
-We used the graph algorithms contained in the JGraphT library to generate the initial dependencies graphs. For the random graphs, we utilized the GnpRandomGraphGenerator class that follows the Erdős–Rényi model [[1]](#1). For the Barabasi Albert graphs, we utilized the BarabasiAlbertGraphGenerator class [[2]](#2) that implements preferential attachment growth. 
+We used the graph algorithms contained in the JGraphT library to generate the initial dependencies graphs. For the Barabasi Albert graphs, we utilized the BarabasiAlbertGraphGenerator class [[2]](#2) that implements preferential attachment growth. 
 
 ### Microservices-related Design Patterns ###
 
