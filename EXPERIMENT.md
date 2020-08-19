@@ -187,8 +187,13 @@ We use Cox-Stuart test to characterize statistically a trend (upward or downward
             <td align="center">0</td>
             <td align="center">0</td>
         </tr>
+        <tr>
+            <td colspan="13">
+            <b>1. Imp.</b>= Improving Trend, <b>2. Eros.</b>= Erosion Trend
+            </td>
+        </tr>
     </tbody>    
-    <caption style="caption-side:bottom"><b>1. Imp.</b>= Improving Trend, <b>2. Eros.</b>= Erosion Trend</caption>
+    
 </table>
 
 For each MSA, we count as *Improve Scenario* and *Improving Trend* when at least one of the ten tests resulted in Improving Trend. For instance (in the [contingency table](#contingency-tables-for-medium-graphs-scenario)), the evolution of 60 applications reveals a significant improving trend for the SID metric when we remove the architecture smell. The same is valid for counting as *Erosion Scenario* and *Erosion Trend*; that is when at least one of the ten tests resulted in Erosion Trend. Similarly, from 210 unities (MSA) in the erosion scenario, SID revealed a significant increase for 198 MSAs.
