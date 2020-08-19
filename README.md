@@ -64,13 +64,7 @@ In this experiment, we established twenty releases (beyond the initial release) 
 
 ### Architecture Smells ###
 
-The evolution of a dependency graph through releases in this experiment follows the architectural improvement or the architectural erosion scenario. For this, we have chosen one architecture smell (problem) to use in our evolution scenario. We chose the megaservice problem that is similar to the *God Class* in OO programming. The main characteristic of a *god class* is the accumulation of responsibilities causing an increase in size and amount of dependencies. In the literature, this architecture smell can be found under different names [[5]](#5) [[6]](#6) [[7]](#7) [[8]](#8). 
-
-In the case of microservices, Taibi et al. [[5]](#5) [[6]](#6) reports that the megaservice smell is one of the main anti-patterns problems stated by practitioners. Azadi et al [[7]](#7) used the God Component denomination as one of the architectural smells detected by the analyzed tools. In [[8]](#8) Bogner et al. there is a categorization of this problem in service-based systems and, according to the literature, there are several different names found for this problem, such as Multiservice, The God Object, God Object Web Service, and Big Ball of Mud.
-
-In OO programming, there are different methods to identify a god class. Generally, these methods use coupling and cohesion metrics related to the classes and their methods. For service-based systems, we did not find methods to detect a megaservice at the level of dependencies of services only. Also, we do not have any reference to a typical dependency graph representing a megaservice. Therefore, we assume a megaservice as a node (representation of microservice in a dependency graph) that has many input edges. The number of entry edges for each megaservice will be defined by a percentage of the number of services in the system within a configured range. 
-
-The architectural improvement scenario will be characterized by the decomposition of features of a megaservice in other services, thus balancing incoming calls. This decomposition will be done throughout the releases until there are no more nodes considered megaservices. In the architectural erosion scenario, after selecting a node to be a megaservice, the main action in the next releases is to include new nodes with edges that invoke the selected megaservice, thus representing the accumulation of responsibilities.
+The evolution of a dependency graph through releases in this experiment follows the architectural improvement or the architectural erosion scenario. For this, we have chosen two architecture smell (problem 1 and problem 2) reported in the [experiment report](#EXPERIMENT.md#architecture-smells)
 
 ### References ###
 <a id="1">[1]</a> 
