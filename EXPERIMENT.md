@@ -194,9 +194,73 @@ For each MSA, we count as *Improve Scenario* and *Improving Trend* when at least
 
 We justify this rationale as just one single intervention is made to improve or deteriorate the application, so it must affect the series in a unique change-point. Conversely, *Improve Scenario* and *Erosion Trend* will be computed when there is at least one test resulting in Erosion Trend and none resulting in Improving Trend. The opposite case (*Erosion Scenario* and *Improving Trend*) occurs when there is at least one test resulting in Improving Trend and none Erosion Trend. Finally, we count as *No Trend* only when all ten tests result in No Trend, i.e., it has no statistical significance.
 
-Based on the contingency table for each scenario, we used the Chi-Square test of independence to verify how correlated are the intended evolution scenarios (Improve or Erosion) and the result of the Cox-Stuart test for trend analysis (results in Table~\ref{tab:calculatedMetrics}). We do not consider the SCF metric for testing the experiment's hypotheses due to its anomalous behavior (monotonic-decreasing no matter the scenario), which is also reflected in the [Contingency Table](#contingency-tables-for-medium-graphs-scenario).
+Based on the contingency table for each scenario, we used the Chi-Square test of independence to verify how correlated are the intended evolution scenarios (Improve or Erosion) and the result of the Cox-Stuart test for trend analysis (results in Table [below](#experiment-results-per-metric)). We do not consider the SCF metric for testing the experiment's hypotheses due to its anomalous behavior (monotonic-decreasing no matter the scenario), which is also reflected in the [Contingency Table](#contingency-tables-for-medium-graphs-scenario).
 
-Table~\ref{tab:calculatedMetrics} also presents the Cramer's V measure. We use it in association with the Chi-Square test as the latter is sensitive to large sample sizes. The Cramer's V measures the correlation between two nominal variables (architectural evolution scenario and detected trends) for each coupling metric as an interval between zero (no association) and one (strong association). We consider rejecting the null hypothesis when the Chi-Square test (*p-value* < 0.05) and the Cramer's V statistic ($\varphi_c > 0.5$) result in a significant association. 
+##### Experiment Results per Metric
+<table>
+    <thead>
+        <tr>
+            <th>Scenarios</th>
+            <th colspan="3">SID</th>
+            <th colspan="3">SDD</th>
+            <th colspan="3">ADCS</th>
+        </tr>
+        <tr>            
+            <th style="width:7%">Size</th>
+            <th style="width:7%">Chi</th>
+            <th style="width:7%">p-value</th>
+            <th style="width:7%">Cramers</th>
+            <th style="width:7%">Chi</th>
+            <th style="width:7%">p-value</th>
+            <th style="width:7%">Cramers</th>
+            <th style="width:7%">Chi</th>
+            <th style="width:7%">p-value</th>
+            <th style="width:7%">Cramers</th>            
+        </tr>
+    </thead>    
+    <tbody>
+        <tr>
+            <td align="center">Large</td>
+            <td align="center">145.53</td>
+            <td align="center">2.5e-32</td>
+            <td align="center">0.59</td>
+            <td align="center">256.91</td>
+            <td align="center">1.6e-56</td>
+            <td align="center">0.78</td>
+            <td align="center">142.62</td>
+            <td align="center">1.1e-31</td>
+            <td align="center">0.58</td>
+        </tr>
+        <tr>
+            <td align="center">Medium</td>
+            <td align="center">173.13</td>
+            <td align="center">2.5e-38</td>
+            <td align="center">0.64</td>
+            <td align="center">171.76</td>
+            <td align="center">5.0e-38</td>
+            <td align="center">0.64</td>
+            <td align="center">118.98</td>
+            <td align="center">1.4e-26</td>
+            <td align="center">0.53</td>
+        </tr>
+        <tr>
+            <td align="center">Small</td>
+            <td align="center">96.92</td>
+            <td align="center">9.0e-22</td>
+            <td align="center">0.48</td>
+            <td align="center">65.01</td>
+            <td align="center">7.6e-15</td>
+            <td align="center">0.39</td>
+            <td align="center">148.36</td>
+            <td align="center">6.1e-33</td>
+            <td align="center">0.59</td>
+        </tr>        
+    </tbody>
+</table>
+
+
+
+Table [above](#experiment-results-per-metric) also presents the Cramer's V measure. We use it in association with the Chi-Square test as the latter is sensitive to large sample sizes. The Cramer's V measures the correlation between two nominal variables (architectural evolution scenario and detected trends) for each coupling metric as an interval between zero (no association) and one (strong association). We consider rejecting the null hypothesis when the Chi-Square test (*p-value* < 0.05) and the Cramer's V statistic ($\varphi_c > 0.5$) result in a significant association. 
 
 Therefore, we could not reject **H0** in the scenarios: SID metric with small MSAs and SDD metric with small MSAs. Except for these two combinations of metrics and scenarios, we can reject **H0** and accept the **H1** for the other 10 combinations (metrics x MSA size). 
 
