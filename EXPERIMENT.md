@@ -66,7 +66,6 @@ where <img src="https://render.githubusercontent.com/render/math?math=k"> is the
 <p align="center">
     <img src="https://github.com/daniel-apolinario/microservices-graph/blob/master/barabasi-albert-example.png"/>
 </p>
-![Barabasi Albert Graph Sample](barabasi-albert-example.png)
 
 ### Graph Size
 
@@ -118,7 +117,9 @@ After executing this procedure, we reached the amount of 210 replications. Based
 Firstly, we analyze the general behavior of the metrics. For each scenario, we grouped the metric values of all replications, and we calculated the mean values for each release as they are independent. Figure below shows the plot of the four metrics for the scenario using graphs of medium size as an 
 example of how we can get a visual sense of the metrics with most evident upward or downward trends.
 
-![Mean trends for the medium-size graphs](BA-MEDIUM-METRICS.png)
+<p align="center">
+    <img src="https://github.com/daniel-apolinario/microservices-graph/blob/master/BA-MEDIUM-METRICS.png"/>
+</p>
 
 In this analysis, the SCF metric presents a downward trend in all scenarios, even when purposefully introducing smells. Therefore, it is not sensitive enough to detect the architecture changes introduced during the experiment. The SCF metric seems to be more sensitive to the number of nodes in the graph than to the coupling between them, since the average number of edges does not vary significantly during evolution. An increase in SCF would reveal a chaotic architecture, where it should be evident the architecture remarkably deteriorated. 
 
