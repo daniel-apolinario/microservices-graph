@@ -142,9 +142,9 @@ We use Cox-Stuart test to characterize statistically a trend (upward or downward
             <th colspan="3">SCF</th>
         </tr>
         <tr>            
-            <th style="width:7%">Imp<img src="https://render.githubusercontent.com/render/math?math=^1"></th>
+            <th style="width:7%">I<img src="https://render.githubusercontent.com/render/math?math=^1"></th>
             <th style="width:7%">No Trend</th>
-            <th style="width:7%">Eros<img src="https://render.githubusercontent.com/render/math?math=^2"></th>
+            <th style="width:7%">E<img src="https://render.githubusercontent.com/render/math?math=^2"></th>
             <th style="width:7%">Imp<img src="https://render.githubusercontent.com/render/math?math=^1"></th>
             <th style="width:7%">No Trend</th>
             <th style="width:7%">Eros<img src="https://render.githubusercontent.com/render/math?math=^2"></th>
