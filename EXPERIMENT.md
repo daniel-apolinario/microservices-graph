@@ -64,7 +64,11 @@ The generated dependency graphs need to be as realistic as possible w.r.t. coupl
 where <img src="https://render.githubusercontent.com/render/math?math=k"> is the number of connections of a node and <img src="https://render.githubusercontent.com/render/math?math=\gamma"> is the degree distribution component. In the Figure below, there is an example of a graph for each level.
 
 <p align="center">
-    <img src="https://github.com/daniel-apolinario/microservices-graph/blob/master/barabasi-albert-example.png"/>
+    <figure>
+        <img src="https://github.com/daniel-apolinario/microservices-graph/blob/master/barabasi-albert-example.png" alt="Barabasi Albert Graph example"/>
+        <figcaption>"Barabasi Albert Graph example.</figcaption>
+        </figure>
+    <!--img src="https://github.com/daniel-apolinario/microservices-graph/blob/master/barabasi-albert-example.png"/-->
 </p>
 
 ### Graph Size
@@ -189,7 +193,7 @@ We use Cox-Stuart test to characterize statistically a trend (upward or downward
 
 For each MSA, we count as *Improve Scenario* and *Improving Trend* when at least one of the ten tests resulted in Improving Trend. For instance (in Table~\ref{tab:contingencyTable}), the evolution of 60 applications reveals a significant improving trend for the SID metric when we remove the architecture smell. The same is valid for counting as *Erosion Scenario* and *Erosion Trend*; that is when at least one of the ten tests resulted in Erosion Trend. Similarly, from 210 unities (MSA) in the erosion scenario, SID revealed a significant increase for 198 MSAs.
 
-We justify this rationale as just one single intervention is made to improve or deteriorate the application, so it must affect the series in a unique change-point. Conversely, *Improve Scenario* and *Erosion Trend* will be computed when there is at least one test resulting in Erosion Trend and none resulting in Improving Trend. The opposite case (*Erosion Scenario* and *Improving Trend*) occurs when there is at least one test resulting in Improving Trend and none Erosion Trend. Finally, we count as \emph{No Trend} only when all ten tests result in No Trend, i.e., it has no statistical significance.
+We justify this rationale as just one single intervention is made to improve or deteriorate the application, so it must affect the series in a unique change-point. Conversely, *Improve Scenario* and *Erosion Trend* will be computed when there is at least one test resulting in Erosion Trend and none resulting in Improving Trend. The opposite case (*Erosion Scenario* and *Improving Trend*) occurs when there is at least one test resulting in Improving Trend and none Erosion Trend. Finally, we count as *No Trend* only when all ten tests result in No Trend, i.e., it has no statistical significance.
 
 Based on the contingency table for each scenario, we used the Chi-Square test of independence to verify how correlated are the intended evolution scenarios (Improve or Erosion) and the result of the Cox-Stuart test for trend analysis (results in Table~\ref{tab:calculatedMetrics}). We do not consider the SCF metric for testing the experiment's hypotheses due to its anomalous behavior (monotonic-decreasing no matter the scenario), which is also reflected in Table~\ref{tab:contingencyTable}.
 
