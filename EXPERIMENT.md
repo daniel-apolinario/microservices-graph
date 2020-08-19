@@ -63,13 +63,10 @@ The generated dependency graphs need to be as realistic as possible w.r.t. coupl
 
 where <img src="https://render.githubusercontent.com/render/math?math=k"> is the number of connections of a node and <img src="https://render.githubusercontent.com/render/math?math=\gamma"> is the degree distribution component. In the Figure below, there is an example of a graph for each level.
 
-<!--p align="center"-->
-    <figure>
-        <img src="https://github.com/daniel-apolinario/microservices-graph/blob/master/barabasi-albert-example.png" alt="Barabasi Albert Graph example"/>
-        <figcaption>"Barabasi Albert Graph example.</figcaption>
-        </figure>
-    <!--img src="https://github.com/daniel-apolinario/microservices-graph/blob/master/barabasi-albert-example.png"/-->
-<!--/p-->
+###### Barabasi Albert Graph Sample
+<p align="center">
+    <img src="https://github.com/daniel-apolinario/microservices-graph/blob/master/barabasi-albert-example.png"/>
+</p>
 
 ### Graph Size
 
