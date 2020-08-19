@@ -64,7 +64,7 @@ In this experiment, we established twenty releases (beyond the initial release) 
 
 ### Architecture Smells ###
 
-The evolution of a dependency graph through releases in this experiment follows the architectural improvement or the architectural erosion scenario. For this, we have chosen two architecture smell (problem 1 and problem 2) reported in the [experiment report](#EXPERIMENT.md#architecture-smells)
+The evolution of a dependency graph through releases in this experiment follows the architectural improvement or the architectural erosion scenario. For this, we have chosen two architecture smell (problem 1 and problem 2) reported in the [experiment report](#EXPERIMENT.md)
 
 ### References ###
 <a id="1">[1]</a> 
