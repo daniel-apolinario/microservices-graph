@@ -132,6 +132,7 @@ performing better for small applications.
 We use Cox-Stuart test to characterize statistically a trend (upward or downward) in the series metrics values through the releases. In this experiment, we performed ten trend tests for each experimental unit (MSA), considering all possible intervals of 12 releases length (from release <img src="https://render.githubusercontent.com/render/math?math=n"> to <img src="https://render.githubusercontent.com/render/math?math=n %2B 1"> successively). For each scenario, we determined a contingency table similar to this [table](#contingency-tables-for-medium-graphs-scenario).
 
 ##### Contingency Tables for Medium Graphs Scenario
+**1. Imp.**= Improving Trend, **2. Eros.**= Erosion Trend
 <table>
     <thead>
         <tr>
@@ -142,18 +143,18 @@ We use Cox-Stuart test to characterize statistically a trend (upward or downward
             <th colspan="3">SCF</th>
         </tr>
         <tr>            
-            <th style="width:7%">Imp.<img src="https://render.githubusercontent.com/render/math?math=^1"></th>
+            <th style="width:7%">Imp<img src="https://render.githubusercontent.com/render/math?math=^1"></th>
             <th style="width:7%">No Trend</th>
-            <th style="width:7%">Eros.</th>
-            <th style="width:7%">Imp.</th>
+            <th style="width:7%">Eros<img src="https://render.githubusercontent.com/render/math?math=^2"></th>
+            <th style="width:7%">Imp<img src="https://render.githubusercontent.com/render/math?math=^1"></th>
             <th style="width:7%">No Trend</th>
-            <th style="width:7%">Eros.</th>
-            <th style="width:7%">Imp.</th>
+            <th style="width:7%">Eros<img src="https://render.githubusercontent.com/render/math?math=^2"></th>
+            <th style="width:7%">Imp<img src="https://render.githubusercontent.com/render/math?math=^1"></th>
             <th style="width:7%">No Trend</th>
-            <th style="width:7%">Eros.</th>
-            <th style="width:7%">Imp.</th>
+            <th style="width:7%">Eros<img src="https://render.githubusercontent.com/render/math?math=^2"></th>
+            <th style="width:7%">Imp<img src="https://render.githubusercontent.com/render/math?math=^1"></th>
             <th style="width:7%">No Trend</th>
-            <th style="width:7%">Eros.</th>          
+            <th style="width:7%">Eros<img src="https://render.githubusercontent.com/render/math?math=^2"></th>          
         </tr>
     </thead>  
     <tbody>
@@ -189,8 +190,6 @@ We use Cox-Stuart test to characterize statistically a trend (upward or downward
         </tr>
     </tbody>    
 </table>
-Imp.= Improving Trend,Eros.= Erosion Trend
-
 
 For each MSA, we count as *Improve Scenario* and *Improving Trend* when at least one of the ten tests resulted in Improving Trend. For instance (in the [contingency table](#contingency-tables-for-medium-graphs-scenario)), the evolution of 60 applications reveals a significant improving trend for the SID metric when we remove the architecture smell. The same is valid for counting as *Erosion Scenario* and *Erosion Trend*; that is when at least one of the ten tests resulted in Erosion Trend. Similarly, from 210 unities (MSA) in the erosion scenario, SID revealed a significant increase for 198 MSAs.
 
