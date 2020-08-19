@@ -65,7 +65,7 @@ where <img src="https://render.githubusercontent.com/render/math?math=k"> is the
 
 <p align="center">
     <a href="#bagraphexample">
-    <img src="https://github.com/daniel-apolinario/microservices-graph/blob/master/barabasi-albert-example.png"/>
+    <img src="https://github.com/daniel-apolinario/microservices-graph/blob/master/barabasi-albert-example.png">
     </a>
 </p>
 
