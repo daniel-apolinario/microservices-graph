@@ -63,7 +63,9 @@ The generated dependency graphs need to be as realistic as possible w.r.t. coupl
 
 where <img src="https://render.githubusercontent.com/render/math?math=k"> is the number of connections of a node and <img src="https://render.githubusercontent.com/render/math?math=\gamma"> is the degree distribution component. In the Figure below, there is an example of a graph for each level.
 
+<p align="center">
 ![Barabasi Albert Graph Sample](barabasi-albert-example.png)
+</p>
 
 ### Graph Size
 
