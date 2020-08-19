@@ -293,43 +293,43 @@ Finally, the *Chi-Square* Test is sensitive to large sample sizes like the one w
 
 ### References ###
 <a id="1">[1]</a> 
-Bogner - metrics
+J. Bogner, S. Wagner, and A. Zimmermann. 2017. Automatically Measuring the Maintainability of Service- and Microservice-based Systems: A Literature Review. InProc. of the 27th Int. Workshop on Software Measurement(Gothenburg, Sweden). ACM, New York, NY, USA, 107–115
 
 <a id="2">[2]</a> 
-\cite{Giger2011} 
+Giger, Emanuel & Pinzger, Martin & Gall, Harald. (2011). Using the Gini coefficient for bug prediction in eclipse. IWPSE-EVOL'11 - Proceedings of the 12th International Workshop on Principles on Software Evolution. 51-55. 10.1145/2024445.2024455. 
 
 <a id="3">[3]</a>
-\cite{Vasa2009}
+Rajesh Vasa, Markus Lumpe, Philip Branch, and Oscar Nierstrasz. 2009. Comparative analysis of evolving software systems using the Gini coefficient. In 2009 IEEE International Conference on Software Maintenance. IEEE, 179–188.
 
 <a id="4">[4]</a> 
- \cite{Adnan2019}
+S.D. Adnan. 2019. Software evolution on azureus bit torrent software: A study on growth and change analysis.Journal of Engineering Science and Technology 14 (01 2019), 430–447.
  
 <a id="5">[5]</a> 
-\cite{Xu2003}
+Kuan Xu. 2003.  How has the literature on Gini’s index evolved in the past 80 years? Dalhousie University, Economics Working Paper(2003).
 
 <a id="6">[6]</a> 
-\cite{Barabasi1999}
+Albert-László Barabási and Réka Albert. 1999. Emergence of Scaling in Random Networks.Science286, 5439 (1999), 509–512.
 
 <a id="7">[7]</a> 
-\cite{Wheeldon2003}
+Richard Wheeldon and Steve Counsell. 2003.  Power law distributions in class relationships. In Proceedings Third IEEE International Workshop on Source Code Analysis and Manipulation. IEEE, 45–54.
 
 <a id="8">[8]</a> 
-\cite{Potanin2005}
+Alex Potanin, James Noble, Marcus Frean, and Robert Biddle. 2005.  Scale-free geometry in OO programs.Commun. ACM 48, 5 (2005), 99–103.
 
 <a id="9">[9]</a> 
-\cite{Wen2009}
+Lian Wen, R Geoff Dromey, and Diana Kirk. 2009.  Software Engineering and Scale-Free Networks *. IEEE Transactions on Systems, Man, and Cybernetics, Part B (Cybernetics)39, 4 (2009), 845–854.
 
 <a id="10">[10]</a> 
-\cite{Vsubelj2012}
+Lovro Šubelj and Marko Bajec. 2012. Software systems through complex networks science: Review, analysis and applications. In Proceedings of the First International Workshop on Software Mining. 9–16.
 
 <a id="11">[11]</a> 
-\cite{Jing2006}
+Liu Jing, He Keqing, Ma Yutao, and Peng Rong. 2006. Scale free in software metrics. In 30th Annual International Computer Software and Applications Conference (COMPSAC’06), Vol. 1. IEEE, 229–235.
 
 <a id="12">[12]</a> 
-\cite{NetflixMicroservices}
+MayukhNair.[n.d.]. How Netflix works:the (hugelysimplified) complex stuf fthat happens every time you hit Play. https://medium.com/refraction-tech-everything/how-netflix-works-the-hugely-simplified-complex-stuff-that-happens-every-time-you-hit-play-3a40c9be254b [Online] [Accessed: 28-Mar-2020].
 
 <a id="13">[13]</a> 
-\cite{AmazonMicroservices}
+Cristian Satnic. [n.d.]. Amazon, microservices and the birth of AWS cloud computing. https://www.linkedin.com/pulse/amazon-microservices-birth-aws-cloud-computing-cristian-satnic[On-line] [Accessed: 28-Mar-2020].
 
 <a id="14">[14]</a> 
 \cite{Rahman2019}
