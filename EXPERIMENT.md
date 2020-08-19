@@ -142,18 +142,18 @@ We use Cox-Stuart test to characterize statistically a trend (upward or downward
             <th colspan="3">SCF</th>
         </tr>
         <tr>            
-            <th style="width:7%">I<img src="https://render.githubusercontent.com/render/math?math=^1"></th>
+            <th style="width:7%">Imp.</th>
             <th style="width:7%">No Trend</th>
-            <th style="width:7%">E<img src="https://render.githubusercontent.com/render/math?math=^2"></th>
-            <th style="width:7%">Imp<img src="https://render.githubusercontent.com/render/math?math=^1"></th>
+            <th style="width:7%">Eros.</th>
+            <th style="width:7%">Imp.</th>
             <th style="width:7%">No Trend</th>
-            <th style="width:7%">Eros<img src="https://render.githubusercontent.com/render/math?math=^2"></th>
-            <th style="width:7%">Imp<img src="https://render.githubusercontent.com/render/math?math=^1"></th>
+            <th style="width:7%">Eros.</th>
+            <th style="width:7%">Imp.</th>
             <th style="width:7%">No Trend</th>
-            <th style="width:7%">Eros<img src="https://render.githubusercontent.com/render/math?math=^2"></th>
-            <th style="width:7%">Imp<img src="https://render.githubusercontent.com/render/math?math=^1"></th>
+            <th style="width:7%">Eros.</th>
+            <th style="width:7%">Imp.</th>
             <th style="width:7%">No Trend</th>
-            <th style="width:7%">Eros<img src="https://render.githubusercontent.com/render/math?math=^2"></th>          
+            <th style="width:7%">Eros.</th>          
         </tr>
     </thead>  
     <tbody>
@@ -189,7 +189,7 @@ We use Cox-Stuart test to characterize statistically a trend (upward or downward
         </tr>
         <tr>
             <td colspan="13">
-            <b>1. Imp.</b>= Improving Trend, <b>2. Eros.</b>= Erosion Trend
+            <b>Imp.</b>= Improving Trend, <b>Eros.</b>= Erosion Trend
             </td>
         </tr>
     </tbody>    
@@ -261,6 +261,17 @@ Based on the contingency table for each scenario, we used the Chi-Square test of
             <td align="center">6.1e-33</td>
             <td align="center">0.59</td>
         </tr>        
+        <tr style="border:0">
+            <td colspan="9">
+            <b>Chi </b>= Chi-squared test statistic
+            </td>
+            <td colspan="9">
+            <b>Chi </b>= Chi-squared test's p-value
+            </td>
+            <td colspan="9">
+            <b><img src="https://render.githubusercontent.com/render/math?math=\varphi_c"> </b>= Cramér’s V statistic 
+            </td>
+        </tr>
     </tbody>
 </table>
 
