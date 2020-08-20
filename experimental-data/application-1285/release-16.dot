@@ -1,0 +1,31 @@
+strict digraph G {
+  BA1 [ label="BA1" ];
+  BA2 [ label="BA2" ];
+  BA3 [ label="BA3" ];
+  BA4 [ label="BA4" ];
+  BA5 [ label="BA5" ];
+  GTW [ label="GTW" ];
+  REG [ label="REG" ];
+  TRC [ label="TRC" ];
+  MSV1 [ label="MSV1" ];
+  BA1 -> BA2;
+  GTW -> BA5;
+  BA1 -> REG;
+  BA2 -> REG;
+  BA3 -> REG;
+  BA4 -> REG;
+  BA5 -> REG;
+  BA1 -> TRC;
+  BA2 -> TRC;
+  BA3 -> TRC;
+  BA4 -> TRC;
+  BA5 -> TRC;
+  GTW -> TRC;
+  TRC -> REG;
+  BA4 -> BA1;
+  BA5 -> BA1;
+  BA2 -> MSV1;
+  BA3 -> MSV1;
+  MSV1 -> REG;
+  MSV1 -> TRC;
+}

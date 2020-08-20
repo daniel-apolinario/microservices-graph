@@ -1,0 +1,7 @@
+{
+  "fileName": "/home/daniel/Documentos/mestrado-2018/projeto/grafos-dependencia/application-1702/release-00.dot",
+  "applicationName": "application-1702",
+  "initialArchitectureState": "BAD",
+  "architectureEvolutionTarget": "BETTER",
+  "architectureEvolutionIssue": "CONCENTRATE_OUTGOING_EDGES"
+}

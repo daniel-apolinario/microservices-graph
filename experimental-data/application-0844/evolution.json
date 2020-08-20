@@ -1,0 +1,7 @@
+{
+  "fileName": "/home/daniel/Documentos/mestrado-2018/projeto/grafos-dependencia/application-0844/release-00.dot",
+  "applicationName": "application-0844",
+  "initialArchitectureState": "BAD",
+  "architectureEvolutionTarget": "BETTER",
+  "architectureEvolutionIssue": "CONCENTRATE_OUTGOING_EDGES"
+}

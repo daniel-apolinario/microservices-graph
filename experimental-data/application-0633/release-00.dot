@@ -1,0 +1,38 @@
+strict digraph G {
+  RD1 [ label="RD1" ];
+  RD2 [ label="RD2" ];
+  RD3 [ label="RD3" ];
+  RD4 [ label="RD4" ];
+  RD5 [ label="RD5" ];
+  RD6 [ label="RD6" ];
+  RD7 [ label="RD7" ];
+  RD8 [ label="RD8" ];
+  RD9 [ label="RD9" ];
+  RD10 [ label="RD10" ];
+  RD11 [ label="RD11" ];
+  GTW [ label="GTW" ];
+  REG [ label="REG" ];
+  RD7 -> RD1;
+  RD5 -> RD2;
+  RD3 -> RD7;
+  RD9 -> RD3;
+  RD3 -> RD11;
+  RD11 -> RD3;
+  RD8 -> RD4;
+  GTW -> RD5;
+  GTW -> RD6;
+  GTW -> RD8;
+  GTW -> RD9;
+  GTW -> RD10;
+  RD1 -> REG;
+  RD2 -> REG;
+  RD3 -> REG;
+  RD4 -> REG;
+  RD5 -> REG;
+  RD6 -> REG;
+  RD7 -> REG;
+  RD8 -> REG;
+  RD9 -> REG;
+  RD10 -> REG;
+  RD11 -> REG;
+}

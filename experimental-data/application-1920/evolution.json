@@ -1,0 +1,7 @@
+{
+  "fileName": "/home/daniel/Documentos/mestrado-2018/projeto/grafos-dependencia/application-1920/release-00.dot",
+  "applicationName": "application-1920",
+  "initialArchitectureState": "GOOD",
+  "architectureEvolutionTarget": "WORSE",
+  "architectureEvolutionIssue": "CONCENTRATE_OUTGOING_EDGES"
+}

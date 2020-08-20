@@ -1,0 +1,16 @@
+{
+    "replicasQuantity" : "210",
+    "graphStructureFactor" : [ "RANDOM_GRAPH", 
+			       "BARABASI_ALBERT_GRAPH"
+			     ], 
+    "graphSizeFactor" : [ "SMALL", 
+			  "MEDIUM", 
+			  "BIG"  
+			],       
+    "graphScenarioFactor" : [ "IMPROVE", 
+			      "WORSEN"
+			    ],
+    "releasesNumber" : "20",
+    "architectureEvolutionGrowthRateMininum" : "30",
+    "architectureEvolutionGrowthRateMaximum" : "80"
+}

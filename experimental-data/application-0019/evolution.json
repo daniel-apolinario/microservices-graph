@@ -1,0 +1,7 @@
+{
+  "fileName": "/home/daniel/Documentos/mestrado-2018/projeto/grafos-dependencia/application-0019/release-00.dot",
+  "applicationName": "application-0019",
+  "initialArchitectureState": "BAD",
+  "architectureEvolutionTarget": "BETTER",
+  "architectureEvolutionIssue": "CONCENTRATE_INCOMING_EDGES"
+}
