@@ -1,0 +1,35 @@
+strict digraph G {
+  D1 [ label="D1" ];
+  D2 [ label="D2" ];
+  D3 [ label="D3" style="filled"];
+  D4 [ label="D4" ];
+  D5 [ label="D5" ];
+  GTW [ label="GTW" ];
+  REG [ label="REG" ];
+  CFG [ label="CFG" ];
+  MD1 [ label="MD1" color="blue", fontcolor="blue"];
+  MD2 [ label="MD2" color="brown", fontcolor="brown" ];
+  MD3 [ label="MD3" color="darkgoldenrod1", fontcolor="darkgoldenrod1"];
+  D1 -> D2;
+  D2 -> D1;
+  D3 -> D1;
+  D4 -> D3;
+  D5 -> D1;
+  GTW -> D4;
+  GTW -> D5;
+  D1 -> REG;
+  D2 -> REG;
+  D3 -> REG;
+  D4 -> REG;
+  D5 -> REG;
+  D3 -> CFG;
+  D5 -> CFG;
+  REG -> CFG;
+  D3 -> MD1 [style="dashed" color="blue" label="+ v8" fontcolor="blue"];
+  MD1 -> REG [style="dashed" color="blue" label="+ v8" fontcolor="blue"];
+  D3 -> MD2 [style="dashed" color="brown" label="+ v16" fontcolor="brown"];
+  MD2 -> REG [style="dashed" color="brown" label="+ v16" fontcolor="brown"];
+  MD2 -> CFG [style="dashed" color="brown" label="+ v16" fontcolor="brown"];
+  D3 -> MD3 [style="dashed" color="darkgoldenrod1" label="+ v20" fontcolor="darkgoldenrod1"];
+  MD3 -> REG [style="dashed" color="darkgoldenrod1" label="+ v20" fontcolor="darkgoldenrod1"];
+}

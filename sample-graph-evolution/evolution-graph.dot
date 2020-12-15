@@ -1,0 +1,33 @@
+strict digraph G {
+  I1 [ label="I1" style="filled"];
+  I2 [ label="I2" ];
+  I3 [ label="I3" ];
+  I4 [ label="I4" ];
+  I5 [ label="I5" ];
+  GTW [ label="GTW" ];
+  REG [ label="REG" ];
+  TRC [ label="TRC" ];
+  MI1 [ label="MI1", color="blue", fontcolor="blue" ];
+  I1 -> I2;
+  I2 -> I1 [style="dashed" color="red" label="- v7" fontcolor="red"];
+  I3 -> I1 [style="dashed" color="red" label="- v7" fontcolor="red"];
+  GTW -> I5;
+  I1 -> REG;
+  I2 -> REG;
+  I3 -> REG;
+  I4 -> REG;
+  I5 -> REG;
+  I1 -> TRC;
+  I2 -> TRC;
+  I3 -> TRC;
+  I4 -> TRC;
+  I5 -> TRC;
+  GTW -> TRC;
+  TRC -> REG;
+  I4 -> I1;
+  I5 -> I1;
+  I2 -> MI1 [style="dashed" color="blue" label="+ v7" fontcolor="blue"];
+  I3 -> MI1 [style="dashed" color="blue" label="+ v7" fontcolor="blue"];
+  MI1 -> REG [style="dashed" color="blue" label="+ v7" fontcolor="blue"];
+  MI1 -> TRC [style="dashed" color="blue" label="+ v7" fontcolor="blue"];
+}
