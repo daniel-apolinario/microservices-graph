@@ -1,0 +1,13 @@
+{
+    "replicasQuantity" : "10",
+    "graphStructureFactor" : [ "RANDOM_GRAPH", 
+			       "BARABASI_ALBERT_GRAPH"
+			     ], 
+    "graphSizeFactor" : [ "SMALL", 
+			  "MEDIUM", 
+			  "BIG"  
+			],       
+    "graphScenarioFactor" : [ "IMPROVE", 
+			      "WORSEN"
+			    ]	
+}
